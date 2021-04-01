@@ -211,9 +211,10 @@ class GOSIASimFitter {
 		void	SetLikelihoodFit(bool b = true)					{ fLikelihood = b;			}	/*!< Define whether we do a log-likelihood based fit (default: chi-squared) */
 		bool	LikelihoodFit()						const	{ return fLikelihood;			}	/*!< Return whether we do a log-likelihood based fit (default: chi-squared) */
 
-		std::vector<double>	GetFitParameters()				{ return parameters;			}	/*!< Return fit parameters - note that these will be updated with the fit result after the fit - Used in MCMC methods */
-		std::vector<double>	GetFitUL()					{ return par_UL;			}	/*!< Return the fit parameter upper limits - Used in MCMC methods */
-		std::vector<double>	GetFitLL()					{ return par_LL;			}	/*!< Return the fit parameter lower limits - Used in MCMC methods */
+		double			GetChisq()				const	{ return chisq;				}
+		std::vector<double>	GetFitParameters()			const	{ return parameters;			}	/*!< Return fit parameters - note that these will be updated with the fit result after the fit - Used in MCMC methods */
+		std::vector<double>	GetFitUL()				const	{ return par_UL;			}	/*!< Return the fit parameter upper limits - Used in MCMC methods */
+		std::vector<double>	GetFitLL()				const	{ return par_LL;			}	/*!< Return the fit parameter lower limits - Used in MCMC methods */
 
 		void	SetFitParameters(std::vector<double> p)				{ parameters = p;			}	/*!< Set the fit parameters - note that these will be updated after the fit has been performed - Used in MCMC methods */
 		void	SetFitUL(std::vector<double> p)					{ par_UL = p;				}	/*!< Set the fit parameter upper limits - Used in MCMC methods */
@@ -239,6 +240,7 @@ class GOSIASimFitter {
 
 		std::vector<int>		index;
 
+		double				chisq;
 		std::vector<double>		parameters;			/*!< Matrix elements + scaling factors */
 		std::vector<double>		par_LL;				/*!< Matrix elements + scaling factors - LOWER LIMIT */
 		std::vector<double>		par_UL;				/*!< Matrix elements + scaling factors - UPPER LIMIT */

@@ -18,6 +18,8 @@ GOSIASimFitter::GOSIASimFitter()
 
 	verbose		= false;
 
+	chisq		= -1;
+
 }
 
 void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
@@ -220,6 +222,8 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 	const double	*res = min->X();
 	for(unsigned int i=0;i<parameters.size();i++)
 		parameters[i] = res[i];
+
+	chisq = min->MinValue();
 
 	covMat.ResizeTo(parameters.size(),parameters.size());
 	corMat.ResizeTo(parameters.size(),parameters.size());
