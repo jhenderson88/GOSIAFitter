@@ -41,13 +41,13 @@ class ScalingParameter{
 		double 	GetScalingUpperLimit()		const	{ return scaling_UL;			}	/*!< Return common scaling upper allowed limit */
 		std::vector<int> GetExperimentNumbers()	const	{ return experimentNumber;		}	/*!< Return the vector of experimental indices coupled to this common scaling */
 		int	GetExperimentNumber(int i)	const	{
-			if( (unsigned)i < experimentNumber.size() )
-				return experimentNumber.at(i);
-			else{
-				std::cout << "Experiment number out of range" << std::endl;
-				return -1;
-			}
-		}	/*!< Get the experiment number for index i */
+									if( (unsigned)i < experimentNumber.size() )
+										return experimentNumber.at(i);
+									else{
+										std::cout << "Experiment number out of range" << std::endl;
+										return -1;
+									}
+								}	/*!< Get the experiment number for index i */
 
 
 	private:

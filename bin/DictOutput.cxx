@@ -104,6 +104,54 @@ namespace ROOT {
 } // end of namespace ROOT
 
 namespace ROOT {
+   static TClass *ExptDoublet_Dictionary();
+   static void ExptDoublet_TClassManip(TClass*);
+   static void *new_ExptDoublet(void *p = 0);
+   static void *newArray_ExptDoublet(Long_t size, void *p);
+   static void delete_ExptDoublet(void *p);
+   static void deleteArray_ExptDoublet(void *p);
+   static void destruct_ExptDoublet(void *p);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::ExptDoublet*)
+   {
+      ::ExptDoublet *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::ExptDoublet));
+      static ::ROOT::TGenericClassInfo 
+         instance("ExptDoublet", "include/ExperimentalInput.h", 8,
+                  typeid(::ExptDoublet), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &ExptDoublet_Dictionary, isa_proxy, 4,
+                  sizeof(::ExptDoublet) );
+      instance.SetNew(&new_ExptDoublet);
+      instance.SetNewArray(&newArray_ExptDoublet);
+      instance.SetDelete(&delete_ExptDoublet);
+      instance.SetDeleteArray(&deleteArray_ExptDoublet);
+      instance.SetDestructor(&destruct_ExptDoublet);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::ExptDoublet*)
+   {
+      return GenerateInitInstanceLocal((::ExptDoublet*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::ExptDoublet*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+
+   // Dictionary for non-ClassDef classes
+   static TClass *ExptDoublet_Dictionary() {
+      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::ExptDoublet*)0x0)->GetClass();
+      ExptDoublet_TClassManip(theClass);
+   return theClass;
+   }
+
+   static void ExptDoublet_TClassManip(TClass* theClass){
+      theClass->CreateAttributeMap();
+      TDictAttributeMap* attrMap( theClass->GetAttributeMap() );
+      attrMap->AddProperty("file_name","include/ExperimentalInput.h");
+   }
+
+} // end of namespace ROOT
+
+namespace ROOT {
    static TClass *ExptData_Dictionary();
    static void ExptData_TClassManip(TClass*);
    static void *new_ExptData(void *p = 0);
@@ -118,7 +166,7 @@ namespace ROOT {
       ::ExptData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::ExptData));
       static ::ROOT::TGenericClassInfo 
-         instance("ExptData", "include/ExperimentalInput.h", 20,
+         instance("ExptData", "include/ExperimentalInput.h", 92,
                   typeid(::ExptData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &ExptData_Dictionary, isa_proxy, 4,
                   sizeof(::ExptData) );
@@ -166,7 +214,7 @@ namespace ROOT {
       ::ExperimentData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::ExperimentData));
       static ::ROOT::TGenericClassInfo 
-         instance("ExperimentData", "include/ExperimentalInput.h", 94,
+         instance("ExperimentData", "include/ExperimentalInput.h", 166,
                   typeid(::ExperimentData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &ExperimentData_Dictionary, isa_proxy, 4,
                   sizeof(::ExperimentData) );
@@ -831,6 +879,27 @@ namespace ROOT {
       ((current_t*)p)->~current_t();
    }
 } // end of namespace ROOT for class ::Nucleus
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_ExptDoublet(void *p) {
+      return  p ? new(p) ::ExptDoublet : new ::ExptDoublet;
+   }
+   static void *newArray_ExptDoublet(Long_t nElements, void *p) {
+      return p ? new(p) ::ExptDoublet[nElements] : new ::ExptDoublet[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_ExptDoublet(void *p) {
+      delete ((::ExptDoublet*)p);
+   }
+   static void deleteArray_ExptDoublet(void *p) {
+      delete [] ((::ExptDoublet*)p);
+   }
+   static void destruct_ExptDoublet(void *p) {
+      typedef ::ExptDoublet current_t;
+      ((current_t*)p)->~current_t();
+   }
+} // end of namespace ROOT for class ::ExptDoublet
 
 namespace ROOT {
    // Wrappers around operator new
@@ -1777,6 +1846,71 @@ namespace ROOT {
 } // end of namespace ROOT for class vector<LitBranchingRatio>
 
 namespace ROOT {
+   static TClass *vectorlEExptDoubletgR_Dictionary();
+   static void vectorlEExptDoubletgR_TClassManip(TClass*);
+   static void *new_vectorlEExptDoubletgR(void *p = 0);
+   static void *newArray_vectorlEExptDoubletgR(Long_t size, void *p);
+   static void delete_vectorlEExptDoubletgR(void *p);
+   static void deleteArray_vectorlEExptDoubletgR(void *p);
+   static void destruct_vectorlEExptDoubletgR(void *p);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const vector<ExptDoublet>*)
+   {
+      vector<ExptDoublet> *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<ExptDoublet>));
+      static ::ROOT::TGenericClassInfo 
+         instance("vector<ExptDoublet>", -2, "vector", 469,
+                  typeid(vector<ExptDoublet>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &vectorlEExptDoubletgR_Dictionary, isa_proxy, 0,
+                  sizeof(vector<ExptDoublet>) );
+      instance.SetNew(&new_vectorlEExptDoubletgR);
+      instance.SetNewArray(&newArray_vectorlEExptDoubletgR);
+      instance.SetDelete(&delete_vectorlEExptDoubletgR);
+      instance.SetDeleteArray(&deleteArray_vectorlEExptDoubletgR);
+      instance.SetDestructor(&destruct_vectorlEExptDoubletgR);
+      instance.AdoptCollectionProxyInfo(TCollectionProxyInfo::Generate(TCollectionProxyInfo::Pushback< vector<ExptDoublet> >()));
+
+      ::ROOT::AddClassAlternate("vector<ExptDoublet>","std::__1::vector<ExptDoublet, std::__1::allocator<ExptDoublet> >");
+      return &instance;
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const vector<ExptDoublet>*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+
+   // Dictionary for non-ClassDef classes
+   static TClass *vectorlEExptDoubletgR_Dictionary() {
+      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const vector<ExptDoublet>*)0x0)->GetClass();
+      vectorlEExptDoubletgR_TClassManip(theClass);
+   return theClass;
+   }
+
+   static void vectorlEExptDoubletgR_TClassManip(TClass* ){
+   }
+
+} // end of namespace ROOT
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_vectorlEExptDoubletgR(void *p) {
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<ExptDoublet> : new vector<ExptDoublet>;
+   }
+   static void *newArray_vectorlEExptDoubletgR(Long_t nElements, void *p) {
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<ExptDoublet>[nElements] : new vector<ExptDoublet>[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_vectorlEExptDoubletgR(void *p) {
+      delete ((vector<ExptDoublet>*)p);
+   }
+   static void deleteArray_vectorlEExptDoubletgR(void *p) {
+      delete [] ((vector<ExptDoublet>*)p);
+   }
+   static void destruct_vectorlEExptDoubletgR(void *p) {
+      typedef vector<ExptDoublet> current_t;
+      ((current_t*)p)->~current_t();
+   }
+} // end of namespace ROOT for class vector<ExptDoublet>
+
+namespace ROOT {
    static TClass *vectorlEExptDatagR_Dictionary();
    static void vectorlEExptDatagR_TClassManip(TClass*);
    static void *new_vectorlEExptDatagR(void *p = 0);
@@ -1937,6 +2071,7 @@ namespace {
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 extern int __Cling_AutoLoading_Map;
 class __attribute__((annotate(R"ATTRDUMP(pattern@@@*)ATTRDUMP"))) __attribute__((annotate(R"ATTRDUMP(file_name@@@include/Nucleus.h)ATTRDUMP"))) __attribute__((annotate("$clingAutoload$include/DataReader.h")))  Nucleus;
+class __attribute__((annotate(R"ATTRDUMP(pattern@@@*)ATTRDUMP"))) __attribute__((annotate(R"ATTRDUMP(file_name@@@include/ExperimentalInput.h)ATTRDUMP"))) __attribute__((annotate("$clingAutoload$include/DataReader.h")))  ExptDoublet;
 class __attribute__((annotate(R"ATTRDUMP(pattern@@@*)ATTRDUMP"))) __attribute__((annotate(R"ATTRDUMP(file_name@@@include/ExperimentalInput.h)ATTRDUMP"))) __attribute__((annotate("$clingAutoload$include/DataReader.h")))  ExptData;
 class __attribute__((annotate(R"ATTRDUMP(pattern@@@*)ATTRDUMP"))) __attribute__((annotate(R"ATTRDUMP(file_name@@@include/ExperimentalInput.h)ATTRDUMP"))) __attribute__((annotate("$clingAutoload$include/DataReader.h")))  ExperimentData;
 class __attribute__((annotate(R"ATTRDUMP(pattern@@@*)ATTRDUMP"))) __attribute__((annotate(R"ATTRDUMP(file_name@@@include/DataReader.h)ATTRDUMP"))) __attribute__((annotate("$clingAutoload$include/DataReader.h")))  DataReader;
@@ -1981,6 +2116,7 @@ class __attribute__((annotate(R"ATTRDUMP(pattern@@@*)ATTRDUMP"))) __attribute__(
 "DataReader", payloadCode, "@",
 "ExperimentData", payloadCode, "@",
 "ExptData", payloadCode, "@",
+"ExptDoublet", payloadCode, "@",
 "GOSIAReader", payloadCode, "@",
 "GOSIASimFitter", payloadCode, "@",
 "GOSIASimMinFCN", payloadCode, "@",

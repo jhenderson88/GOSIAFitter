@@ -1,5 +1,6 @@
 #include "MiscFunctions.h"
 
+double MiscFunctions::c 	= 299792458; 
 double MiscFunctions::hbar	= 1.05457e-34;
 
 double MiscFunctions::GetMaxMatrix(TMatrixD mat){
@@ -246,26 +247,3 @@ double MiscFunctions::SphericalHarmonics(double theta, int l, int m, bool sym){
 	return 0;
 
 }
-
-
-double MiscFunctions::SimpsonsRule(TGraph* g, int nSteps, double xMin, double xMax){
-
-	double xStep = (xMax - xMin)/((double)nSteps - 1.);
-
-	double integral = 0;
-
-	for(int x = 0; x < nSteps; x++){
-		double xVal = xMin + x*xStep;
-
-		if(x == 0 || x == (nSteps-1))
-			integral += (xStep/3.)*g->Eval(xVal);
-		else if((x % 2) == 0)
-			integral += (xStep/3.)*(g->Eval(xVal) * 2);
-		else 
-			integral += (xStep/3.)*(g->Eval(xVal) * 4);
-	} 
-
-	return integral;
-	
-}
-

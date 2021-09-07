@@ -33,8 +33,6 @@ class MiscFunctions {
 
 		static 	double	SphericalHarmonics(double,int,int,bool b = true);	/*!<	*/
 
-		static	double	SimpsonsRule(TGraph*,int nSteps, double xMin, double xMax);	/*!<	Perform a numerical integration of a TGraph using Simpson's rule using nSteps between xMin and xMax	*/
-
 	
 };
 

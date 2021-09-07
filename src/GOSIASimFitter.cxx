@@ -24,7 +24,7 @@ GOSIASimFitter::GOSIASimFitter()
 
 void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
-	GOSIASimMinFCN theFCN(exptData_Beam,exptData_Target);
+	GOSIASimMinFCN theFCN(GetBeamData(),GetTargetData());
 
 	theFCN.SetBeamGOSIAInput(GetBeamGOSIAInput());
 	theFCN.SetBeamGOSIAOutput(GetBeamGOSIAOutput());
@@ -32,38 +32,39 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 	theFCN.SetTargetGOSIAOutput(GetTargetGOSIAOutput());
 	theFCN.SetBeamBST(GetBeamBST());
 	theFCN.SetTargetBST(GetTargetBST());
-	theFCN.SetBeamMapping(beamMapping_i,beamMapping_f,beamMapping_l);
-	theFCN.SetTargetMapping(targetMapping_i,targetMapping_f,targetMapping_l);
+	theFCN.SetBeamMapping(GetBeamMappingInit(),GetBeamMappingFinal(),GetBeamMappingLambda());
+	theFCN.SetTargetMapping(GetTargetMappingInit(),GetTargetMappingFinal(),GetTargetMappingLambda());
 
-	theFCN.SetBeamMatrixElements(matrixElements_Beam);
-	theFCN.SetTargetMatrixElements(matrixElements_Target);
-	theFCN.SetScalingParameters(scalingParameters);
+	theFCN.SetBeamMatrixElements(GetBeamMatrixElements());
+	theFCN.SetTargetMatrixElements(GetTargetMatrixElements());
+	theFCN.SetScalingParameters(GetScalingParameters());
 
-	theFCN.SetBeamLitLifetimes(litLifetimes_Beam);
-	theFCN.SetBeamLitBranching(litBranchingRatios_Beam);
-	theFCN.SetBeamLitMixing(litMixingRatios_Beam);	
-	theFCN.SetBeamLitMatrixElements(litMatrixElements_Beam);	
-	theFCN.SetTargetLitLifetimes(litLifetimes_Target);
-	theFCN.SetTargetLitBranching(litBranchingRatios_Target);
-	theFCN.SetTargetLitMixing(litMixingRatios_Target);	
-	theFCN.SetTargetLitMatrixElements(litMatrixElements_Target);	
+	theFCN.SetBeamLitLifetimes(GetBeamLitLifetimes());
+	theFCN.SetBeamLitBranching(GetBeamLitBranching());
+	theFCN.SetBeamLitMixing(GetBeamLitMixing());	
+	theFCN.SetBeamLitMatrixElements(GetBeamLitMatrixElement());	
+	theFCN.SetTargetLitLifetimes(GetTargetLitLifetimes());
+	theFCN.SetTargetLitBranching(GetTargetLitBranching());
+	theFCN.SetTargetLitMixing(GetTargetLitMixing());	
+	theFCN.SetTargetLitMatrixElements(GetTargetLitMatrixElement());	
 
-	theFCN.SetBeamNucleus(&fNucleus_Beam);
-	theFCN.SetTargetNucleus(&fNucleus_Target);
+	Nucleus	tmpNuclB	= GetBeamNucleus();
+	Nucleus	tmpNuclT	= GetTargetNucleus();
+	
+	theFCN.SetBeamNucleus(&tmpNuclB);
+	theFCN.SetTargetNucleus(&tmpNuclT);
 
-	theFCN.SetBeamCorrectionFactors(correctionFactors_Beam);
-	theFCN.SetTargetCorrectionFactors(correctionFactors_Target);
+	theFCN.SetBeamCorrectionFactors(GetBeamCorrectionFactors());
+	theFCN.SetTargetCorrectionFactors(GetTargetCorrectionFactors());
 
-	theFCN.SetIter(maxIter);
-	theFCN.SetCalls(maxCalls);
+	theFCN.SetIter(GetMaxIterations());
+	theFCN.SetCalls(GetMaxFunctionCalls());
 
-	theFCN.SetNthreads(nThreads);
-
-	theFCN.SetVerbose(verbose);
+	theFCN.SetVerbose(GetVerbose());
 
 	theFCN.SetupCalculation();
 
-	theFCN.SetLikelihoodFit(fLikelihood);
+	theFCN.SetLikelihoodFit(LikelihoodFit());
 
 	size_t	Nexpts = 0;
 	if(exptData_Beam.size() > exptData_Target.size())

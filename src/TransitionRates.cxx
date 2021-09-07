@@ -205,6 +205,7 @@ void TransitionRates::SetMatrixElements(){
 		for(int y=0;y<MixingRatios.GetNrows();y++){
 			if(TransitionStrengths_Abs.at(6)[y][x] != 0 && TransitionStrengths_Abs.at(1)[y][x] !=0){
 				MixingRatios[y][x] = TMath::Sqrt(TransitionStrengths_Abs.at(1)[y][x] / TransitionStrengths_Abs.at(6)[y][x]) * TMath::Sign(1,MatrixElements.at(6)[x][y]) * TMath::Sign(1,MatrixElements.at(1)[x][y]);
+				MixingRatios[x][y] = TMath::Sqrt(TransitionStrengths_Abs.at(1)[y][x] / TransitionStrengths_Abs.at(6)[y][x]) * TMath::Sign(1,MatrixElements.at(6)[x][y]) * TMath::Sign(1,MatrixElements.at(1)[x][y]);
 			}
 		}
 	}

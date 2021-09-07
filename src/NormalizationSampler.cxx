@@ -51,11 +51,8 @@ void NormalizationSampler::Run(double *par){
 	const char* 	c_t = str.c_str();
 	system(c_t);	// 	Run the target GOSIA file
 
-	std::string	beamout = GetBeamGOSIAOutput();
-	std::string	targout = GetBeamGOSIAOutput();
-
-	const char	*b_out = beamout.c_str();
-	const char	*t_out = targout.c_str();
+	const char	*b_out = GetBeamGOSIAOutput().c_str();
+	const char	*t_out = GetTargetGOSIAOutput().c_str();
 	GOSIAReader	beam_gosiaReader(&nucl_b,b_out);	//	Grab the GOSIA yields
 	GOSIAReader	target_gosiaReader(&nucl_t,t_out);	//	Grab the GOSIA yields
 

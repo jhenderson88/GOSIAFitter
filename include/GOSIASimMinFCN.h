@@ -3,6 +3,7 @@
 
 #include "ScalingParameter.h"
 #include "Nucleus.h"
+#include "Minuit2/FCNBase.h"
 #include "Literature.h"
 #include "ExperimentalInput.h"
 #include "MatrixElement.h"
@@ -10,7 +11,6 @@
 #include "GOSIAReader.h"
 #include "ScalingFitFCN.h"
 
-#include "Minuit2/FCNBase.h"
 #include "Minuit2/Minuit2Minimizer.h"
 #include "Math/Functor.h"
 #include "Math/Factory.h"
