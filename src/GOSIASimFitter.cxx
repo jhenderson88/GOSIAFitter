@@ -24,7 +24,7 @@ GOSIASimFitter::GOSIASimFitter()
 
 void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
-	GOSIASimMinFCN theFCN(GetBeamData(),GetTargetData());
+	GOSIASimMinFCN theFCN(exptData_Beam,exptData_Target);
 
 	theFCN.SetBeamGOSIAInput(GetBeamGOSIAInput());
 	theFCN.SetBeamGOSIAOutput(GetBeamGOSIAOutput());
@@ -32,39 +32,38 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 	theFCN.SetTargetGOSIAOutput(GetTargetGOSIAOutput());
 	theFCN.SetBeamBST(GetBeamBST());
 	theFCN.SetTargetBST(GetTargetBST());
-	theFCN.SetBeamMapping(GetBeamMappingInit(),GetBeamMappingFinal(),GetBeamMappingLambda());
-	theFCN.SetTargetMapping(GetTargetMappingInit(),GetTargetMappingFinal(),GetTargetMappingLambda());
+	theFCN.SetBeamMapping(beamMapping_i,beamMapping_f,beamMapping_l);
+	theFCN.SetTargetMapping(targetMapping_i,targetMapping_f,targetMapping_l);
 
-	theFCN.SetBeamMatrixElements(GetBeamMatrixElements());
-	theFCN.SetTargetMatrixElements(GetTargetMatrixElements());
-	theFCN.SetScalingParameters(GetScalingParameters());
+	theFCN.SetBeamMatrixElements(matrixElements_Beam);
+	theFCN.SetTargetMatrixElements(matrixElements_Target);
+	theFCN.SetScalingParameters(scalingParameters);
 
-	theFCN.SetBeamLitLifetimes(GetBeamLitLifetimes());
-	theFCN.SetBeamLitBranching(GetBeamLitBranching());
-	theFCN.SetBeamLitMixing(GetBeamLitMixing());	
-	theFCN.SetBeamLitMatrixElements(GetBeamLitMatrixElement());	
-	theFCN.SetTargetLitLifetimes(GetTargetLitLifetimes());
-	theFCN.SetTargetLitBranching(GetTargetLitBranching());
-	theFCN.SetTargetLitMixing(GetTargetLitMixing());	
-	theFCN.SetTargetLitMatrixElements(GetTargetLitMatrixElement());	
+	theFCN.SetBeamLitLifetimes(litLifetimes_Beam);
+	theFCN.SetBeamLitBranching(litBranchingRatios_Beam);
+	theFCN.SetBeamLitMixing(litMixingRatios_Beam);	
+	theFCN.SetBeamLitMatrixElements(litMatrixElements_Beam);	
+	theFCN.SetTargetLitLifetimes(litLifetimes_Target);
+	theFCN.SetTargetLitBranching(litBranchingRatios_Target);
+	theFCN.SetTargetLitMixing(litMixingRatios_Target);	
+	theFCN.SetTargetLitMatrixElements(litMatrixElements_Target);	
 
-	Nucleus	tmpNuclB	= GetBeamNucleus();
-	Nucleus	tmpNuclT	= GetTargetNucleus();
-	
-	theFCN.SetBeamNucleus(&tmpNuclB);
-	theFCN.SetTargetNucleus(&tmpNuclT);
+	theFCN.SetBeamNucleus(&fNucleus_Beam);
+	theFCN.SetTargetNucleus(&fNucleus_Target);
 
-	theFCN.SetBeamCorrectionFactors(GetBeamCorrectionFactors());
-	theFCN.SetTargetCorrectionFactors(GetTargetCorrectionFactors());
+	theFCN.SetBeamCorrectionFactors(correctionFactors_Beam);
+	theFCN.SetTargetCorrectionFactors(correctionFactors_Target);
 
-	theFCN.SetIter(GetMaxIterations());
-	theFCN.SetCalls(GetMaxFunctionCalls());
+	theFCN.SetIter(maxIter);
+	theFCN.SetCalls(maxCalls);
 
-	theFCN.SetVerbose(GetVerbose());
+	theFCN.SetNthreads(nThreads);
+
+	theFCN.SetVerbose(verbose);
 
 	theFCN.SetupCalculation();
 
-	theFCN.SetLikelihoodFit(LikelihoodFit());
+	theFCN.SetLikelihoodFit(fLikelihood);
 
 	size_t	Nexpts = 0;
 	if(exptData_Beam.size() > exptData_Target.size())
@@ -218,13 +217,36 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 	std::cout	<< "**************************************** FIT COMPLETE ****************************************"
 			<< std::endl;
 
-	min->PrintResults();
+	//min->PrintResults();
+
+	chisq	= min->MinValue();
 
 	const double	*res = min->X();
+	const double	*unc = min->Errors();
+
+	std::cout	<< "Beam matrix elements:"
+			<< std::endl;
+	for(size_t i=0;i<matrixElements_Beam.size();i++){
+		std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
+				<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
+				<< std::setw(10) << std::left << res[i]
+				<< std::setw(10) << std::left << unc[i]
+				<< std::endl;
+	}
+	std::cout	<< "Target matrix elements:"
+			<< std::endl;
+	for(size_t i=0;i<matrixElements_Target.size();i++){
+		size_t j = matrixElements_Beam.size() + i;
+		std::cout	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
+				<< std::setw(10) << std::left << matrixElements_Target.at(i).GetFinalState()
+				<< std::setw(10) << std::left << res[j]
+				<< std::setw(10) << std::left << unc[j]
+				<< std::endl;
+	}
+	std::cout	<< std::endl;
+
 	for(unsigned int i=0;i<parameters.size();i++)
 		parameters[i] = res[i];
-
-	chisq = min->MinValue();
 
 	covMat.ResizeTo(parameters.size(),parameters.size());
 	corMat.ResizeTo(parameters.size(),parameters.size());
@@ -239,7 +261,7 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	if(DoFullUncertainty()){
 
-		min->SetTolerance(0.01);
+		//min->SetTolerance(0.01);
 
 		std::cout	<< "************************************** UNCERTAINTY EVAL. **************************************"
 				<< std::endl;
@@ -291,6 +313,17 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 			<< std::endl;
 
 	corMat.Print();
+
+
+	std::cout	<< "\n"
+			<< "******** Final Chi-Squared ***********\n"
+			<< std::endl;
+
+	std::cout	<< chisq
+			<< std::endl;
+
+	std::cout	<< "********     Complete      ***********\n"
+			<< std::endl;
 }
 
 void GOSIASimFitter::CreateScalingParameter(std::vector<int> expnum){
