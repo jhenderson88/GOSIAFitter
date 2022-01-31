@@ -22,6 +22,163 @@ GOSIASimFitter::GOSIASimFitter()
 
 }
 
+GOSIASimFitter::GOSIASimFitter(const GOSIASimFitter& g) {
+
+
+	index				= g.index;
+
+	chisq				= g.chisq;
+	parameters			= g.parameters;			
+	par_LL				= g.par_LL;				
+	par_UL				= g.par_UL;				
+	matrixElements_Beam		= g.matrixElements_Beam;		
+	matrixElements_Target		= g.matrixElements_Target;		
+	scalingParameters		= g.scalingParameters;		
+
+	correctionFactors_Beam		= g.correctionFactors_Beam;		
+	correctionFactors_Target	= g.correctionFactors_Target;	
+
+	exptData_Beam			= g.exptData_Beam;			
+	exptData_Target			= g.exptData_Target;		
+
+	litLifetimes_Beam		= g.litLifetimes_Beam;		
+	litLifetimes_Target		= g.litLifetimes_Target;		
+
+	litBranchingRatios_Beam		= g.litBranchingRatios_Beam;	
+	litBranchingRatios_Target	= g.litBranchingRatios_Target;	
+
+	litMixingRatios_Beam		= g.litMixingRatios_Beam;		
+	litMixingRatios_Target		= g.litMixingRatios_Target;		
+
+	litMatrixElements_Beam		= g.litMatrixElements_Beam;		
+	litMatrixElements_Target	= g.litMatrixElements_Target;	
+
+	theErrorDef			= g.theErrorDef;
+
+	EffectiveCrossSection_Beam	= g.EffectiveCrossSection_Beam;
+	EffectiveCrossSection_Target	= g.EffectiveCrossSection_Target;
+
+	fNucleus_Beam			= g.fNucleus_Beam;
+	fNucleus_Target			= g.fNucleus_Target;
+	fNucleus_Beam_Base		= g.fNucleus_Beam_Base;
+	fNucleus_Target_Base		= g.fNucleus_Target_Base;
+
+	maxIter				= g.maxIter;
+	maxCalls			= g.maxCalls;
+	fitTolerance			= g.fitTolerance;
+
+	nThreads			= g.nThreads;
+
+	first				= g.first;
+	verbose				= g.verbose;
+
+	covMat				= g.covMat;
+	corMat				= g.corMat;
+
+	fDoFullUnc			= g.fDoFullUnc;
+
+	fLikelihood			= g.fLikelihood;
+
+	beamGOSIAFile_inp		= g.beamGOSIAFile_inp;
+	targetGOSIAFile_inp		= g.targetGOSIAFile_inp;
+
+	beamGOSIAFile_out		= g.beamGOSIAFile_out;
+	targetGOSIAFile_out		= g.targetGOSIAFile_out;
+
+	beamBSTFile			= g.beamBSTFile;
+	targetBSTFile			= g.targetBSTFile;
+
+	beamMapping_i			= g.beamMapping_i;
+	beamMapping_f			= g.beamMapping_f;
+	beamMapping_l			= g.beamMapping_l;
+
+	targetMapping_i			= g.targetMapping_i;
+	targetMapping_f			= g.targetMapping_f;
+	targetMapping_l			= g.targetMapping_l;
+
+	expt_weights			= g.expt_weights;
+
+}
+GOSIASimFitter& GOSIASimFitter::operator = (const GOSIASimFitter& g){
+
+
+	index				= g.index;
+
+	chisq				= g.chisq;
+	parameters			= g.parameters;			
+	par_LL				= g.par_LL;				
+	par_UL				= g.par_UL;				
+	matrixElements_Beam		= g.matrixElements_Beam;		
+	matrixElements_Target		= g.matrixElements_Target;		
+	scalingParameters		= g.scalingParameters;		
+
+	correctionFactors_Beam		= g.correctionFactors_Beam;		
+	correctionFactors_Target	= g.correctionFactors_Target;	
+
+	exptData_Beam			= g.exptData_Beam;			
+	exptData_Target			= g.exptData_Target;		
+
+	litLifetimes_Beam		= g.litLifetimes_Beam;		
+	litLifetimes_Target		= g.litLifetimes_Target;		
+
+	litBranchingRatios_Beam		= g.litBranchingRatios_Beam;	
+	litBranchingRatios_Target	= g.litBranchingRatios_Target;	
+
+	litMixingRatios_Beam		= g.litMixingRatios_Beam;		
+	litMixingRatios_Target		= g.litMixingRatios_Target;		
+
+	litMatrixElements_Beam		= g.litMatrixElements_Beam;		
+	litMatrixElements_Target	= g.litMatrixElements_Target;	
+
+	theErrorDef			= g.theErrorDef;
+
+	EffectiveCrossSection_Beam	= g.EffectiveCrossSection_Beam;
+	EffectiveCrossSection_Target	= g.EffectiveCrossSection_Target;
+
+	fNucleus_Beam			= g.fNucleus_Beam;
+	fNucleus_Target			= g.fNucleus_Target;
+	fNucleus_Beam_Base		= g.fNucleus_Beam_Base;
+	fNucleus_Target_Base		= g.fNucleus_Target_Base;
+
+	maxIter				= g.maxIter;
+	maxCalls			= g.maxCalls;
+	fitTolerance			= g.fitTolerance;
+
+	nThreads			= g.nThreads;
+
+	first				= g.first;
+	verbose				= g.verbose;
+
+	covMat				= g.covMat;
+	corMat				= g.corMat;
+
+	fDoFullUnc			= g.fDoFullUnc;
+
+	fLikelihood			= g.fLikelihood;
+
+	beamGOSIAFile_inp		= g.beamGOSIAFile_inp;
+	targetGOSIAFile_inp		= g.targetGOSIAFile_inp;
+
+	beamGOSIAFile_out		= g.beamGOSIAFile_out;
+	targetGOSIAFile_out		= g.targetGOSIAFile_out;
+
+	beamBSTFile			= g.beamBSTFile;
+	targetBSTFile			= g.targetBSTFile;
+
+	beamMapping_i			= g.beamMapping_i;
+	beamMapping_f			= g.beamMapping_f;
+	beamMapping_l			= g.beamMapping_l;
+
+	targetMapping_i			= g.targetMapping_i;
+	targetMapping_f			= g.targetMapping_f;
+	targetMapping_l			= g.targetMapping_l;
+
+	expt_weights			= g.expt_weights;
+
+	return *this;
+
+}
+
 void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	GOSIASimMinFCN theFCN(exptData_Beam,exptData_Target);
@@ -130,7 +287,7 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 	//		ROOT::Math::Factory::CreateMinimizer("GSLMultiMin", "SteepestDescent");
 	ROOT::Math::Functor f_init(theFCN,parameters.size());
 
-	min->SetErrorDef(1);
+	min->SetErrorDef(1.);
 	//if(fLikelihood)
 	if(false)
 		min->SetErrorDef(0.5);
@@ -229,8 +386,8 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 	for(size_t i=0;i<matrixElements_Beam.size();i++){
 		std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
 				<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
-				<< std::setw(10) << std::left << res[i]
-				<< std::setw(10) << std::left << unc[i]
+				<< std::setw(15) << std::left << res[i]
+				<< std::setw(15) << std::left << unc[i]
 				<< std::endl;
 	}
 	std::cout	<< "Target matrix elements:"
@@ -239,8 +396,8 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 		size_t j = matrixElements_Beam.size() + i;
 		std::cout	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
 				<< std::setw(10) << std::left << matrixElements_Target.at(i).GetFinalState()
-				<< std::setw(10) << std::left << res[j]
-				<< std::setw(10) << std::left << unc[j]
+				<< std::setw(15) << std::left << res[j]
+				<< std::setw(15) << std::left << unc[j]
 				<< std::endl;
 	}
 	std::cout	<< std::endl;

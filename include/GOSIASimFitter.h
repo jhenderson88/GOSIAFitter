@@ -6,18 +6,18 @@
 #include "ScalingParameter.h"
 #include <chrono>
 
-#include "Minuit2/Minuit2Minimizer.h"
+//#include "Minuit2/Minuit2Minimizer.h"
 #include "Math/Functor.h"
 #include "Math/Factory.h"
 #include "Math/Minimizer.h"
 #include "Math/MinimizerOptions.h"
-#include "Minuit2/FunctionMinimum.h"
-#include "Minuit2/MnUserParameterState.h"
-#include "Minuit2/MnMachinePrecision.h"
-#include "Minuit2/MnMigrad.h" 
-#include "Minuit2/MnMinos.h"
-#include "Minuit2/MnContours.h"
-#include "Minuit2/MnPlot.h"
+//#include "Minuit2/FunctionMinimum.h"
+//#include "Minuit2/MnUserParameterState.h"
+//#include "Minuit2/MnMachinePrecision.h"
+//#include "Minuit2/MnMigrad.h" 
+//#include "Minuit2/MnMinos.h"
+//#include "Minuit2/MnContours.h"
+//#include "Minuit2/MnPlot.h"
 
 #include <iostream>
 
@@ -67,6 +67,8 @@ class GOSIASimFitter {
 	public:
 		GOSIASimFitter();
 		virtual	~GOSIASimFitter()	{;}
+		GOSIASimFitter(const GOSIASimFitter& g);			/*!< Copy constructor */
+		GOSIASimFitter& operator = (const GOSIASimFitter& g);		/*!< Assignment operator */
 		
 		void	DoFit(const char* method = "Minuit2", const char* algorithm = "Combined" );	/*!< Perform fitting routine with a user defined method and algorithm (default: Minuit2, Combined) */
 
@@ -215,10 +217,23 @@ class GOSIASimFitter {
 		std::vector<double>	GetFitParameters()			const	{ return parameters;			}	/*!< Return fit parameters - note that these will be updated with the fit result after the fit - Used in MCMC methods */
 		std::vector<double>	GetFitUL()				const	{ return par_UL;			}	/*!< Return the fit parameter upper limits - Used in MCMC methods */
 		std::vector<double>	GetFitLL()				const	{ return par_LL;			}	/*!< Return the fit parameter lower limits - Used in MCMC methods */
-
+	
+		void	ClearFitParameters()						
+		{ 
+			parameters.clear();			
+			par_UL.clear();
+			par_LL.clear();
+		}			
 		void	SetFitParameters(std::vector<double> p)				{ parameters = p;			}	/*!< Set the fit parameters - note that these will be updated after the fit has been performed - Used in MCMC methods */
 		void	SetFitUL(std::vector<double> p)					{ par_UL = p;				}	/*!< Set the fit parameter upper limits - Used in MCMC methods */
 		void	SetFitLL(std::vector<double> p)					{ par_LL = p;				}	/*!< Set the fit parameter lower limits - Used in MCMC methods */
+
+		void	AddFitParameter(double p, double ll, double ul)			
+		{ 
+			parameters.push_back(p);		
+			par_LL.push_back(ll);
+			par_UL.push_back(ul);
+		}
 
 		void	SetFittingParameter(size_t i, double v)				{ parameters.at(i) = v;			}	/*!< Set an individual fitting parameter - Used in MCMC methods */
 

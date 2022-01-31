@@ -25,7 +25,7 @@ class Nucleus
 	public:
 
 		Nucleus();						
-		Nucleus(int Z, int A, int nS, int nL = 7);	/*!< Construct nucleus with Z protons, A nucleons, nS total states and nL multipolarities allowed */				
+		Nucleus(int Z, int A, int nS, int nL = 8);	/*!< Construct nucleus with Z protons, A nucleons, nS total states and nL multipolarities allowed */				
 		Nucleus(const Nucleus& n);			/*!< Copy constructor */
 		Nucleus& operator = (const Nucleus& n);		/*!< Assignment operator */
 		~Nucleus() {;}

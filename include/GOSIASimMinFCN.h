@@ -3,7 +3,7 @@
 
 #include "ScalingParameter.h"
 #include "Nucleus.h"
-#include "Minuit2/FCNBase.h"
+//#include "Minuit2/FCNBase.h"
 #include "Literature.h"
 #include "ExperimentalInput.h"
 #include "MatrixElement.h"
@@ -11,16 +11,16 @@
 #include "GOSIAReader.h"
 #include "ScalingFitFCN.h"
 
-#include "Minuit2/Minuit2Minimizer.h"
+//#include "Minuit2/Minuit2Minimizer.h"
 #include "Math/Functor.h"
 #include "Math/Factory.h"
 #include "Math/Minimizer.h"
-#include "Minuit2/FunctionMinimum.h"
-#include "Minuit2/MnUserParameterState.h"
-#include "Minuit2/MnMigrad.h" 
-#include "Minuit2/MnMinos.h"
-#include "Minuit2/MnContours.h"
-#include "Minuit2/MnPlot.h"
+//#include "Minuit2/FunctionMinimum.h"
+//#include "Minuit2/MnUserParameterState.h"
+//#include "Minuit2/MnMigrad.h" 
+//#include "Minuit2/MnMinos.h"
+//#include "Minuit2/MnContours.h"
+//#include "Minuit2/MnPlot.h"
 
 #include <ctime>
 #include <thread>
@@ -110,6 +110,13 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 			targetMapping_l	= l;
 		}
 
+		std::vector<int>	GetBeamMapping_I()			const	{ return beamMapping_i;			}
+		std::vector<int>	GetBeamMapping_F()			const	{ return beamMapping_f;			}
+		std::vector<int>	GetBeamMapping_L()			const	{ return beamMapping_l;			}
+
+		std::vector<int>	GetTargetMapping_I()			const	{ return targetMapping_i;		}
+		std::vector<int>	GetTargetMapping_F()			const	{ return targetMapping_f;		}
+		std::vector<int>	GetTargetMapping_L()			const	{ return targetMapping_l;		}
 
 		std::vector<ScalingParameter>	GetScalingParameters()			{ return scalingParameters;		}	/*!< Return the vector of ScalingParameter objects for fitting */
 		void	SetScalingParameters(std::vector<ScalingParameter> s)		{ scalingParameters = s;		}	/*!< Define the vector of ScalingParameter objects for fitting */
@@ -190,7 +197,8 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 		void	SetLikelihoodFit(bool b = true)					{ fLikelihood = b;			}	/*!< Define whether we do a log-likelihood based fit (default: chi-squared) */
 		bool	LikelihoodFit()						const	{ return fLikelihood;			}	/*!< Return whether we do a log-likelihood based fit (default: chi-squared) */
 
-		void	SetWeights(std::vector<float> v)				{ expt_weights = v;			}		
+		void	SetWeights(std::vector<float> v)				{ expt_weights = v;			}	
+		std::vector<float>	GetWeights()				const	{ return expt_weights;			}	
 
 	private :
 

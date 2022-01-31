@@ -125,7 +125,7 @@ void Nucleus::SetStateJ(int s, double J){
 
 void Nucleus::SetMatrixElement(int l, int s1, int s2, double me){
 
-	std::string mult[7] = {"E1","E2","E3","E4","E5","E6","M1"};
+	std::string mult[8] = {"E1","E2","E3","E4","E5","E6","M1","M2"};
 	int	lambda = l+1; // This lambda is only used for checking spin/parity conservation
 	if(l >= 6) // Magnetic - opposite parity conventions to electric
 		lambda -= 5;
@@ -156,6 +156,8 @@ void Nucleus::SetMatrixElement(int l, int s1, int s2, double me){
 				<< std::setw(30) << std::left << lambda 
 				<< std::setw(20) << std::left << dJ 
 				<< std::endl;
+		std::cout	<< s1 << "\t" << s2
+				<< std::endl;
 		return;
 	}
 
@@ -184,7 +186,7 @@ void Nucleus::MultipolarityReminder() const{
 
 void Nucleus::PrintNucleus() const{
 
-	std::string mult[7] = {"E1","E2","E3","E4","E5","E6","M1"};
+	std::string mult[8] = {"E1","E2","E3","E4","E5","E6","M1","M2"};
 
 	std::cout << "Z: " << GetZ() << ", A: " << GetA() << std::endl;
 	std::cout << "Number of states: " << GetNstates() << std::endl;
