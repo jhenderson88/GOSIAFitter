@@ -17,6 +17,8 @@
 #pragma link C++ defined_in "include/GOSIAReader.h";
 #pragma link C++ defined_in "include/GOSIASimFitter.h";
 #pragma link C++ defined_in "include/GOSIASimMinFCN.h";
+#pragma link C++ defined_in "include/GOSIAQuadFitter.h";
+#pragma link C++ defined_in "include/GOSIAQuadMinFCN.h";
 #pragma link C++ defined_in "include/ScalingFitFCN.h";
 #pragma link C++ defined_in "include/NormalizationScaling.h";
 #pragma link C++ defined_in "include/MCMCSimWalker.h";

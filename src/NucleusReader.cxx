@@ -150,43 +150,27 @@ void NucleusReader::ReadGOSIANucleus(const char* filename){
 			MEFlag = false;
 
 		if(MEFlag && (line == "1,0,0,0,0" || line == "1\t0\t0\t0\t0")){
-			std::cout	<< __LINE__
-					<< std::endl;
 			tmpLambda = 0;
 		}
 		else if(MEFlag && (line == "2,0,0,0,0" || line == "2\t0\t0\t0\t0")){
-			std::cout	<< __LINE__
-					<< std::endl;
 			tmpLambda = 1;
 		}
 		else if(MEFlag && (line == "3,0,0,0,0" || line == "3\t0\t0\t0\t0")){
-			std::cout	<< __LINE__
-					<< std::endl;
 			tmpLambda = 2;
 		}
 		else if(MEFlag && (line == "4,0,0,0,0" || line == "4\t0\t0\t0\t0")){
-			std::cout	<< __LINE__
-					<< std::endl;
 			tmpLambda = 3;
 		}
 		else if(MEFlag && (line == "5,0,0,0,0" || line == "5\t0\t0\t0\t0")){
-			std::cout	<< __LINE__
-					<< std::endl;
 			tmpLambda = 4;
 		}
 		else if(MEFlag && (line == "6,0,0,0,0" || line == "6\t0\t0\t0\t0")){
-			std::cout	<< __LINE__
-					<< std::endl;
 			tmpLambda = 5;
 		}
 		else if(MEFlag && (line == "7,0,0,0,0" || line == "7\t0\t0\t0\t0")){
-			std::cout	<< __LINE__
-					<< std::endl;
 			tmpLambda = 6;
 		}
 		else if(MEFlag && (line == "8,0,0,0,0" || line == "8\t0\t0\t0\t0")){
-			std::cout	<< __LINE__
-					<< std::endl;
 			tmpLambda = 7;
 		}
 		else if(MEFlag){
