@@ -247,3 +247,84 @@ double MiscFunctions::SphericalHarmonics(double theta, int l, int m, bool sym){
 	return 0;
 
 }
+
+void MiscFunctions::SplineFit(double *x, double *y, int n, double dy1, double dyn, double* ddy) {
+  double y2[n];
+  double u[1500];
+  double qn;
+  double un;
+
+  if (dy1 > 1e30) {
+    y2[0] = 0;
+    u[0] = 1500;
+  }
+  else {
+    y2[0] = -0.5;
+    u[0] = (3.0/(x[1]-x[0]))*((y[1]-y[0])/(x[1]-x[0])-dy1);
+  }
+  for (int i=1; i<n-1; ++i) {
+    double sig = (x[i] - x[i-1])/(x[i+1]-x[i-1]);
+    double p = sig * ddy[i-1] + 2;
+    y2[i] = (sig-1)/p;
+    u[i] = (6 * ((y[i+1]-y[i])/(x[i+1] - x[i]) - (y[i]-y[i-1])/(x[i]-x[i-1]))/(x[i+1]-x[i-1]) - sig*u[i-1])/p;    
+  }
+  if (dyn > 1e30) {
+    qn = 0;
+    un = 0;
+  }
+  else {
+    qn = 0.5;
+    un = (3/(x[n-1]-x[n-2])) * (dyn - (y[n-1]-y[n-2])/(x[n-1]-x[n-2]));
+  }
+  ddy[n-1] = (un-qn*u[n-2])/(qn*ddy[n-2] + 1.);
+  for (int k=n-2; k>=0; --k) {
+    ddy[k] = ddy[k]*ddy[k+1] + u[k];
+  }
+}
+
+void MiscFunctions::SplineEval(double *x, double *y, double *ddy, int n, double &xval, double &yval) {
+  int klo = 0;
+  int khi = n-1;
+  int k;
+  while (khi-klo > 1) {
+    k = (khi + klo)/2;
+    if (x[k] > xval) { khi = k; }
+    else { klo = k; }
+  }
+  double h = x[khi] - x[klo];
+
+  double a;
+  double b;
+  if (std::abs(h) < 1e-9) {
+    if ( xval < x[0] ) { h = 1; }
+    if ( xval > x[n-1] ) { k = n-2; }
+    a = (y[k] - y[k+1])/(x[k] - x[k+1]);
+    b = (y[k] + y[k+1] - a*(x[k] + x[k+1]))*0.5;
+    yval = a*xval + b;
+    std::cout << "SplineEval " << xval << " " << yval << " extrapolation" << std::endl;
+    return;
+  }
+  a = (x[khi] - xval)/h;
+  b = (xval - x[klo])/h;
+  yval = a*y[klo] + b*y[khi] + ((std::pow(a,3) - a)*ddy[klo] + (std::pow(b,3) - b)*ddy[khi])*(h*h/6.);
+                                                     
+  return;
+}
+
+void MiscFunctions::Spline(double *x, double *y, int n, double xval, double &yval) {
+  double *y_loc = new double[n]();
+  for (int i=0; i<n; ++i) {
+    y_loc[i] = std::log(y[i]);
+  }
+  double dy1 = (y_loc[1]-y_loc[0])/(x[1]-x[0]);
+  double dyn = (y_loc[n-1]-y_loc[n-2])/(x[n-1]-x[n-2]);
+
+  double *ddy = new double[n]();
+  SplineFit(x, y_loc, n, dy1, dyn, ddy);
+
+  SplineEval(x, y_loc, ddy, n, xval, yval);
+
+  yval = std::exp(yval);
+  return;
+}
+

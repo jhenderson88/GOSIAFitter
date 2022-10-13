@@ -62,6 +62,7 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 												iter = 0;	
 												nThreads = 1;
 												fLikelihood 	= false;
+                        workingDir = ".";
 
 												size_t	Nexpts = 0;
 												if(exptData_Beam.size() > exptData_Target.size())
@@ -79,6 +80,8 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 
 		virtual void ClearAll();	/*!< Clear all vectors */
 
+  void SetWorkingDir(std::string s) { workingDir = s; }
+  
 		void	SetBeamGOSIAInput(std::string s)				{ beamGOSIAFile_inp = s;		}
 		void	SetTargetGOSIAInput(std::string s)				{ targetGOSIAFile_inp = s;		}
 
@@ -130,8 +133,12 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 		// The below are duplicated for beam and target excitation:
 		void	SetBeamMatrixElements(std::vector<MatrixElement> m)		{ ME_Beam = m;				}	/*!< Define the vector of beam MatrixElement objects to be fitted */
 		std::vector<MatrixElement>	GetBeamMatrixElements() 	const	{ return ME_Beam;			}	/*!< Return the vector of beam MatrixElement objects to be fitted */
+  void	SetBeamRelativeElements(std::vector<RelativeMatrixElement> m)		{ ME_BeamRel = m;				}	/*!< Define the vector of beam RelativeMatrixElement objects to be varied */  
+  std::vector<RelativeMatrixElement>	GetBeamRelativeElements() const {	return ME_BeamRel; }	/*!< Define the vector of beam RelativeMatrixElement objects to be varied */
 		void	SetTargetMatrixElements(std::vector<MatrixElement> m)		{ ME_Target = m;			}	/*!< Define the vector of target MatrixElement objects to be fitted */
 		std::vector<MatrixElement>	GetTargetMatrixElements() 	const	{ return ME_Target;			}	/*!< Return the vector of target MatrixElement objects to be fitted */
+  void	SetTargetRelativeElements(std::vector<RelativeMatrixElement> m)		{ ME_TargetRel = m;				}	/*!< Define the vector of beam RelativeMatrixElement objects to be varied */  
+  std::vector<RelativeMatrixElement>	GetTargetRelativeElements() const {	return ME_TargetRel; }	/*!< Define the vector of beam RelativeMatrixElement objects to be varied */
 
 		void	SetBeamData(std::vector<ExperimentData> d)			{ exptData_Beam = d;			}	/*!< Define the vector of beam ExperimentData objects (one for each experiment) */
 		std::vector<ExperimentData>	GetBeamData() 			const	{ return exptData_Beam;			}	/*!< Return the vector of beam ExperimentData objects (one for each experiment) */
@@ -202,9 +209,12 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 
 	private :
 
+  std::string workingDir;
 		std::vector<double>		parameters;			/*!< Matrix elements for both beam and target, and common scaling factors */
 		std::vector<MatrixElement>	ME_Beam;			/*!< Beam matrix elements - Preset to relate parameters to beam matrix elements */
+  std::vector<RelativeMatrixElement>	ME_BeamRel;			/*!< Beam matrix elements - Preset to relate parameters to beam matrix elements */
 		std::vector<MatrixElement>	ME_Target;			/*!< Target matrix elements - Preset to relate parameters to target matrix elements */
+  std::vector<RelativeMatrixElement>	ME_TargetRel;			/*!< Beam matrix elements - Preset to relate parameters to beam matrix elements */
 		std::vector<ScalingParameter>	scalingParameters;		/*!< Scaling parameters - common to both target and beam excitations */
 
 		std::vector<TMatrixD>		correctionFactors_Beam;		/*!< Point correction factor for the beam (accounts for the angular distribution of the cross section) */

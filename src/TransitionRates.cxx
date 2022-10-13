@@ -6,7 +6,6 @@ TransitionRates::TransitionRates() : fNucleus(NULL)
 
 TransitionRates::TransitionRates(Nucleus *nucl) : fNucleus(nucl)
 {
-
 	StateJ = nucl->GetLevelJ();
 	StateE = nucl->GetLevelEnergies();
 
@@ -40,6 +39,8 @@ TransitionRates::TransitionRates(const TransitionRates& t){
 	}
 	SummedTransitionStrengths.ResizeTo(t.SummedTransitionStrengths.GetNcols(),t.SummedTransitionStrengths.GetNrows());
 	SummedTransitionStrengths 	= t.SummedTransitionStrengths;
+  SummedGammaTransitionStrengths.ResizeTo(t.SummedGammaTransitionStrengths.GetNcols(),t.SummedGammaTransitionStrengths.GetNrows());
+	SummedGammaTransitionStrengths 	= t.SummedGammaTransitionStrengths;
 	Lifetimes.ResizeTo(t.Lifetimes.GetNcols(),t.Lifetimes.GetNrows());
 	Lifetimes 			= t.Lifetimes;
 	BranchingRatios.ResizeTo(t.BranchingRatios.GetNcols(),t.BranchingRatios.GetNrows());
@@ -52,6 +53,8 @@ TransitionRates::TransitionRates(const TransitionRates& t){
 
 	StateLifetimes.ResizeTo(t.StateLifetimes.GetNrows());
 	StateLifetimes 			= t.StateLifetimes;
+  StateGammaLifetimes.ResizeTo(t.StateGammaLifetimes.GetNrows());
+	StateGammaLifetimes 			= t.StateGammaLifetimes;
 	StateDecayProb.ResizeTo(t.StateDecayProb.GetNrows());
 	StateDecayProb 			= t.StateDecayProb;
 
@@ -85,6 +88,8 @@ TransitionRates& TransitionRates::operator = (const TransitionRates& t){
 	}
 	SummedTransitionStrengths.ResizeTo(t.SummedTransitionStrengths.GetNcols(),t.SummedTransitionStrengths.GetNrows());
 	SummedTransitionStrengths 	= t.SummedTransitionStrengths;
+  SummedGammaTransitionStrengths.ResizeTo(t.SummedGammaTransitionStrengths.GetNcols(),t.SummedGammaTransitionStrengths.GetNrows());
+	SummedGammaTransitionStrengths 	= t.SummedGammaTransitionStrengths;
 	Lifetimes.ResizeTo(t.Lifetimes.GetNcols(),t.Lifetimes.GetNrows());
 	Lifetimes 			= t.Lifetimes;
 	BranchingRatios.ResizeTo(t.BranchingRatios.GetNcols(),t.BranchingRatios.GetNrows());
@@ -97,6 +102,8 @@ TransitionRates& TransitionRates::operator = (const TransitionRates& t){
 
 	StateLifetimes.ResizeTo(t.StateLifetimes.GetNrows());
 	StateLifetimes 			= t.StateLifetimes;
+  StateGammaLifetimes.ResizeTo(t.StateGammaLifetimes.GetNrows());
+	StateGammaLifetimes 			= t.StateGammaLifetimes;
 	StateDecayProb.ResizeTo(t.StateDecayProb.GetNrows());
 	StateDecayProb 			= t.StateDecayProb;
 
@@ -113,9 +120,9 @@ TransitionRates& TransitionRates::operator = (const TransitionRates& t){
 
 void TransitionRates::SetMatrixElements(){
 	
-	double nbarns[7] = {1,2,3,4,5,6,0};
-	double multfactor[7] = {0.629e-15,816e-12,1760e-6,5882,2.89e10,1.95e17,56.8e-15};	// Factors for B --> Lifetime
-	int power[7] = {3,5,7,9,11,13,3};
+	double nbarns[8] = {1,2,3,4,5,6,0,1};
+	double multfactor[8] = {0.629e-15, 816e-12, 1760e-6, 5882, 2.89e10, 1.95e17, 56.8e-15, 0.7381e-7};	// Factors for B --> Lifetime
+	int power[8] = {3,5,7,9,11,13,3,5};
 
 	MatrixElements.resize(fNucleus->GetMatrixElements().size());
 	for(unsigned int i=0;i<MatrixElements.size();i++){
@@ -152,13 +159,19 @@ void TransitionRates::SetMatrixElements(){
 
 	Lifetimes.ResizeTo(TransitionStrengths.at(0).GetNcols(),TransitionStrengths.at(0).GetNrows());
 	SummedTransitionStrengths.ResizeTo(TransitionStrengths.at(0).GetNcols(),TransitionStrengths.at(0).GetNrows());
+  SummedGammaTransitionStrengths.ResizeTo(TransitionStrengths.at(0).GetNcols(),TransitionStrengths.at(0).GetNrows());
 	for(int x=0;x<TransitionStrengths.at(0).GetNcols();x++){
 		for(int y=0;y<TransitionStrengths.at(0).GetNrows();y++){
 			SummedTransitionStrengths[y][x] = 0;
+      SummedGammaTransitionStrengths[y][x] = 0;
+      if (x == y) { continue; }
 			for(unsigned int i=0;i<TransitionStrengths.size();i++){
-				SummedTransitionStrengths[y][x] += (TMath::Power(TMath::Abs(StateE.at(x)-StateE.at(y)),power[i]) * TransitionStrengths.at(i)[y][x]) / multfactor[i];
+        //TJG  - adding internal conversion
+				SummedGammaTransitionStrengths[y][x] += (TMath::Power(TMath::Abs(StateE.at(x)-StateE.at(y)),power[i]) * TransitionStrengths.at(i)[y][x]) / multfactor[i];
+
+        SummedTransitionStrengths[y][x] += (TMath::Power(TMath::Abs(StateE.at(x)-StateE.at(y)),power[i]) * TransitionStrengths.at(i)[y][x]) * (1.0 + fNucleus->GetConversionCoeffients().at(i)[y][x]) / multfactor[i];        
 			}
-			if(SummedTransitionStrengths[y][x]>0)
+			if(SummedTransitionStrengths[y][x]>0)        
 				Lifetimes[y][x] = (1 / SummedTransitionStrengths[y][x]);
 			else
 				Lifetimes[y][x] = 0;
@@ -167,12 +180,14 @@ void TransitionRates::SetMatrixElements(){
 
 	for(int x=0;x<SummedTransitionStrengths.GetNrows();x++){
 		for(int y=x+1;y<SummedTransitionStrengths.GetNcols();y++){
-			if(SummedTransitionStrengths[y][x] > 0)
+			if(SummedTransitionStrengths[y][x] > 0) {
 				nDecays++;
+      }
 		}
 	}
-	
-	StateLifetimes.ResizeTo(SummedTransitionStrengths.GetNcols());	
+
+	StateLifetimes.ResizeTo(SummedTransitionStrengths.GetNcols());
+  StateGammaLifetimes.ResizeTo(SummedGammaTransitionStrengths.GetNcols());	
 	StateDecayProb.ResizeTo(SummedTransitionStrengths.GetNcols());
 	for(int x=0;x<SummedTransitionStrengths.GetNcols();x++){
 		double tmp = 0;
@@ -183,15 +198,27 @@ void TransitionRates::SetMatrixElements(){
 			StateLifetimes[x] = 1/tmp;
 		else
 			StateLifetimes[x] = 0;
+
+	}
+
+  for(int x=0;x<SummedGammaTransitionStrengths.GetNcols();x++){
+		double tmp = 0;
+		for(int y=0;y<SummedGammaTransitionStrengths.GetNrows();y++)
+			tmp+=SummedGammaTransitionStrengths[y][x] * 1e-12;
+    if(tmp>0)
+			StateGammaLifetimes[x] = 1/tmp;
+		else
+			StateGammaLifetimes[x] = 0;
+
 	}
 		
 
 	BranchingRatios.ResizeTo(fNucleus->GetNstates(),fNucleus->GetNstates());
 	for(int x=0;x<BranchingRatios.GetNcols();x++){
-		double sum = SumColumn(SummedTransitionStrengths,x);
+		double sum = SumColumn(SummedGammaTransitionStrengths,x);
 		if(sum > 0){
 			for(int y=0;y<BranchingRatios.GetNrows();y++)
-				BranchingRatios[y][x] = SummedTransitionStrengths[y][x] / sum;
+				BranchingRatios[y][x] = SummedGammaTransitionStrengths[y][x] / sum;
 		}
 		else
 			for(int y=0;y<BranchingRatios.GetNrows();y++)
@@ -214,9 +241,9 @@ void TransitionRates::SetMatrixElements(){
 
 void TransitionRates::Print() const{
 
-	std::string mult[7] = {"E1","E2","E3","E4","E5","E6","M1"};
-	std::string MEUnits[7] = {"eb^(1/2)","eb","eb^(3/2)","eb^(2)","eb^(5/2)","eb^3","uN"};	
-	std::string TSUnits[7] = {"e2fm2","e2fm4","e2fm6","e2fm8","e2fm10","e2fm12","uN2"};	
+	std::string mult[8] = {"E1","E2","E3","E4","E5","E6","M1","M2"};
+	std::string MEUnits[8] = {"eb^(1/2)","eb","eb^(3/2)","eb^(2)","eb^(5/2)","eb^3","uN","uN^(2)"};	
+	std::string TSUnits[8] = {"e2fm2","e2fm4","e2fm6","e2fm8","e2fm10","e2fm12","uN2","uN4"};	
 	
 	std::cout << "\nMatrix elements" << std::endl;
 	for(unsigned int i=0;i<MatrixElements.size();i++){

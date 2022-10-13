@@ -35,7 +35,8 @@ class TransitionRates
 		void		SetMatrixElements();		/*!< Set up the experimental data based on the provided Nucleus class */	
 		void		Print() const;			/*!< Print the data, as determined from energies and matrix elements */
 
-		TVectorD	GetLifetimes()			const			{ return StateLifetimes;	}	/*!< Return a TVectorD of state lifetimes (ps) */	
+		TVectorD	GetLifetimes()			const			{ return StateLifetimes;	}	/*!< Return a TVectorD of state lifetimes (ps) */
+    TVectorD	GetGammaLifetimes()			const			{ return StateGammaLifetimes;	}	/*!< Return a TVectorD of state lifetimes (ps) */	
 		TMatrixD	GetBranchingRatios()		const			{ return BranchingRatios;	}	/*!< Return a TVectorD of branching ratios */
 		TMatrixD	GetMixingRatios()		const			{ return MixingRatios;		}	/*!< Return a TMatrixD of mixing ratios (E/M) */
 
@@ -50,7 +51,8 @@ class TransitionRates
 		std::vector<TMatrixD>		TransitionStrengths;
 		std::vector<TMatrixD>		TransitionStrengths_Abs;
 		std::vector<TMatrixD>		TransitionAmplitudes;
-		TMatrixD			SummedTransitionStrengths;
+		TMatrixD			SummedGammaTransitionStrengths;
+    TMatrixD			SummedTransitionStrengths;
 		TMatrixD			Lifetimes;
 		TMatrixD			BranchingRatios;			// Column == initial state, row == final states
 		TMatrixD			MixingRatios;
@@ -58,6 +60,7 @@ class TransitionRates
 		std::vector<double>		StateE;
 
 		TVectorD			StateLifetimes;
+    TVectorD			StateGammaLifetimes;
 		TVectorD			StateDecayProb;
 		
 		double				SumColumn(TMatrixD,int) const;

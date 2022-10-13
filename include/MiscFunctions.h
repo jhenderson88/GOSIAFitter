@@ -33,7 +33,9 @@ class MiscFunctions {
 
 		static 	double	SphericalHarmonics(double,int,int,bool b = true);	/*!<	*/
 
-	
+    static void Spline(double *x, double *y, int n, double xval, double &yval);
+    static void SplineEval(double *x, double *y, double *ddy, int n, double &xval, double &yval);
+    static void SplineFit(double *x, double *y, int n, double dy1, double dyn, double* ddy);
 };
 
 #endif

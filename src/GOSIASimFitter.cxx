@@ -1,5 +1,10 @@
 #include "GOSIASimFitter.h"
 
+#include "TString.h"
+#include "TGraph.h"
+#include "TGraphErrors.h"
+#include "TMultiGraph.h"
+
 GOSIASimFitter::GOSIASimFitter()
 {
 
@@ -20,10 +25,12 @@ GOSIASimFitter::GOSIASimFitter()
 
 	chisq		= -1;
 
+  workingDir = "./";
+
 }
 
 GOSIASimFitter::GOSIASimFitter(const GOSIASimFitter& g) {
-
+  workingDir = g.workingDir;
 
 	index				= g.index;
 
@@ -101,7 +108,7 @@ GOSIASimFitter::GOSIASimFitter(const GOSIASimFitter& g) {
 }
 GOSIASimFitter& GOSIASimFitter::operator = (const GOSIASimFitter& g){
 
-
+  workingDir = g.workingDir;
 	index				= g.index;
 
 	chisq				= g.chisq;
@@ -179,10 +186,43 @@ GOSIASimFitter& GOSIASimFitter::operator = (const GOSIASimFitter& g){
 
 }
 
+void GOSIASimFitter::UpdateMEs() {
+  for(unsigned int i=0;i<matrixElements_Beam.size();i++){
+    fNucleus_Beam.SetMatrixElement(matrixElements_Beam.at(i).GetLambda(),matrixElements_Beam.at(i).GetInitialState(),matrixElements_Beam.at(i).GetFinalState(),matrixElements_Beam.at(i).GetMatrixElement());
+	}
+  for(unsigned int i=0;i<relativeElements_Beam.size();i++){
+    double me = fNucleus_Beam.GetMatrixElements().at(relativeElements_Beam.at(i).GetLambdaRel())[relativeElements_Beam.at(i).GetInitialStateRel()][relativeElements_Beam.at(i).GetFinalStateRel()];
+    me = me * relativeElements_Beam.at(i).GetRelativeElement();
+		fNucleus_Beam.SetMatrixElement(relativeElements_Beam.at(i).GetLambda(),relativeElements_Beam.at(i).GetInitialState(),relativeElements_Beam.at(i).GetFinalState(),me);
+	}
+  for(unsigned int i=0;i<matrixElements_Target.size();i++){
+	  fNucleus_Target.SetMatrixElement(matrixElements_Target.at(i).GetLambda(),matrixElements_Target.at(i).GetInitialState(),matrixElements_Target.at(i).GetFinalState(),matrixElements_Target.at(i).GetMatrixElement());
+	}
+  for(unsigned int i=0;i<relativeElements_Target.size();i++){
+    double me = fNucleus_Target.GetMatrixElements().at(relativeElements_Target.at(i).GetLambdaRel())[relativeElements_Target.at(i).GetInitialStateRel()][relativeElements_Target.at(i).GetFinalStateRel()];
+    me = me * relativeElements_Target.at(i).GetRelativeElement();
+		fNucleus_Target.SetMatrixElement(relativeElements_Target.at(i).GetLambda(),relativeElements_Target.at(i).GetInitialState(),relativeElements_Target.at(i).GetFinalState(),me);
+	}
+}
+
+void GOSIASimFitter::WriteBST() {
+  std::ofstream	beam_bst(workingDir+"/"+beamBSTFile);
+	for(size_t i=0;i<beamMapping_i.size();i++){
+		beam_bst << fNucleus_Beam.GetMatrixElements().at(beamMapping_l.at(i))[beamMapping_f.at(i)][beamMapping_i.at(i)] << "\n";
+	}
+	beam_bst.close();
+  std::ofstream	target_bst(workingDir+"/"+targetBSTFile);
+	for(size_t i=0;i<targetMapping_i.size();i++){
+		target_bst << fNucleus_Target.GetMatrixElements().at(targetMapping_l.at(i))[targetMapping_f.at(i)][targetMapping_i.at(i)] << "\n";
+	}
+	target_bst.close();
+}
+
 void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	GOSIASimMinFCN theFCN(exptData_Beam,exptData_Target);
 
+  theFCN.SetWorkingDir(workingDir);
 	theFCN.SetBeamGOSIAInput(GetBeamGOSIAInput());
 	theFCN.SetBeamGOSIAOutput(GetBeamGOSIAOutput());
 	theFCN.SetTargetGOSIAInput(GetTargetGOSIAInput());
@@ -193,7 +233,9 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 	theFCN.SetTargetMapping(targetMapping_i,targetMapping_f,targetMapping_l);
 
 	theFCN.SetBeamMatrixElements(matrixElements_Beam);
+  theFCN.SetBeamRelativeElements(relativeElements_Beam);
 	theFCN.SetTargetMatrixElements(matrixElements_Target);
+  theFCN.SetTargetRelativeElements(relativeElements_Target);
 	theFCN.SetScalingParameters(scalingParameters);
 
 	theFCN.SetBeamLitLifetimes(litLifetimes_Beam);
@@ -235,42 +277,82 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	theFCN.SetWeights(expt_weights);
 
+  if (verbose) {
 	for(size_t m=0;m<matrixElements_Beam.size();m++)
 		matrixElements_Beam.at(m).Print();
 	for(size_t m=0;m<matrixElements_Target.size();m++)
 		matrixElements_Target.at(m).Print();
+  }
 
+  std::vector<std::string> names;
 	parameters.clear();
 	par_LL.clear();
 	par_UL.clear();
+  int nBeamMatrixElements = 0;
 	for(unsigned int i=0;i<matrixElements_Beam.size();i++){
-		parameters.push_back(matrixElements_Beam.at(i).GetMatrixElement());
-		par_LL.push_back(matrixElements_Beam.at(i).GetMatrixElementLowerLimit());
-		par_UL.push_back(matrixElements_Beam.at(i).GetMatrixElementUpperLimit());
+    if (!matrixElements_Beam.at(i).GetFixed()) {
+      parameters.push_back(matrixElements_Beam.at(i).GetMatrixElement());
+      par_LL.push_back(matrixElements_Beam.at(i).GetMatrixElementLowerLimit());
+      par_UL.push_back(matrixElements_Beam.at(i).GetMatrixElementUpperLimit());
+      names.push_back("Beam-ME-"+std::to_string(i));
+      ++nBeamMatrixElements;
+    }
 	}
+  int nRelativeBeam = 0;
+  for(unsigned int i=0;i<relativeElements_Beam.size();i++){
+    if (!relativeElements_Beam.at(i).GetFixed()) {
+      ++nRelativeBeam;
+      parameters.push_back(relativeElements_Beam.at(i).GetRelativeElement());
+      par_LL.push_back(relativeElements_Beam.at(i).GetRelativeElementLowerLimit());
+      par_UL.push_back(relativeElements_Beam.at(i).GetRelativeElementUpperLimit());
+      names.push_back("Beam-RelME-"+std::to_string(i));
+    }
+	}
+  int nTargetMatrixElements = 0;
 	for(unsigned int i=0;i<matrixElements_Target.size();i++){
-		parameters.push_back(matrixElements_Target.at(i).GetMatrixElement());
-		par_LL.push_back(matrixElements_Target.at(i).GetMatrixElementLowerLimit());
-		par_UL.push_back(matrixElements_Target.at(i).GetMatrixElementUpperLimit());
+    if (!matrixElements_Target.at(i).GetFixed()) {
+      parameters.push_back(matrixElements_Target.at(i).GetMatrixElement());
+      par_LL.push_back(matrixElements_Target.at(i).GetMatrixElementLowerLimit());
+      par_UL.push_back(matrixElements_Target.at(i).GetMatrixElementUpperLimit());
+      names.push_back("Target-ME-"+std::to_string(i));
+    }
 	}
+  int nRelativeTarget = 0;
+  for(unsigned int i=0;i<relativeElements_Target.size();i++){
+    if (!relativeElements_Target.at(i).GetFixed()) {
+      ++nRelativeTarget;
+      parameters.push_back(relativeElements_Target.at(i).GetRelativeElement());
+      par_LL.push_back(relativeElements_Target.at(i).GetRelativeElementLowerLimit());
+      par_UL.push_back(relativeElements_Target.at(i).GetRelativeElementUpperLimit());
+      names.push_back("Target-RelME-"+std::to_string(i));
+    }
+	}  
 
-	std::cout 	<< std::setw(12) << std::left << "Parameters:" 
-			<< std::endl;
-	for(unsigned int i=0;i<matrixElements_Beam.size();i++){
-		std::cout	<< std::setw(11) << std::left << "Beam ME:" 
+  std::cout 	<< std::setw(12) << std::left << "Parameters:" 
+                << std::endl;
+	for(unsigned int i=0;i<nBeamMatrixElements;i++){
+		std::cout	<< std::setw(13) << std::left << "Beam ME:" 
 				<< std::setw(4) << std::left << i+1;
 	}
-	for(unsigned int i=0;i<matrixElements_Target.size();i++){
-		std::cout	<< std::setw(11) << std::left << "Target ME:" 
+  for(unsigned int i=0;i<nRelativeBeam;i++){
+		std::cout	<< std::setw(13) << std::left << "Rel Beam ME:" 
+				<< std::setw(4) << std::left << i+1;
+	}
+	for(unsigned int i=0;i<nTargetMatrixElements;i++){
+		std::cout	<< std::setw(13) << std::left << "Target ME:" 
+              << std::setw(4) << std::left << i+1;
+	}
+  for(unsigned int i=0;i<nRelativeTarget;i++){
+		std::cout	<< std::setw(13) << std::left << "Rel Beam ME:" 
 				<< std::setw(4) << std::left << i+1;
 	}
 	std::cout	<< std::endl;
 	for(unsigned int i=0;i<parameters.size();i++){
-		std::cout 	<< std::setw(11) << std::left << parameters.at(i) 
+		std::cout 	<< std::setw(13) << std::left << parameters.at(i) 
 				<< std::setw(4) << std::left << "";
 	}
 	std::cout << std::endl;
-
+  
 	theFCN.SetNpar(parameters.size());
 
 	ROOT::Math::Minimizer *min =
@@ -306,20 +388,8 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 			<< std::endl;
 
 	for(unsigned int i=0; i<parameters.size(); i++){
-		std::string name;
-		if(i < matrixElements_Beam.size()){
-			name = "Beam-ME-"+std::to_string(i);
-			//min->SetVariable(i,name,parameters.at(i),0.001);
-			min->SetLimitedVariable(i,name,parameters.at(i),0.0001,par_LL.at(i),par_UL.at(i));
-			std::cout	<< name << std::endl;
-		}
-		else if(i < matrixElements_Target.size() + matrixElements_Beam.size()){
-			name = "Target-ME-"+std::to_string(i - matrixElements_Beam.size());
-			//min->SetVariable(i,name,parameters.at(i),0.001);
-			min->SetLimitedVariable(i,name,parameters.at(i),0.0001,par_LL.at(i),par_UL.at(i));
-			//min->SetFixedVariable(i,name,parameters.at(i));
-			std::cout	<< name << std::endl;
-		}
+    min->SetLimitedVariable(i,names.at(i),parameters.at(i),0.0001,par_LL.at(i),par_UL.at(i));
+    std::cout	<< names.at(i) << std::setw(4) << " " << std::setw(10) << std::left << parameters.at(i) << std::endl;
 	}
 
 	std::cout << std::endl;
@@ -383,23 +453,118 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	std::cout	<< "Beam matrix elements:"
 			<< std::endl;
+  int parct = 0;
 	for(size_t i=0;i<matrixElements_Beam.size();i++){
-		std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
-				<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
-				<< std::setw(15) << std::left << res[i]
-				<< std::setw(15) << std::left << unc[i]
-				<< std::endl;
+    if (!matrixElements_Beam.at(i).GetFixed()) {
+      matrixElements_Beam.at(i).SetMatrixElement(res[parct]);
+      fNucleus_Beam.SetMatrixElement(matrixElements_Beam.at(i).GetLambda(),
+                                     matrixElements_Beam.at(i).GetInitialState(),
+                                     matrixElements_Beam.at(i).GetFinalState(),
+                                     res[parct]);
+      std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
+                << std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
+                << std::setw(15) << std::left << fNucleus_Beam.GetMatrixElements().at(matrixElements_Beam.at(i).GetLambda())[matrixElements_Beam.at(i).GetInitialState()][matrixElements_Beam.at(i).GetFinalState()]
+                << std::setw(15) << std::left << res[parct] 
+                << std::setw(15) << std::left << unc[parct]
+                << std::endl;
+      ++parct;
+    }
+    else {
+      fNucleus_Beam.SetMatrixElement(matrixElements_Beam.at(i).GetLambda(),
+                                     matrixElements_Beam.at(i).GetInitialState(),
+                                     matrixElements_Beam.at(i).GetFinalState(),
+                                     matrixElements_Beam.at(i).GetMatrixElement());
+      std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
+                << std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
+                << std::setw(15) << std::left << fNucleus_Beam.GetMatrixElements().at(matrixElements_Beam.at(i).GetLambda())[matrixElements_Beam.at(i).GetInitialState()][matrixElements_Beam.at(i).GetFinalState()] << std::endl;
+    }
 	}
+  std::cout	<< "Relative Beam matrix elements:"
+            << std::endl;
+  for(size_t i=0;i<relativeElements_Beam.size();i++){
+		std::cout	<< std::setw(10) << std::left << relativeElements_Beam.at(i).GetInitialState()
+              << std::setw(10) << std::left << relativeElements_Beam.at(i).GetFinalState();
+    if (!relativeElements_Beam.at(i).GetFixed()) {
+      relativeElements_Beam.at(i).SetRelativeElement(res[parct]);
+      fNucleus_Beam.SetMatrixElement(relativeElements_Beam.at(i).GetLambda(),
+                                     relativeElements_Beam.at(i).GetInitialState(),
+                                     relativeElements_Beam.at(i).GetFinalState(),
+                                     res[parct]*fNucleus_Beam.GetMatrixElements().at(relativeElements_Beam.at(i).GetLambdaRel())[relativeElements_Beam.at(i).GetInitialStateRel()][relativeElements_Beam.at(i).GetFinalStateRel()]);
+      std::cout << std::setw(15) << std::left << res[parct]*fNucleus_Beam.GetMatrixElements().at(relativeElements_Beam.at(i).GetLambdaRel())[relativeElements_Beam.at(i).GetInitialStateRel()][relativeElements_Beam.at(i).GetFinalStateRel()]
+                << std::setw(15) << std::left << res[parct]
+                << std::setw(15) << std::left << unc[parct]
+                << std::endl;
+      ++parct;
+    }
+    else {
+      fNucleus_Beam.SetMatrixElement(relativeElements_Beam.at(i).GetLambda(),
+                                     relativeElements_Beam.at(i).GetInitialState(),
+                                     relativeElements_Beam.at(i).GetFinalState(),
+                                     relativeElements_Beam.at(i).GetRelativeElement()*fNucleus_Beam.GetMatrixElements().at(relativeElements_Beam.at(i).GetLambdaRel())[relativeElements_Beam.at(i).GetInitialStateRel()][relativeElements_Beam.at(i).GetFinalStateRel()]);
+      std::cout << std::setw(15) << std::left << relativeElements_Beam.at(i).GetRelativeElement()*fNucleus_Beam.GetMatrixElements().at(relativeElements_Beam.at(i).GetLambdaRel())[relativeElements_Beam.at(i).GetInitialStateRel()][relativeElements_Beam.at(i).GetFinalStateRel()]
+              << std::setw(15) << std::left << relativeElements_Beam.at(i).GetRelativeElement()
+              << std::setw(15) << std::left << 0.0
+              << std::endl;
+
+    }
+	}  
 	std::cout	<< "Target matrix elements:"
 			<< std::endl;
 	for(size_t i=0;i<matrixElements_Target.size();i++){
-		size_t j = matrixElements_Beam.size() + i;
-		std::cout	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
-				<< std::setw(10) << std::left << matrixElements_Target.at(i).GetFinalState()
-				<< std::setw(15) << std::left << res[j]
-				<< std::setw(15) << std::left << unc[j]
-				<< std::endl;
+    if (!matrixElements_Target.at(i).GetFixed()) {
+      matrixElements_Target.at(i).SetMatrixElement(res[parct]);
+      fNucleus_Target.SetMatrixElement(matrixElements_Target.at(i).GetLambda(),
+                                     matrixElements_Target.at(i).GetInitialState(),
+                                     matrixElements_Target.at(i).GetFinalState(),
+                                     res[parct]);
+      std::cout	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
+                << std::setw(10) << std::left << matrixElements_Target.at(i).GetFinalState()
+                << std::setw(15) << std::left << fNucleus_Target.GetMatrixElements().at(matrixElements_Target.at(i).GetLambda())[matrixElements_Target.at(i).GetInitialState()][matrixElements_Target.at(i).GetFinalState()]
+                << std::setw(15) << std::left << res[parct] 
+                << std::setw(15) << std::left << unc[parct]
+                << std::endl;
+      ++parct;
+    }
+    else {
+     fNucleus_Target.SetMatrixElement(matrixElements_Target.at(i).GetLambda(),
+                                     matrixElements_Target.at(i).GetInitialState(),
+                                     matrixElements_Target.at(i).GetFinalState(),
+                                     matrixElements_Target.at(i).GetMatrixElement());
+      std::cout	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
+                << std::setw(10) << std::left << matrixElements_Target.at(i).GetFinalState()
+                << std::setw(15) << std::left << fNucleus_Target.GetMatrixElements().at(matrixElements_Target.at(i).GetLambda())[matrixElements_Target.at(i).GetInitialState()][matrixElements_Target.at(i).GetFinalState()] << std::endl;
+    }
 	}
+  std::cout	<< "Relative Target matrix elements:"
+            << std::endl;
+  for(size_t i=0;i<relativeElements_Target.size();i++){
+		std::cout	<< std::setw(10) << std::left << relativeElements_Target.at(i).GetInitialState()
+              << std::setw(10) << std::left << relativeElements_Target.at(i).GetFinalState();
+    if (!relativeElements_Target.at(i).GetFixed()) {
+      relativeElements_Target.at(i).SetRelativeElement(res[parct]);
+      fNucleus_Target.SetMatrixElement(relativeElements_Target.at(i).GetLambda(),
+                                     relativeElements_Target.at(i).GetInitialState(),
+                                     relativeElements_Target.at(i).GetFinalState(),
+                                     res[parct]*fNucleus_Target.GetMatrixElements().at(relativeElements_Target.at(i).GetLambdaRel())[relativeElements_Target.at(i).GetInitialStateRel()][relativeElements_Target.at(i).GetFinalStateRel()]);
+      std::cout << std::setw(15) << std::left << res[parct]*fNucleus_Target.GetMatrixElements().at(relativeElements_Target.at(i).GetLambdaRel())[relativeElements_Target.at(i).GetInitialStateRel()][relativeElements_Target.at(i).GetFinalStateRel()]
+                << std::setw(15) << std::left << res[parct]
+                << std::setw(15) << std::left << unc[parct]
+                << std::endl;
+      ++parct;
+    }
+    else {
+      fNucleus_Target.SetMatrixElement(relativeElements_Target.at(i).GetLambda(),
+                                     relativeElements_Target.at(i).GetInitialState(),
+                                     relativeElements_Target.at(i).GetFinalState(),
+                                     relativeElements_Target.at(i).GetRelativeElement()*fNucleus_Target.GetMatrixElements().at(relativeElements_Target.at(i).GetLambdaRel())[relativeElements_Target.at(i).GetInitialStateRel()][relativeElements_Target.at(i).GetFinalStateRel()]);
+      std::cout << std::setw(15) << std::left << relativeElements_Target.at(i).GetRelativeElement()*fNucleus_Target.GetMatrixElements().at(relativeElements_Target.at(i).GetLambdaRel())[relativeElements_Target.at(i).GetInitialStateRel()][relativeElements_Target.at(i).GetFinalStateRel()]
+                << std::setw(15) << std::left << relativeElements_Target.at(i).GetRelativeElement()
+                << std::setw(15) << std::left << 0.0
+                << std::endl;
+
+    }
+	}   
+
 	std::cout	<< std::endl;
 
 	for(unsigned int i=0;i<parameters.size();i++)
@@ -496,10 +661,60 @@ void GOSIASimFitter::AddBeamFittingMatrixElement(int lambda, int init, int fin, 
 	MatrixElement tmpME(matrixElements_Beam.size(),lambda,init,fin,ME,LL,UL);
 	matrixElements_Beam.push_back(tmpME);
 }
+
+void GOSIASimFitter::SetBeamFittingMatrixElement(int lambda, int init, int fin, double ME, double LL, double UL){
+  for (int j=0; j<matrixElements_Beam.size(); ++j) {
+    if (matrixElements_Beam[j].GetLambda() == lambda &&
+        matrixElements_Beam[j].GetInitialState() == init &&
+        matrixElements_Beam[j].GetFinalState() == fin) {
+      matrixElements_Beam[j].SetMatrixElement(ME);
+      matrixElements_Beam[j].SetMatrixElementLowerLimit(LL);
+      matrixElements_Beam[j].SetMatrixElementLowerLimit(UL);
+    }
+  }
+}
+
+void GOSIASimFitter::AddBeamRelativeMatrixElement(int lambda, int init,int fin,int lambda2,int init2,int fin2 ,double ME, double ME_LL, double ME_UL, bool fixed, bool relative) {
+  double rel = 1.0;
+  double rel_ll = 1.0; 
+  double rel_ul = 1.0;
+  if (relative == true ) {
+    rel = ME;
+    rel_ll = ME_LL;
+    rel_ul = ME_UL;
+  }
+  else {
+    rel = ME/fNucleus_Beam.GetMatrixElements().at(lambda2 )[init2][fin2];
+    rel_ll = ME_LL/fNucleus_Beam.GetMatrixElements().at(lambda2)[init2][fin2];
+    rel_ul = ME_UL/fNucleus_Beam.GetMatrixElements().at(lambda2)[init2][fin2];
+  }    
+  RelativeMatrixElement tmpME(relativeElements_Beam.size(),lambda,init,fin,lambda2,init2,fin2,rel,rel_ll,rel_ul,fixed);
+  relativeElements_Beam.push_back(tmpME);
+}
+
 void GOSIASimFitter::AddTargetFittingMatrixElement(int lambda, int init, int fin, double ME, double LL, double UL){
 	MatrixElement tmpME(matrixElements_Target.size(),lambda,init,fin,ME,LL,UL);
 	matrixElements_Target.push_back(tmpME);
 }
+
+void GOSIASimFitter::AddTargetRelativeMatrixElement(int lambda, int init,int fin,int lambda2,int init2,int fin2 ,double ME, double ME_LL, double ME_UL, bool fixed, bool relative) {
+  double rel = 1.0;
+  double rel_ll = 1.0; 
+  double rel_ul = 1.0;
+  if (relative == true ) {
+    rel = ME;
+    rel_ll = ME_LL;
+    rel_ul = ME_UL;
+  }
+  else {
+    rel = ME/fNucleus_Target.GetMatrixElements().at(lambda2)[init2][fin2];
+    rel_ll = ME_LL/fNucleus_Target.GetMatrixElements().at(lambda2)[init2][fin2];
+    rel_ul = ME_UL/fNucleus_Target.GetMatrixElements().at(lambda2)[init2][fin2];
+  }    
+  RelativeMatrixElement tmpME(relativeElements_Target.size(),lambda,init,fin,lambda2,init2,fin2,rel,rel_ll,rel_ul,fixed);
+  relativeElements_Target.push_back(tmpME);
+}
+
 
 //void GOSIASimFitter::AddBeamCorrectionFactor(TVectorD corrFac){
 //	correctionFactors_Beam.push_back(corrFac);
@@ -564,7 +779,12 @@ void GOSIASimFitter::AddTargetData(int nExpt, int init, int fin, double counts, 
 
 void GOSIASimFitter::AddBeamLifetime(int index, double lifetime, double unc){
 	LitLifetime tmpLifetime(index,lifetime,unc);
-	litLifetimes_Beam.push_back(tmpLifetime);	
+	litLifetimes_Beam.push_back(tmpLifetime);  
+}
+
+void GOSIASimFitter::AddBeamHalfLife(int index, double halflife, double unc){
+	LitLifetime tmpLifetime(index,halflife/TMath::Log(2),unc/TMath::Log(2));
+	litLifetimes_Beam.push_back(tmpLifetime);  
 }
 void GOSIASimFitter::AddBeamBranchingRatio(int index_I1, int index_F1, int index_F2, double br, double unc){
 	LitBranchingRatio tmpBR(index_I1,index_F1,index_F2,br,unc);
@@ -581,6 +801,10 @@ void GOSIASimFitter::AddBeamMatrixElement(int mult, int index_I, int index_F, do
 void GOSIASimFitter::AddTargetLifetime(int index, double lifetime, double unc){
 	LitLifetime tmpLifetime(index,lifetime,unc);
 	litLifetimes_Target.push_back(tmpLifetime);	
+}
+void GOSIASimFitter::AddTargetHalfLife(int index, double halflife, double unc){
+	LitLifetime tmpLifetime(index,halflife/TMath::Log(2),unc/TMath::Log(2));
+	litLifetimes_Target.push_back(tmpLifetime);  
 }
 void GOSIASimFitter::AddTargetBranchingRatio(int index_I1, int index_F1, int index_F2, double br, double unc){
 	LitBranchingRatio tmpBR(index_I1,index_F1,index_F2,br,unc);
@@ -716,7 +940,7 @@ void GOSIASimFitter::Print() const{
 		}
 	}
 
-	std::string	mult[7] = {"E1","E2","E3","E4","E5","E6","M1"};
+	std::string	mult[8] = {"E1","E2","E3","E4","E5","E6","M1","M2"};
 
 	std::cout 	<< "\n\n"
 			<< "Starting matrix elements (beam):"
@@ -854,6 +1078,332 @@ void GOSIASimFitter::Print() const{
 			MiscFunctions::PrintMatrixNucleus(tmpMat,fNucleus_Target);	
 
 		}
-	}	
+	}
 
+}
+
+void GOSIASimFitter::WriteYieldGraphs(TFile *file, std::vector<double> angles, std::vector<double> norms) {
+  file->cd();
+  TransitionRates rates_b(&fNucleus_Beam);
+
+	const char	*b_out = beamGOSIAFile_out.c_str();
+	GOSIAReader	beam_gosiaReader(&fNucleus_Beam,b_out);	//	Grab the GOSIA yields
+  
+	std::vector<ExperimentData>	beamCalc	= beam_gosiaReader.GetGOSIAData();
+	EffectiveCrossSection_Beam.clear();	
+
+	for(size_t i=0; i<beamCalc.size(); i++){
+		TMatrixD	tmpMat;
+		tmpMat.ResizeTo(rates_b.GetBranchingRatios().GetNrows(),rates_b.GetBranchingRatios().GetNcols());
+		size_t	nRows = beamCalc.at(i).GetData().size();
+		for(size_t j=0; j<nRows; j++){
+			int	init		= beamCalc.at(i).GetData().at(j).GetInitialIndex();
+			int	fina		= beamCalc.at(i).GetData().at(j).GetFinalIndex();
+			double 	counts 		= beamCalc.at(i).GetData().at(j).GetCounts();
+			tmpMat[fina][init]	= counts * correctionFactors_Beam.at(i)[init][fina];
+			tmpMat[init][fina]	= counts * correctionFactors_Beam.at(i)[init][fina];
+		}
+		EffectiveCrossSection_Beam.push_back(tmpMat);
+	}
+
+  std::vector<double>	scaling;
+	scaling.resize(exptData_Beam.size());
+	for(size_t s=0;s<scalingParameters.size();s++){
+		std::vector<double>	sc_expt;
+		std::vector<double>	sc_expt_unc;
+		std::vector<double>	sc_calc;
+		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
+			size_t i = scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			if(expt_weights.at(i) == 0) 
+				continue;
+			if(i < exptData_Beam.size()){
+				for(size_t t=0;t<exptData_Beam.at(i).GetData().size();++t){
+					int	index_init 	= exptData_Beam.at(i).GetData().at(t).GetInitialIndex();
+					int	index_final 	= exptData_Beam.at(i).GetData().at(t).GetFinalIndex();
+					double 	calcCounts 	= EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+					double 	exptCounts 	= exptData_Beam.at(i).GetData().at(t).GetCounts();
+					double	sigma		= (exptData_Beam.at(i).GetData().at(t).GetUpUnc() + exptData_Beam.at(i).GetData().at(t).GetDnUnc())/2.;  // Average uncertainty
+					sigma 	/= expt_weights.at(i);
+					if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+						sc_expt.push_back(exptCounts);
+						sc_expt_unc.push_back(sigma);
+						sc_calc.push_back(calcCounts);
+					}				
+				}
+				for(size_t t=0;i<exptData_Beam.at(i).GetDoublet().size();++t){
+					int	index_init1 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex1();
+					int	index_final1 	= exptData_Beam.at(i).GetDoublet().at(t).GetFinalIndex1();
+					int	index_init2 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex2();
+					int	index_final2 	= exptData_Beam.at(i).GetDoublet().at(t).GetFinalIndex2();
+					double 	calcCounts 	= EffectiveCrossSection_Beam.at(i)[index_final1][index_init1] + EffectiveCrossSection_Beam.at(i)[index_final2][index_init2];
+					double 	exptCounts 	= exptData_Beam.at(i).GetDoublet().at(t).GetCounts();
+					double	sigma		= (exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc() + exptData_Beam.at(i).GetDoublet().at(t).GetDnUnc())/2.;  // Average uncertainty
+					sigma 	/= expt_weights.at(i);
+					if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+						sc_expt.push_back(exptCounts);
+						sc_expt_unc.push_back(sigma);
+						sc_calc.push_back(calcCounts);
+					}				
+				}
+			}
+    }
+
+    if(sc_expt.size() > 0){
+			ScalingFitFCN theFCN;
+
+			theFCN.SetData(sc_expt,sc_expt_unc,sc_calc);
+		
+			ROOT::Math::Minimizer *min =
+				ROOT::Math::Factory::CreateMinimizer("Minuit2","Migrad");
+			ROOT::Math::Functor f_init(theFCN,1);
+			min->SetFunction(f_init);
+			min->SetVariable(0,"Scaling",1,0.000001);
+			min->SetTolerance(0.001);
+			min->Minimize();
+
+
+			//min->PrintResults();
+		
+			for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
+				size_t i 	= scalingParameters.at(s).GetExperimentNumbers().at(ss);
+				scaling[i]	= min->X()[0];
+			}
+		}
+		else{
+			for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
+				size_t i 	= scalingParameters.at(s).GetExperimentNumbers().at(ss);
+				scaling[i]	= 0;
+			}
+
+		}	
+
+	}
+
+  int			counter = 0;
+
+
+  std::map<std::pair<int, int>, TGraph* > calcGraphs;
+  std::map<std::pair<int, int>, TGraphErrors* > expGraphs;
+  std::map<std::pair<int, int>, TMultiGraph* > graphs;
+
+  std::map<std::pair<int, int>, TGraph* > normCalcGraphs;
+  std::map<std::pair<int, int>, TGraphErrors* > normExpGraphs;
+  std::map<std::pair<int, int>, TMultiGraph* > normGraphs;
+  
+  std::map<std::pair<int, int>, int > write;
+
+	for(unsigned int i=0;i<exptData_Beam.size();i++){
+    
+		double	exptchisq	= 0;
+		if(expt_weights.at(i) == 0) 
+			continue;
+    
+		for(unsigned int t=0;t<exptData_Beam.at(i).GetData().size();++t){
+			double 	tmp 		= 0;
+			int	index_init 	= exptData_Beam.at(i).GetData().at(t).GetInitialIndex();
+			int	index_final 	= exptData_Beam.at(i).GetData().at(t).GetFinalIndex();
+
+      TGraph *calcGraph;
+      TGraphErrors *expGraph;
+      TMultiGraph *graph;
+      
+      TGraph *normCalcGraph;
+      TGraphErrors *normExpGraph;
+      TMultiGraph *normGraph;
+      
+      if (calcGraphs.find({index_init, index_final}) == calcGraphs.end()) {
+        calcGraph = new TGraph();
+        expGraph = new TGraphErrors();
+        graph = new TMultiGraph();
+
+        normCalcGraph = new TGraph();
+        normExpGraph = new TGraphErrors();
+        normGraph = new TMultiGraph();
+        
+        calcGraphs[{index_init, index_final}] = calcGraph;
+        expGraphs[{index_init, index_final}] = expGraph;
+        graphs[{index_init, index_final}] = graph;
+
+        normCalcGraphs[{index_init, index_final}] = normCalcGraph;
+        normExpGraphs[{index_init, index_final}] = normExpGraph;
+        normGraphs[{index_init, index_final}] = normGraph;
+
+        TString calcname;
+        calcname.Form("calcYields_%i_%i", index_init, index_final);
+        TString expname;
+        expname.Form("expYields_%i_%i", index_init, index_final);
+
+        TString normcalcname;
+        normcalcname.Form("calcYieldsNrm_%i_%i", index_init, index_final);
+        TString normexpname;
+        normexpname.Form("expYieldsNrm_%i_%i", index_init, index_final);
+        
+        calcGraph->SetName(calcname.Data());
+        calcGraph->SetLineWidth(2);
+        calcGraph->SetLineColor(kRed);
+
+        expGraph->SetMarkerStyle(kFullCircle);
+        expGraph->SetName(expname.Data());
+
+        normCalcGraph->SetName(normcalcname.Data());
+        normCalcGraph->SetLineWidth(2);
+        normCalcGraph->SetLineColor(kRed);
+
+        normExpGraph->SetMarkerStyle(kFullCircle);
+        normExpGraph->SetName(normexpname.Data());
+        
+        TString name;
+        name.Form("yields_%i_%i", index_init, index_final);
+        graph->SetName(name.Data());
+        graph->Add(calcGraph, "L");
+        graph->Add(expGraph, "P");
+
+        TString normname;
+        normname.Form("yieldsNrm_%i_%i", index_init, index_final);
+        normGraph->SetName(normname.Data());
+        normGraph->Add(normCalcGraph, "L");
+        normGraph->Add(normExpGraph, "P");        
+      }
+      else {
+        calcGraph =         calcGraphs[{index_init, index_final}];
+        expGraph =           expGraphs[{index_init, index_final}];
+        graph =           graphs[{index_init, index_final}];
+
+        normCalcGraph =         normCalcGraphs[{index_init, index_final}];
+        normExpGraph =           normExpGraphs[{index_init, index_final}];
+        normGraph =           normGraphs[{index_init, index_final}];       
+      }
+      
+			double 	calcCounts 	= scaling.at(i) * EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+			double 	exptCounts 	= exptData_Beam.at(i).GetData().at(t).GetCounts();
+			double	sigma		= exptData_Beam.at(i).GetData().at(t).GetUpUnc() * exptData_Beam.at(i).GetData().at(t).GetDnUnc();
+			double	sigma_prime	= (exptData_Beam.at(i).GetData().at(t).GetUpUnc() - exptData_Beam.at(i).GetData().at(t).GetDnUnc());
+			sigma			/= expt_weights.at(i);
+      sigma_prime	/= expt_weights.at(i);
+
+      calcGraph->AddPoint(i+1, calcCounts);
+      expGraph->AddPoint(i+1, exptCounts);
+      expGraph->SetPointError(expGraph->GetN()-1, 0, exptData_Beam.at(i).GetData().at(t).GetUpUnc());
+
+      normCalcGraph->AddPoint(angles[i], calcCounts/norms[i]);
+      normExpGraph->AddPoint(angles[i], exptCounts/norms[i]);
+      normExpGraph->SetPointError(expGraph->GetN()-1, 0, exptData_Beam.at(i).GetData().at(t).GetUpUnc()/norms[i]);
+		}
+		for(unsigned int t=0;t<exptData_Beam.at(i).GetDoublet().size();++t){
+			double 	tmp 		= 0;
+			int	index_init1 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex1();
+			int	index_final1 	= exptData_Beam.at(i).GetDoublet().at(t).GetFinalIndex1();
+			int	index_init2 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex2();
+			int	index_final2 	= exptData_Beam.at(i).GetDoublet().at(t).GetFinalIndex2();
+			double 	calcCounts 	= scaling.at(i) * (EffectiveCrossSection_Beam.at(i)[index_final1][index_init1] + EffectiveCrossSection_Beam.at(i)[index_final2][index_init2]);
+			double 	exptCounts 	= exptData_Beam.at(i).GetDoublet().at(t).GetCounts();
+			double	sigma		= exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc() * exptData_Beam.at(i).GetDoublet().at(t).GetDnUnc();
+			double	sigma_prime	= (exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc() - exptData_Beam.at(i).GetDoublet().at(t).GetDnUnc());
+			sigma			/= expt_weights.at(i);
+			sigma_prime		/= expt_weights.at(i);
+		}
+		counter++;
+	}
+
+  
+  for(unsigned int i=0;i<exptData_Beam.size();i++){
+    
+		double	exptchisq	= 0;
+		if(expt_weights.at(i) == 0) 
+			continue;
+    
+		for(unsigned int t=0;t<exptData_Beam.at(i).GetData().size();++t){
+			double 	tmp 		= 0;
+			int	index_init 	= exptData_Beam.at(i).GetData().at(t).GetInitialIndex();
+			int	index_final 	= exptData_Beam.at(i).GetData().at(t).GetFinalIndex();
+
+      if (calcGraphs.find({index_init, index_final}) == calcGraphs.end()) {
+      }
+      else {
+        if (write.find({index_init, index_final}) == write.end()) {
+          calcGraphs[{index_init, index_final}]->Write();
+          expGraphs[{index_init, index_final}]->Write();
+          graphs[{index_init, index_final}]->Write();
+
+          normCalcGraphs[{index_init, index_final}]->Write();
+          normExpGraphs[{index_init, index_final}]->Write();
+          normGraphs[{index_init, index_final}]->Write();
+        }
+        else {
+          write[{index_init, index_final}] = 1;
+        }
+      }
+    }
+  }
+  file->Write();  
+}
+
+
+void GOSIASimFitter::FixAllBeamMatrixElements() {
+  for (int j=0; j<matrixElements_Beam.size(); ++j) {
+    matrixElements_Beam[j].SetFixed(true);
+  }
+
+  for (int j=0; j<relativeElements_Beam.size(); ++j) {
+    relativeElements_Beam[j].SetFixed(true);
+  }
+}
+
+void GOSIASimFitter::UnFixAllBeamMatrixElements() {
+  for (int j=0; j<matrixElements_Beam.size(); ++j) {
+    matrixElements_Beam[j].SetFixed(false);
+  }
+
+  for (int j=0; j<relativeElements_Beam.size(); ++j) {
+    relativeElements_Beam[j].SetFixed(false);
+  }
+}
+
+
+void GOSIASimFitter::FixBeamMatrixElements(std::vector<std::vector<int> > indices) {
+  for (int i = 0; i<indices.size(); ++i) {
+    int lambda = indices[i][0];
+    int init = indices[i][1];
+    int fin = indices[i][2];
+
+    for (int j=0; j<matrixElements_Beam.size(); ++j) {
+      if (matrixElements_Beam[j].GetLambda() == lambda &&
+          matrixElements_Beam[j].GetInitialState() == init &&
+          matrixElements_Beam[j].GetFinalState() == fin) {
+        matrixElements_Beam[j].SetFixed(true);
+      }
+    }
+
+    for (int j=0; j<relativeElements_Beam.size(); ++j) {
+      if (relativeElements_Beam[j].GetLambda() == lambda &&
+          relativeElements_Beam[j].GetInitialState() == init &&
+          relativeElements_Beam[j].GetFinalState() == fin) {
+        relativeElements_Beam[j].SetFixed(true);
+      }
+    }
+  }
+}
+
+void GOSIASimFitter::UnFixBeamMatrixElements(std::vector<std::vector<int> > indices) {
+  for (int i = 0; i<indices.size(); ++i) {
+    int lambda = indices[i][0];
+    int init = indices[i][1];
+    int fin = indices[i][2];
+
+    for (int j=0; j<matrixElements_Beam.size(); ++j) {
+      if (matrixElements_Beam[j].GetLambda() == lambda &&
+          matrixElements_Beam[j].GetInitialState() == init &&
+          matrixElements_Beam[j].GetFinalState() == fin) {
+        matrixElements_Beam[j].SetFixed(false);
+      }
+    }
+
+    for (int j=0; j<relativeElements_Beam.size(); ++j) {
+      if (relativeElements_Beam[j].GetLambda() == lambda &&
+          relativeElements_Beam[j].GetInitialState() == init &&
+          relativeElements_Beam[j].GetFinalState() == fin) {
+        relativeElements_Beam[j].SetFixed(false);
+      }
+    }
+  }
 }

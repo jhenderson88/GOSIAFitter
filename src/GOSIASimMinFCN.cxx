@@ -1,4 +1,5 @@
 #include "GOSIASimMinFCN.h"
+#include "Gosia.h"
 
 void GOSIASimMinFCN::SetupCalculation(){
 
@@ -7,6 +8,7 @@ void GOSIASimMinFCN::SetupCalculation(){
 		for(unsigned int s=0;s<scalingParameters.at(i).GetExperimentNumbers().size();s++)
 			exptIndex[scalingParameters.at(i).GetExperimentNumbers().at(s)] = (int)i;
 
+  if (verbose) {
 	std::cout	<< std::setw(13) << std::left << "Experiment: "
 			<< std::setw(14) << std::left << "Scaling index: "
 			<< std::endl;
@@ -15,6 +17,7 @@ void GOSIASimMinFCN::SetupCalculation(){
 				<< std::setw(14) << std::left << exptIndex.at(i)
 				<< std::endl;
 	}
+  }
 
 }
 
@@ -33,29 +36,104 @@ double GOSIASimMinFCN::operator()(const double* par){
 	Clock::time_point t0 = Clock::now();
 
 
-	Nucleus nucl_b = fNucleus_Beam;	
-	Nucleus nucl_t = fNucleus_Target;
+	Nucleus &nucl_b = fNucleus_Beam;	
+	Nucleus &nucl_t = fNucleus_Target;
 
+    
 	parameters.clear();
+  int parct = 0;
+  int nRelBeam = 0;
+  int nRelTarget = 0;
+  int nBeamME = 0;
+  int nTargetME = 0;
 	for(unsigned int i=0;i<ME_Beam.size();i++){
-		nucl_b.SetMatrixElement(ME_Beam.at(i).GetLambda(),ME_Beam.at(i).GetInitialState(),ME_Beam.at(i).GetFinalState(),par[i]);
-		parameters.push_back(par[i]);
+    if (!ME_Beam.at(i).GetFixed()) {
+      nucl_b.SetMatrixElement(ME_Beam.at(i).GetLambda(),ME_Beam.at(i).GetInitialState(),ME_Beam.at(i).GetFinalState(),par[parct]);
+      parameters.push_back(par[parct]);
+      ++parct;
+      ++nBeamME;
+    }
+    else {
+      nucl_b.SetMatrixElement(ME_Beam.at(i).GetLambda(),ME_Beam.at(i).GetInitialState(),ME_Beam.at(i).GetFinalState(),ME_Beam.at(i).GetMatrixElement());
+    }      
 	}
+  //relative matrix elements
+  for(unsigned int i=0;i<ME_BeamRel.size();i++){
+    double me = nucl_b.GetMatrixElements().at(ME_BeamRel.at(i).GetLambdaRel())[ME_BeamRel.at(i).GetInitialStateRel()][ME_BeamRel.at(i).GetFinalStateRel()];
+    if (ME_BeamRel.at(i).GetFixed()) {
+      me = me * ME_BeamRel.at(i).GetRelativeElement();
+    }
+    else {
+      me = me * par[parct];
+      parameters.push_back(par[parct]);
+      ++parct;
+      ++nRelBeam;
+    }
+		nucl_b.SetMatrixElement(ME_BeamRel.at(i).GetLambda(),ME_BeamRel.at(i).GetInitialState(),ME_BeamRel.at(i).GetFinalState(),me);
+	}
+  
 	for(unsigned int i=0;i<ME_Target.size();i++){
-		nucl_t.SetMatrixElement(ME_Target.at(i).GetLambda(),ME_Target.at(i).GetInitialState(),ME_Target.at(i).GetFinalState(),par[i + ME_Beam.size()]);
-		parameters.push_back(par[i + ME_Beam.size()]);
+    if (!ME_Target.at(i).GetFixed()) {
+      nucl_t.SetMatrixElement(ME_Target.at(i).GetLambda(),ME_Target.at(i).GetInitialState(),ME_Target.at(i).GetFinalState(),par[parct]);
+      parameters.push_back(par[parct]);     
+      ++parct;
+      ++nTargetME;
+    }
+    else {
+      nucl_t.SetMatrixElement(ME_Target.at(i).GetLambda(),ME_Target.at(i).GetInitialState(),ME_Target.at(i).GetFinalState(),ME_Target.at(i).GetMatrixElement());
+    }
+	}
+
+  //relative matrix elements
+  for(unsigned int i=0;i<ME_TargetRel.size();i++){
+    double me = nucl_t.GetMatrixElements().at(ME_TargetRel.at(i).GetLambdaRel())[ME_TargetRel.at(i).GetInitialStateRel()][ME_TargetRel.at(i).GetFinalStateRel()];
+    if (ME_TargetRel.at(i).GetFixed()) {
+      me = me * ME_TargetRel.at(i).GetRelativeElement();
+    }
+    else {
+      me = me * par[parct];
+      parameters.push_back(par[parct]);
+      ++parct;
+      ++nRelTarget;
+    }
+		nucl_t.SetMatrixElement(ME_TargetRel.at(i).GetLambda(),ME_TargetRel.at(i).GetInitialState(),ME_TargetRel.at(i).GetFinalState(),me);
 	}
 
 	if(verbose){
 		std::cout	<< std::endl;
-		std::cout	<< "Parameters:"
-				<< std::endl;
-		for(unsigned int i=0;i<ME_Beam.size();i++)
-			std::cout	<< std::setw(12) << std::left << par[i];
-		std::cout	<< std::endl;
-		for(unsigned int i=0;i<ME_Target.size();i++)
-			std::cout	<< std::setw(12) << std::left << par[i + ME_Beam.size()];
-		std::cout	<< std::endl;
+		std::cout	<< parct << " Parameters:";
+    int linect = 0;
+    for (unsigned int i=0; i<parct; ++i) {
+      if (linect%12 == 0) {
+        std::cout	<< std::endl;
+        std::cout << std::setw(20) << std::left;      
+        if (i == 0) {
+          std::cout << "Beam: ";
+          linect = 0;
+        }
+        else {
+          std::cout << " ";
+        }
+      }
+      if (i == nBeamME) {
+        std::cout << std::endl;
+        std::cout << std::setw(20) << std::left << "Relative Beam: ";
+        linect = 0;
+      }
+      else if (i == nBeamME + nRelBeam) {
+        std::cout << std::endl;
+        std::cout << std::setw(20) << std::left << "Target: ";
+        linect = 0;
+      }
+      else if (i == nBeamME + nRelBeam + nRelTarget) {
+        std::cout << std::endl;
+        std::cout << std::setw(20) << std::left << "Relative Target: ";
+        linect = 0;
+      }
+      std::cout	<< std::setw(12) << std::left << par[i];
+      ++linect;
+    }
+    std::cout	<< std::endl;
 	}
 
 	// 	COMPARE WITH LITERATURE CONSTRAINTS:
@@ -82,20 +160,21 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (calcLifetime - lifetime) / litLifetimes_Beam.at(i).GetDnUnc();
 			chisq += tmp * tmp;
 			lifetime_chisq += tmp*tmp;
-			if(index == 1){
-				std::cout	<< std::setw(14) << std::left << "Lifetime:" 
-						<< std::setw(10) << std::left << calcLifetime
-						<< std::setw(10) << std::left << lifetime
-						<< std::setw(10) << std::left << litLifetimes_Beam.at(i).GetUpUnc()
-						<< std::setw(10) << std::left << tmp*tmp 
-						<< std::endl;
-			}
+      if (verbose) {
+      std::cout	<< std::setw(14) << std::left << "Lifetime:"
+                << std::setw(10) << std::left << index 
+                << std::setw(10) << std::left << calcLifetime
+                << std::setw(10) << std::left << lifetime
+                << std::setw(10) << std::left << litLifetimes_Beam.at(i).GetUpUnc()
+                << std::setw(10) << std::left << tmp*tmp 
+                << std::endl;
+      }
 		}
 		NDF++;
 		NDF_lit++;
 	}
 	double br_chisq = 0;
-	if(litBranchingRatios_Beam.size()>0)
+	if(litBranchingRatios_Beam.size()>0 && verbose)    
 		std::cout	<< "BR (Beam):" 
 				<< std::endl;
 	for(unsigned int i=0;i<litBranchingRatios_Beam.size();i++){
@@ -117,6 +196,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (BR - calcBR) / litBranchingRatios_Beam.at(i).GetDnUnc();
 			chisq += tmp * tmp;
 			br_chisq += tmp*tmp;
+      if (verbose) {
 			std::cout	<< std::setw(10) << std::left << index_init 
 					<< std::setw(10) << std::left << index_final1
 					<< std::setw(10) << std::left << index_final2
@@ -125,12 +205,13 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::setw(10) << std::left << litBranchingRatios_Beam.at(i).GetUpUnc()
 					<< std::setw(10) << std::left << tmp*tmp 
 					<< std::endl;
+      }
 		}
 		NDF++;
 		NDF_lit++;
 	}
 	double mr_chisq = 0;
-	if(litMixingRatios_Beam.size()>0)
+	if(litMixingRatios_Beam.size()>0 && verbose)
 		std::cout	<< "Delta (Beam):" 
 				<< std::endl;
 	for(unsigned int i=0;i<litMixingRatios_Beam.size();i++){
@@ -151,6 +232,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (delta - calcDelta) / litMixingRatios_Beam.at(i).GetDnUnc();
 			chisq += tmp * tmp;		
 			mr_chisq += tmp*tmp;
+      if (verbose) {
 			std::cout	<< std::setw(10) << std::left << index_init 
 					<< std::setw(10) << std::left << index_final
 					<< std::setw(10) << std::left << calcDelta
@@ -158,12 +240,13 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::setw(10) << std::left << litMixingRatios_Beam.at(i).GetUpUnc()
 					<< std::setw(10) << std::left << tmp*tmp 
 					<< std::endl;
+      }
 		}
 		NDF++;
 		NDF_lit++;
 	}
 	double me_chisq = 0;
-	if(litMatrixElements_Beam.size()>0)
+	if(litMatrixElements_Beam.size()>0 && verbose)
 		std::cout 	<< "Matrix Elements (Beam)"
 				<< std::endl;
 	for(unsigned int i=0;i<litMatrixElements_Beam.size();i++){
@@ -185,6 +268,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (ME - calcME) / litMatrixElements_Beam.at(i).GetDnUnc();
 			chisq += tmp * tmp;		
 			me_chisq += tmp*tmp;
+      if (verbose) {
 			std::cout	<< std::setw(10) << std::left << index_init 
 					<< std::setw(10) << std::left << index_final
 					<< std::setw(10) << std::left << mult
@@ -193,6 +277,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::setw(14) << std::left << litMatrixElements_Beam.at(i).GetUpUnc()
 					<< std::setw(14) << std::left << tmp*tmp 
 					<< std::endl;
+      }
 		}
 		NDF++;
 		NDF_lit++;
@@ -221,8 +306,10 @@ double GOSIASimMinFCN::operator()(const double* par){
 		NDF_lit++;
 	}
 	if(litBranchingRatios_Target.size()>0)
+    if (verbose) {
 		std::cout	<< "BR (Target):" 
 				<< std::endl;
+    }
 	for(unsigned int i=0;i<litBranchingRatios_Target.size();i++){
 		double 	tmp 		= 0;
 		int	index_init 	= litBranchingRatios_Target.at(i).GetInitialIndex();
@@ -242,6 +329,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (BR - calcBR) / litBranchingRatios_Target.at(i).GetDnUnc();
 			chisq += tmp * tmp;
 			br_chisq += tmp*tmp;
+      if (verbose) {
 			std::cout	<< std::setw(10) << std::left << index_init 
 					<< std::setw(10) << std::left << index_final1
 					<< std::setw(10) << std::left << index_final2
@@ -250,13 +338,16 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::setw(10) << std::left << litBranchingRatios_Target.at(i).GetUpUnc()
 					<< std::setw(10) << std::left << tmp*tmp 
 					<< std::endl;
+      }
 		}
 		NDF++;
 		NDF_lit++;
 	}
 	if(litMixingRatios_Target.size()>0)
+    if (verbose) {
 		std::cout	<< "Delta (Target):" 
 				<< std::endl;
+    }
 	for(unsigned int i=0;i<litMixingRatios_Target.size();i++){
 		double tmp;
 		int 	index_init	= litMixingRatios_Target.at(i).GetInitialIndex();
@@ -275,6 +366,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (delta - calcDelta) / litMixingRatios_Target.at(i).GetDnUnc();
 			chisq += tmp * tmp;		
 			mr_chisq += tmp*tmp;
+      if (verbose) {
 			std::cout	<< std::setw(10) << std::left << index_init 
 					<< std::setw(10) << std::left << index_final
 					<< std::setw(10) << std::left << calcDelta
@@ -282,13 +374,16 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::setw(10) << std::left << litMixingRatios_Target.at(i).GetUpUnc()
 					<< std::setw(10) << std::left << tmp*tmp 
 					<< std::endl;
+      }
 		}
 		NDF++;
 		NDF_lit++;
 	}
 	if(litMatrixElements_Target.size()>0)
+    if (verbose) {
 		std::cout 	<< "Matrix Elements (Target)"
 				<< std::endl;
+    }
 	for(unsigned int i=0;i<litMatrixElements_Target.size();i++){
 		double tmp;
 		int	mult		= litMatrixElements_Target.at(i).GetMultipolarity();
@@ -308,6 +403,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (ME - calcME) / litMatrixElements_Target.at(i).GetDnUnc();
 			chisq += tmp * tmp;		
 			me_chisq += tmp*tmp;
+      if (verbose) {
 			std::cout	<< std::setw(10) << std::left << index_init 
 					<< std::setw(10) << std::left << index_final
 					<< std::setw(10) << std::left << mult
@@ -316,37 +412,38 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::setw(14) << std::left << litMatrixElements_Target.at(i).GetUpUnc()
 					<< std::setw(14) << std::left << tmp*tmp 
 					<< std::endl;
+      }
 		}
 		NDF++;
 		NDF_lit++;
 	}
 	double litchisq = chisq;
 	//	COULEX AND STUFF:
-	
-	std::ofstream		beam_bst(beamBSTFile);
+
+	std::ofstream		beam_bst(workingDir+"/"+beamBSTFile);
 	for(size_t i=0;i<beamMapping_i.size();i++){
 		beam_bst << nucl_b.GetMatrixElements().at(beamMapping_l.at(i))[beamMapping_f.at(i)][beamMapping_i.at(i)] << "\n";
 	}
 	beam_bst.close();
-	
-	std::ofstream		target_bst(targetBSTFile);
+
+	std::ofstream		target_bst(workingDir+"/"+targetBSTFile);
 	for(size_t i=0;i<targetMapping_i.size();i++){
 		target_bst 	<< nucl_t.GetMatrixElements().at(targetMapping_l.at(i))[targetMapping_f.at(i)][targetMapping_i.at(i)] << "\n";
 	}
 	target_bst.close();
 
 	std::string	str;
-	str = "./gosia < "+ beamGOSIAFile_inp+"> /dev/null";
-	const char* 	c_b = str.c_str();
-	system(c_b);		// 	Run the beam GOSIA file
-	str = "./gosia < "+ targetGOSIAFile_inp+"> /dev/null";
-	const char* 	c_t = str.c_str();
-	system(c_t);	// 	Run the target GOSIA file
+	//str = "cd "+workingDir+"; ./gosia < "+ beamGOSIAFile_inp+"> /dev/null";
+	//const char* 	c_b = str.c_str();
+	//system(c_b);		// 	Run the beam GOSIA file
+  RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");
+  RunGosia(targetGOSIAFile_inp, workingDir, "dump.out");
+	//str = "cd "+workingDir+"; ./gosia < "+ targetGOSIAFile_inp+"> /dev/null";
+	//const char* 	c_t = str.c_str();
+	//system(c_t);	// 	Run the target GOSIA file
 
-	const char	*b_out = beamGOSIAFile_out.c_str();
-	const char	*t_out = targetGOSIAFile_out.c_str();
-	GOSIAReader	beam_gosiaReader(&nucl_b,b_out);	//	Grab the GOSIA yields
-	GOSIAReader	target_gosiaReader(&nucl_t,t_out);	//	Grab the GOSIA yields
+	GOSIAReader	beam_gosiaReader(&nucl_b,(workingDir+beamGOSIAFile_out).c_str());	//	Grab the GOSIA yields
+	GOSIAReader	target_gosiaReader(&nucl_t,(workingDir+targetGOSIAFile_out).c_str());	//	Grab the GOSIA yields
 
 	std::vector<ExperimentData>	beamCalc	= beam_gosiaReader.GetGOSIAData();
 	std::vector<ExperimentData>	targetCalc	= target_gosiaReader.GetGOSIAData();
@@ -409,11 +506,19 @@ double GOSIASimMinFCN::operator()(const double* par){
 //		for(unsigned int t=0;t<exptData_Beam.at(exptData_Beam.size()-1).GetData().size();t++){
 			std::cout 	<< std::setw( 6) << std::left << "Init:"
 					<< std::setw( 6) << std::left << "Finl:"
-					<< std::setw(10) << std::left << "Calc:"
-					<< std::setw(10) << std::left << "Expt:"
-					<< std::setw(10) << std::left << "Err:"
-					<< std::setw(10) << std::left << "C/E:"
-					<< std::setw(12) << std::left << "Chisq:";
+					<< std::setw(14) << std::left << "Calc:"
+					<< std::setw(14) << std::left << "Expt:"
+					<< std::setw(14) << std::left << "Err:"
+					<< std::setw(14) << std::left << "C/E:"
+					<< std::setw(14) << std::left << "Chisq:"
+      << std::setw(20) << std::left << " "
+      << std::setw( 6) << std::left << "Init:"
+					<< std::setw( 6) << std::left << "Finl:"
+					<< std::setw(14) << std::left << "Calc:"
+					<< std::setw(14) << std::left << "Expt:"
+					<< std::setw(14) << std::left << "Err:"
+					<< std::setw(14) << std::left << "C/E:"
+					<< std::setw(14) << std::left << "Chisq:";      
 //		}
 		std::cout 	<< std::endl;
 	}
@@ -505,10 +610,9 @@ double GOSIASimMinFCN::operator()(const double* par){
 			}
 		}
 
-
 		if(sc_expt.size() > 0){
 			ScalingFitFCN theFCN;
-	
+
 			theFCN.SetData(sc_expt,sc_expt_unc,sc_calc);
 		
 			ROOT::Math::Minimizer *min =
@@ -528,7 +632,6 @@ double GOSIASimMinFCN::operator()(const double* par){
 			}
 		}
 		else{
-		
 			for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
 				size_t i 	= scalingParameters.at(s).GetExperimentNumbers().at(ss);
 				scaling[i]	= 0;
@@ -547,7 +650,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 		double	exptchisq	= 0;
 		if(expt_weights.at(i) == 0) 
 			continue;
-		if(true){
+		if(verbose){
 			std::cout	<< std::setw(4) << std::left << i+1;
 			std::cout	<< std::setw(10) << std::left << scaling.at(i);
 		}
@@ -561,26 +664,33 @@ double GOSIASimMinFCN::operator()(const double* par){
 			double	sigma_prime	= (exptData_Beam.at(i).GetData().at(t).GetUpUnc() - exptData_Beam.at(i).GetData().at(t).GetDnUnc());
 			sigma			/= expt_weights.at(i);
 			sigma_prime		/= expt_weights.at(i);
-			if(calcCounts > 0 && sigma > 0){
+			if(exptCounts > 0 && sigma > 0){
 				if(true){// && ((index_init == 1 && index_final ==  0) || (index_init == 7 && index_final == 4))){
-					if(fLikelihood){
-						std::cout 	<< std::setw( 6) << std::left << index_init 
-								<< std::setw( 6) << std::left << index_final 
-								<< std::setw(10) << std::left << calcCounts 
-								<< std::setw(10) << std::left << exptCounts 
-								<< std::setw(10) << std::left << calcCounts/exptCounts
-								<< std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
-					}
-					else{
-						std::cout 	<< std::setw( 6) << std::left << index_init 
-								<< std::setw( 6) << std::left << index_final 
-								<< std::setw(10) << std::left << calcCounts 
-								<< std::setw(10) << std::left << exptCounts 
-								<< std::setw(10) << std::left << exptData_Beam.at(i).GetData().at(t).GetUpUnc()
-								<< std::setw(10) << std::left << calcCounts/exptCounts
-								<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
-					}
-				}
+          if (verbose) {
+            if(fLikelihood){
+              std::cout 	<< std::setw( 6) << std::left << index_init 
+                          << std::setw( 6) << std::left << index_final 
+                          << std::setw(14) << std::left << calcCounts 
+                          << std::setw(14) << std::left << exptCounts 
+                          << std::setw(14) << std::left << calcCounts/exptCounts
+                          << std::setw(14) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts)) << std::endl << "              ";
+            }
+            else{
+              std::cout 	<< std::setw( 6) << std::left << index_init 
+                          << std::setw( 6) << std::left << index_final 
+                          << std::setw(14) << std::left << calcCounts 
+                          << std::setw(14) << std::left << exptCounts 
+                          << std::setw(14) << std::left << exptData_Beam.at(i).GetData().at(t).GetUpUnc()
+                          << std::setw(14) << std::left << calcCounts/exptCounts
+                          << std::setw(14) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
+              if (t%2 == 0) {
+                std::cout << std::setw(20) << std::left << " ";
+                if (t==exptData_Beam.at(i).GetData().size()-1) { std::cout << std::endl; }
+              }
+              else { std::cout << std::endl << std::setw(14) << std::left << " "; }
+            }
+          }
+        }
 				if(fLikelihood){
 					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
 					beamchisq	+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
@@ -612,23 +722,25 @@ double GOSIASimMinFCN::operator()(const double* par){
 			sigma_prime		/= expt_weights.at(i);
 			if(calcCounts > 0 && sigma > 0){
 				if(true){// && ((index_init == 1 && index_final ==  0) || (index_init == 7 && index_final == 4))){
-					if(fLikelihood){
-						std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2
-								<< std::setw( 6) << std::left << index_final1*100 + index_final2
-								<< std::setw(10) << std::left << calcCounts 
-								<< std::setw(10) << std::left << exptCounts 
-								<< std::setw(10) << std::left << calcCounts/exptCounts
-								<< std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
-					}
-					else{
-						std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2 
-								<< std::setw( 6) << std::left << index_final1*100 + index_final2
-								<< std::setw(10) << std::left << calcCounts 
-								<< std::setw(10) << std::left << exptCounts 
-								<< std::setw(10) << std::left << exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc()
-								<< std::setw(10) << std::left << calcCounts/exptCounts
-								<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
-					}
+          if (verbose) {
+            if(fLikelihood){
+              std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2
+                          << std::setw( 6) << std::left << index_final1*100 + index_final2
+                          << std::setw(10) << std::left << calcCounts 
+                          << std::setw(10) << std::left << exptCounts 
+                          << std::setw(10) << std::left << calcCounts/exptCounts
+                          << std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
+            }
+            else{
+              std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2 
+                          << std::setw( 6) << std::left << index_final1*100 + index_final2
+                          << std::setw(10) << std::left << calcCounts 
+                          << std::setw(10) << std::left << exptCounts 
+                          << std::setw(10) << std::left << exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc()
+                          << std::setw(10) << std::left << calcCounts/exptCounts
+                          << std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
+            }
+          }
 				}
 				if(fLikelihood){
 					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
@@ -670,6 +782,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 			}
 			std::cout 	<< std::endl;
 		}
+    std::cout 	<< std::endl;
 	}
 	else if(verbose){
 		std::cout 	<< std::setw( 7) << std::left << "Target:"
@@ -698,7 +811,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 		double	exptchisq	= 0;
 		if(expt_weights.at(i) == 0.)
 			continue;
-		if(true){
+		if(verbose){
 			std::cout	<< std::setw(4) << std::left << i+1;
 			std::cout	<< std::setw(10) << std::left << scaling.at(i);
 		}
@@ -714,6 +827,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 			sigma_prime		/= expt_weights.at(i); 
 			if(calcCounts > 0 && sigma > 0){
 				if(true){
+          if (verbose) {
 					if(fLikelihood){
 						std::cout 	<< std::setw( 6) << std::left << index_init 
 								<< std::setw( 6) << std::left << index_final 
@@ -731,6 +845,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 								<< std::setw(10) << std::left << calcCounts/exptCounts
 								<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Target.at(i).GetData().at(t).GetUpUnc(),2);
 					}
+          }
 				}
 				if(fLikelihood){
 					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
@@ -763,6 +878,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 			sigma_prime		/= expt_weights.at(i);
 			if(calcCounts > 0 && sigma > 0){
 				if(true){// && ((index_init == 1 && index_final ==  0) || (index_init == 7 && index_final == 4))){
+          if (verbose) {
 					if(fLikelihood){
 						std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2
 								<< std::setw( 6) << std::left << index_final1*100 + index_final2
@@ -780,6 +896,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 								<< std::setw(10) << std::left << calcCounts/exptCounts
 								<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Target.at(i).GetData().at(t).GetUpUnc(),2);
 					}
+          }
 				}
 				if(fLikelihood){
 					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
@@ -804,7 +921,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 			std::cout << std::endl;
 	}
 
-	if(true){
+	if(verbose){
 		std::cout	<< std::setw(16) << std::left << "Beam expt.:";
 		for(size_t i=0;i<beamdata.size();i++)
 			std::cout << std::setw(8) << std::left << beamdata.at(i);
