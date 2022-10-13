@@ -41,6 +41,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 
     
 	parameters.clear();
+
   int parct = 0;
   int nRelBeam = 0;
   int nRelTarget = 0;
@@ -283,7 +284,10 @@ double GOSIASimMinFCN::operator()(const double* par){
 		NDF_lit++;
 	}
 	// 	Now, compare with the literature for the target:
-	TransitionRates rates_t(&nucl_t);
+	
+	TransitionRates rates_t;
+	if(exptData_Target.size() > 0)
+		rates_t = TransitionRates(&nucl_t);
 	for(unsigned int i=0;i<litLifetimes_Target.size();i++){
 		double 	tmp = 0;
 		int	index		= litLifetimes_Target.at(i).GetIndex();
@@ -305,11 +309,12 @@ double GOSIASimMinFCN::operator()(const double* par){
 		NDF++;
 		NDF_lit++;
 	}
-	if(litBranchingRatios_Target.size()>0)
-    if (verbose) {
-		std::cout	<< "BR (Target):" 
-				<< std::endl;
-    }
+	if(litBranchingRatios_Target.size()>0){
+ 		if (verbose) {
+			std::cout	<< "BR (Target):" 
+					<< std::endl;
+    		}
+	}
 	for(unsigned int i=0;i<litBranchingRatios_Target.size();i++){
 		double 	tmp 		= 0;
 		int	index_init 	= litBranchingRatios_Target.at(i).GetInitialIndex();
@@ -379,11 +384,12 @@ double GOSIASimMinFCN::operator()(const double* par){
 		NDF++;
 		NDF_lit++;
 	}
-	if(litMatrixElements_Target.size()>0)
-    if (verbose) {
-		std::cout 	<< "Matrix Elements (Target)"
-				<< std::endl;
-    }
+	if(litMatrixElements_Target.size()>0){
+	    if (verbose) {
+			std::cout 	<< "Matrix Elements (Target)"
+					<< std::endl;
+    		}
+	}
 	for(unsigned int i=0;i<litMatrixElements_Target.size();i++){
 		double tmp;
 		int	mult		= litMatrixElements_Target.at(i).GetMultipolarity();
@@ -403,7 +409,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (ME - calcME) / litMatrixElements_Target.at(i).GetDnUnc();
 			chisq += tmp * tmp;		
 			me_chisq += tmp*tmp;
-      if (verbose) {
+      		if (verbose) {
 			std::cout	<< std::setw(10) << std::left << index_init 
 					<< std::setw(10) << std::left << index_final
 					<< std::setw(10) << std::left << mult
@@ -412,7 +418,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::setw(14) << std::left << litMatrixElements_Target.at(i).GetUpUnc()
 					<< std::setw(14) << std::left << tmp*tmp 
 					<< std::endl;
-      }
+      			}
 		}
 		NDF++;
 		NDF_lit++;
@@ -426,29 +432,29 @@ double GOSIASimMinFCN::operator()(const double* par){
 	}
 	beam_bst.close();
 
-	std::ofstream		target_bst(workingDir+"/"+targetBSTFile);
-	for(size_t i=0;i<targetMapping_i.size();i++){
-		target_bst 	<< nucl_t.GetMatrixElements().at(targetMapping_l.at(i))[targetMapping_f.at(i)][targetMapping_i.at(i)] << "\n";
+	if(exptData_Target.size() > 0){
+		std::ofstream		target_bst(targetBSTFile);
+		for(size_t i=0;i<targetMapping_i.size();i++){
+			target_bst 	<< nucl_t.GetMatrixElements().at(targetMapping_l.at(i))[targetMapping_f.at(i)][targetMapping_i.at(i)] << "\n";
+		}
+		target_bst.close();
 	}
-	target_bst.close();
 
 	std::string	str;
-	//str = "cd "+workingDir+"; ./gosia < "+ beamGOSIAFile_inp+"> /dev/null";
-	//const char* 	c_b = str.c_str();
-	//system(c_b);		// 	Run the beam GOSIA file
-  RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");
-  RunGosia(targetGOSIAFile_inp, workingDir, "dump.out");
-	//str = "cd "+workingDir+"; ./gosia < "+ targetGOSIAFile_inp+"> /dev/null";
-	//const char* 	c_t = str.c_str();
-	//system(c_t);	// 	Run the target GOSIA file
-
+  	RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");
+	if(exptData_Target.size() > 0){
+  		RunGosia(targetGOSIAFile_inp, workingDir, "dump.out");
+	}
 	GOSIAReader	beam_gosiaReader(&nucl_b,(workingDir+beamGOSIAFile_out).c_str());	//	Grab the GOSIA yields
-	GOSIAReader	target_gosiaReader(&nucl_t,(workingDir+targetGOSIAFile_out).c_str());	//	Grab the GOSIA yields
-
 	std::vector<ExperimentData>	beamCalc	= beam_gosiaReader.GetGOSIAData();
-	std::vector<ExperimentData>	targetCalc	= target_gosiaReader.GetGOSIAData();
-	EffectiveCrossSection_Beam.clear();	
-	EffectiveCrossSection_Target.clear();	
+	
+	std::vector<ExperimentData>	targetCalc;
+	if(exptData_Target.size() > 0){
+		GOSIAReader	target_gosiaReader(&nucl_t,(workingDir+targetGOSIAFile_out).c_str());	//	Grab the GOSIA yields
+		EffectiveCrossSection_Beam.clear();	
+		EffectiveCrossSection_Target.clear();	
+		targetCalc	= target_gosiaReader.GetGOSIAData();
+	}
 
 	for(size_t i=0; i<beamCalc.size(); i++){
 		TMatrixD	tmpMat;

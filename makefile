@@ -15,9 +15,10 @@ $(info PLATFORM: $(PLATFORM))
  
 ifeq ($(PLATFORM),Darwin)
 export __APPLE__:= 1
-CFLAGS     += -Qunused-arguments
-CPP        = clang++
-FORTRAN_LIBS = -L/opt/local/lib/libgcc/ -lgfortran
+CFLAGS     += -Qunused-arguments -Wno-dangling-gsl
+CPP        = g++
+#### FORTRAN LIBS MIGHT NEED SETTING MANUALLY ON MACOS
+FORTRAN_LIBS = -L/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/  -lgfortran
 else
 export __LINUX__:= 1
 CPP        = g++
