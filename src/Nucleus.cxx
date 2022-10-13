@@ -1,4 +1,5 @@
 #include "Nucleus.h"
+#include "BrIccReader.h"
 
 // Empty constructor
 Nucleus::Nucleus()
@@ -11,7 +12,7 @@ Nucleus::Nucleus(int Z, int A, int nS, int nL){
 	SetMaxLambda(nL);
 	SetNstates(nS);
 }
-Nucleus::Nucleus(const Nucleus& n) : MatrixElements(n.MatrixElements.size()), MatrixElementsUL(n.MatrixElementsUL.size()), MatrixElementsLL(n.MatrixElementsLL.size()) {
+Nucleus::Nucleus(const Nucleus& n) : MatrixElements(n.MatrixElements.size()), MatrixElementsUL(n.MatrixElementsUL.size()), MatrixElementsLL(n.MatrixElementsLL.size()), ConversionCoefficients(n.ConversionCoefficients.size()) {
 
 	nStates 	= n.nStates;			// Number of states in the nucleus
 	maxLambda	= n.maxLambda;			// Number of multipolarities to be considered
@@ -38,6 +39,12 @@ Nucleus::Nucleus(const Nucleus& n) : MatrixElements(n.MatrixElements.size()), Ma
 		MatrixElementsLL.at(i).ResizeTo(n.MatrixElementsLL.at(i).GetNcols(),n.MatrixElementsLL.at(i).GetNrows());
 		MatrixElementsLL.at(i) = n.MatrixElementsLL.at(i);
 	}
+
+  for(std::size_t i=0;i<n.ConversionCoefficients.size();i++){
+		ConversionCoefficients.at(i).ResizeTo(n.ConversionCoefficients.at(i).GetNcols(),n.ConversionCoefficients.at(i).GetNrows());
+		ConversionCoefficients.at(i) = n.ConversionCoefficients.at(i);
+	}
+
 
 }
 Nucleus& Nucleus::operator = (const Nucleus& n){
@@ -71,6 +78,12 @@ Nucleus& Nucleus::operator = (const Nucleus& n){
 		MatrixElementsLL.at(i) = n.MatrixElementsLL.at(i);
 	}
 
+  ConversionCoefficients.resize((size_t)n.ConversionCoefficients.size());
+	for(size_t i=0;i<n.ConversionCoefficients.size();i++){
+		ConversionCoefficients.at(i).ResizeTo(n.ConversionCoefficients.at(i).GetNrows(),n.ConversionCoefficients.at(i).GetNcols());
+		ConversionCoefficients.at(i) = n.ConversionCoefficients.at(i);
+	}
+  
 	return *this;
 
 }
@@ -80,7 +93,8 @@ void Nucleus::SetMaxLambda(int mL){
 	maxLambda = mL;
 	MatrixElements.resize(mL);
 	MatrixElementsUL.resize(mL);
-	MatrixElementsLL.resize(mL);	
+	MatrixElementsLL.resize(mL);
+  ConversionCoefficients.resize(mL);	
 }
 
 void Nucleus::SetNstates(int nS){
@@ -94,6 +108,7 @@ void Nucleus::SetNstates(int nS){
 		MatrixElements[i].ResizeTo(nS,nS);
 		MatrixElementsUL[i].ResizeTo(nS,nS);
 		MatrixElementsLL[i].ResizeTo(nS,nS);
+    ConversionCoefficients[i].ResizeTo(nS,nS);
 	}
 	
 }
@@ -133,6 +148,8 @@ void Nucleus::SetMatrixElement(int l, int s1, int s2, double me){
 	int	dP = GetLevelP().at(s1)/GetLevelP().at(s2);
 	if(dP_Lambda != dP){
 		std::cout << "Parity conservation broken! Check state parities and transition multipolarities." << std::endl;
+    std::cout << s1 << "   " << s2 << std::endl;
+    std::cout << GetLevelP().at(s1) << "   " << GetLevelP().at(s2) << std::endl;
 		std::cout 	<< std::setw(25) << std::left << "Transition mult:" 
 				<< std::setw(25) << std::left << "P change (transition):" 
 				<< std::setw(25) << std::left << "P change (levels):"
@@ -218,3 +235,40 @@ void Nucleus::PrintNucleus() const{
 void Nucleus::PrintState(int s) const{
 	std::cout << GetLevelEnergies().at(s) << "\t" << GetLevelJ().at(s) << "\t" << GetLevelP().at(s) << std::endl;
 }	
+
+void Nucleus::SetConversionCoefficients(std::string bricc_idx, std::string bricc_icc) {
+  BrIccReader bricc(bricc_idx, bricc_icc);
+
+  int bricc_lambda[8] = {0,1,2,3,4,-1,5,6};  //BRICC does not have E6 conversion, so M1 and M2 are indices 5 and 6
+
+  for (int l = 0; l<maxLambda; ++l) {
+    for (int i = 0; i<nStates; ++i) {
+      for (int j = i; j<nStates; ++j) {
+        ConversionCoefficients.at(l)[i][j] = 0.;
+        if (i==j) {continue; }
+        if (bricc_lambda[l] < 0) { continue; }
+        //check selection rules
+        //check parity
+        int lambda = l+1;
+        int abs_lambda = l+1;
+        if(l >= 6) {// Magnetic - opposite parity conventions to electric
+          lambda -= 5;
+          abs_lambda -= 6;
+        }
+        int	dP_Lambda = TMath::Power(-1,lambda);
+        int	dP = LevelP.at(i)/LevelP.at(j);
+        if (dP == dP_Lambda) {
+          //triangle inequality
+          if (std::abs(LevelJ.at(i) - LevelJ.at(j)) <= abs_lambda &&
+              abs_lambda <= std::abs(LevelJ.at(i) + LevelJ.at(j))) {
+
+            double Egamma = std::abs(LevelEnergies.at(i) - LevelEnergies.at(j));
+            double CC = bricc.GetTotalCC(nucleusZ, Egamma*1000.0, bricc_lambda[l]);
+            ConversionCoefficients.at(l)[i][j] = CC;
+            ConversionCoefficients.at(l)[j][i] = CC;
+          }
+        }
+      }
+    }
+  }  
+}

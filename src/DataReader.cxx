@@ -45,6 +45,7 @@ void	DataReader::ReadDataFile(const char* datafilename){
 				break;
 			}
 			ss >> initial_state >> final_state >> counts >> uncertainty;
+
 			if(initial_state > 100 && final_state > 100){	// Doublet
 				int	i1	= initial_state / 100;
 				int	f1	= final_state / 100;
@@ -125,6 +126,7 @@ void	DataReader::ReadGOSIAData(const char* datafilename){
 		tmpExpt.ClearData();
 	}
 }
+
 
 
 

@@ -18,18 +18,18 @@
 
 class DataReader {
 
-	public:
-		DataReader(Nucleus*,const char*,bool GOSIA=false);			/*!< Constructor with Nucleus (for level assignments) and filename of formatted data */
-		~DataReader()				{;	}
+       public:
+               DataReader(Nucleus*,const char*,bool GOSIA=false);			/*!< Constructor with Nucleus (for level assignments) and filename of formatted data */
+               ~DataReader()				{;	}
 
-		void	ReadDataFile(const char*);			/*!< Read formatted yield file and add data for ExperimentData vector */
-		void	ReadGOSIAData(const char*);
+               void	ReadDataFile(const char*);			/*!< Read formatted yield file and add data for ExperimentData vector */
+               void	ReadGOSIAData(const char*);
 
-		std::vector<ExperimentData>		GetExperimentData()		{ return exptData;	}	/*!< Return vector of ExperimentData */
+               std::vector<ExperimentData>		GetExperimentData()		{ return exptData;	}	/*!< Return vector of ExperimentData */
 
-	private:
-		Nucleus					fNucleus;	/*!< Nucleus object used to define level assignments */
-		std::vector<ExperimentData>		exptData;	/*!< Vector of ExperimentData objects to hold the data that is read in from the file */
+       private:
+               Nucleus                             fNucleus;	/*!< Nucleus object used to define level assignments */
+               std::vector<ExperimentData>         exptData;	/*!< Vector of ExperimentData objects to hold the data that is read in from the file */
 
 };
 

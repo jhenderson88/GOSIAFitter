@@ -60,6 +60,28 @@ void	GOSIAReader::ReadGOSIAFile(const char* datafilename){
 			counter = 0;
 			tmpExpt.ClearData();
 		}
+    std::size_t found_ruth = line.find("INTEGRATED RUTHERFORD"); // Comment
+		if(found_ruth != std::string::npos){
+      std::string junk;
+
+      std::istringstream ss(line);
+      ss >> junk;
+      ss >> junk;
+      ss >> junk;
+      ss >> junk;
+      rutherfords.push_back(std::atof(junk.substr(8).c_str()));      
+		}
+
+    std::size_t found_angle = line.find("ENERGY RANGE"); // Comment
+		if(found_angle != std::string::npos){
+      energy_low.push_back(std::atof(line.substr(19,7).c_str()));
+      energy_high.push_back(std::atof(line.substr(30,7).c_str()));
+      double angle_lo = std::atof(line.substr(67,7).c_str());
+      double angle_hi = std::atof(line.substr(77,7).c_str());
+      angle_low.push_back(angle_lo);
+      angle_high.push_back(angle_hi);
+      angle_av.push_back((angle_lo+angle_hi)/2.0);
+		}
 	}	
 }
 

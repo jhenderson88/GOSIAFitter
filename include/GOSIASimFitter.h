@@ -2,6 +2,8 @@
 #define GOSIASimFitter_h
 
 
+#include "TFile.h"
+
 #include "GOSIASimMinFCN.h"
 #include "ScalingParameter.h"
 #include <chrono>
@@ -69,7 +71,10 @@ class GOSIASimFitter {
 		virtual	~GOSIASimFitter()	{;}
 		GOSIASimFitter(const GOSIASimFitter& g);			/*!< Copy constructor */
 		GOSIASimFitter& operator = (const GOSIASimFitter& g);		/*!< Assignment operator */
-		
+
+    void UpdateMEs(); /* set the matrix elements in the nucleus objects to reflect those in the parameters */
+    void WriteBST();
+  void SetWorkingDir(std::string s) { workingDir = s; }
 		void	DoFit(const char* method = "Minuit2", const char* algorithm = "Combined" );	/*!< Perform fitting routine with a user defined method and algorithm (default: Minuit2, Combined) */
 
 		void	SetBeamGOSIAInput(std::string s)				{ beamGOSIAFile_inp = s;		}
@@ -110,16 +115,21 @@ class GOSIASimFitter {
 		void	AddTargetData(int i, int init, int fin, double c, double e);	/*!< Add experimental data to experiment defined by index i between initial (init) and final (fin) states with yield (c) and uncertainty (e)  */
 		
 		void	AddBeamLifetime(int,double,double);			/*!< Add literature lifetime data for the beam particle */
+    void	AddBeamHalfLife(int,double,double);			/*!< Add literature lifetime data for the beam particle */
 		void	AddBeamBranchingRatio(int,int,int,double,double);	/*!< Add literature branching ratio data for the beam particle*/
 		void	AddBeamMixingRatio(int,int,double,double);		/*!< Add literature mixing ratio data for the beam particle*/
 		void	AddBeamMatrixElement(int,int,int,double,double);		/*!< Add literature matrix element data for the beam particle*/
 		void	AddTargetLifetime(int,double,double);			/*!< Add literature lifetime data for the target particle*/
+    void	AddTargetHalfLife(int,double,double);			/*!< Add literature lifetime data for the beam particle */
 		void	AddTargetBranchingRatio(int,int,int,double,double);	/*!< Add literature branching ratio data for the target particle*/
 		void	AddTargetMixingRatio(int,int,double,double);		/*!< Add literature mixing ratio data for the target particle*/
 		void	AddTargetMatrixElement(int,int,int,double,double);		/*!< Add literature matrix element data for the target particle*/
 
 		void	AddBeamFittingMatrixElement(int,int,int,double,double,double);		/*!< Add a fitting matrix element for the beam */
+    void  AddBeamRelativeMatrixElement(int,int,int,int,int,int,double,double,double,bool=false,bool=false);		/*!< Add a fitting matrix element for the beam */
+  void SetBeamFittingMatrixElement(int lambda, int init, int fin, double ME, double LL, double UL);
 		void	AddTargetFittingMatrixElement(int,int,int,double,double,double);	/*!< Add a fitting matrix element for the target */
+    void  AddTargetRelativeMatrixElement(int,int,int,int,int,int,double,double,double,bool=false,bool=false);		/*!< Add a fitting matrix element for the beam */
 		void	CreateScalingParameter(std::vector<int>);				/*!< Add a scaling parameter, with common scaling experiments defined by their indices in a vector of int */
 
 		// Scaling parameters are common to both target and beam
@@ -217,6 +227,11 @@ class GOSIASimFitter {
 		std::vector<double>	GetFitParameters()			const	{ return parameters;			}	/*!< Return fit parameters - note that these will be updated with the fit result after the fit - Used in MCMC methods */
 		std::vector<double>	GetFitUL()				const	{ return par_UL;			}	/*!< Return the fit parameter upper limits - Used in MCMC methods */
 		std::vector<double>	GetFitLL()				const	{ return par_LL;			}	/*!< Return the fit parameter lower limits - Used in MCMC methods */
+
+    void FixAllBeamMatrixElements();
+    void UnFixAllBeamMatrixElements();
+    void FixBeamMatrixElements(std::vector<std::vector<int> >);
+    void UnFixBeamMatrixElements(std::vector<std::vector<int> >);
 	
 		void	ClearFitParameters()						
 		{ 
@@ -250,9 +265,10 @@ class GOSIASimFitter {
 		std::vector<int>	GetTargetMappingFinal()			const	{ return targetMapping_f;		}
 		std::vector<int>	GetTargetMappingLambda()		const	{ return targetMapping_l;		}
 
-
+    void WriteYieldGraphs(TFile *file, std::vector<double> angles, std::vector<double> norms);
 	private:
 
+  std::string workingDir;
 		std::vector<int>		index;
 
 		double				chisq;				/*!< Chisq following fit */
@@ -260,7 +276,9 @@ class GOSIASimFitter {
 		std::vector<double>		par_LL;				/*!< Matrix elements + scaling factors - LOWER LIMIT */
 		std::vector<double>		par_UL;				/*!< Matrix elements + scaling factors - UPPER LIMIT */
 		std::vector<MatrixElement>	matrixElements_Beam;		/*!< Preset to related parameters to matrix elements (beam) */
+    std::vector<RelativeMatrixElement>	relativeElements_Beam;		/*!< Preset to related parameters to matrix elements (beam) */
 		std::vector<MatrixElement>	matrixElements_Target;		/*!< Preset to related parameters to matrix elements (target) */
+    std::vector<RelativeMatrixElement>	relativeElements_Target;		/*!< Preset to related parameters to matrix elements (target) */
 		std::vector<ScalingParameter>	scalingParameters;		/*!< Common scaling parameters */
 
 		std::vector<TMatrixD>		correctionFactors_Beam;		/*!< Point corrections for the beam nucleus excitation */
