@@ -444,7 +444,6 @@ double GOSIASimMinFCN::operator()(const double* par){
 	str = "./gosia < "+beamGOSIAFile_inp+"> /dev/null";
 	const char*	c_b = str.c_str();
 	system(c_b);
-	//std::cout	<< workingDir << std::endl;
   	//RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");
 	if(exptData_Target.size() > 0){
 		str = "./gosia < "+targetGOSIAFile_inp+"> /dev/null";
@@ -452,7 +451,6 @@ double GOSIASimMinFCN::operator()(const double* par){
 		system(c_t);
   	//	RunGosia(targetGOSIAFile_inp, workingDir, "dump.out");
 	}
-	std::cout	<< beamGOSIAFile_out << std::endl;
 	GOSIAReader	beam_gosiaReader(&nucl_b,beamGOSIAFile_out.c_str());	//	Grab the GOSIA yields
 	EffectiveCrossSection_Beam.clear();	
 	std::vector<ExperimentData>	beamCalc	= beam_gosiaReader.GetGOSIAData();
@@ -472,7 +470,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 			int	init		= beamCalc.at(i).GetData().at(j).GetInitialIndex();
 			int	fina		= beamCalc.at(i).GetData().at(j).GetFinalIndex();
 			double 	counts 		= beamCalc.at(i).GetData().at(j).GetCounts();
-			if(true && i==0){
+			if(false && i==0){
 				std::cout	<< std::setw( 6) << std::left << init
 						<< std::setw( 6) << std::left << fina
 						<< std::setw(12) << std::left << counts	

@@ -453,34 +453,34 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	std::cout	<< "Beam matrix elements:"
 			<< std::endl;
-  int parct = 0;
+  	int parct = 0;
 	for(size_t i=0;i<matrixElements_Beam.size();i++){
-    if (!matrixElements_Beam.at(i).GetFixed()) {
-      matrixElements_Beam.at(i).SetMatrixElement(res[parct]);
-      fNucleus_Beam.SetMatrixElement(matrixElements_Beam.at(i).GetLambda(),
-                                     matrixElements_Beam.at(i).GetInitialState(),
-                                     matrixElements_Beam.at(i).GetFinalState(),
-                                     res[parct]);
-      std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
-                << std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
-                << std::setw(15) << std::left << fNucleus_Beam.GetMatrixElements().at(matrixElements_Beam.at(i).GetLambda())[matrixElements_Beam.at(i).GetInitialState()][matrixElements_Beam.at(i).GetFinalState()]
-                << std::setw(15) << std::left << res[parct] 
-                << std::setw(15) << std::left << unc[parct]
-                << std::endl;
-      ++parct;
-    }
-    else {
-      fNucleus_Beam.SetMatrixElement(matrixElements_Beam.at(i).GetLambda(),
+    		if (!matrixElements_Beam.at(i).GetFixed()) {
+			matrixElements_Beam.at(i).SetMatrixElement(res[parct]);
+			fNucleus_Beam.SetMatrixElement(matrixElements_Beam.at(i).GetLambda(),
+							matrixElements_Beam.at(i).GetInitialState(),
+							matrixElements_Beam.at(i).GetFinalState(),
+							res[parct]);
+			std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
+					<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
+		//			<< std::setw(15) << std::left << fNucleus_Beam.GetMatrixElements().at(matrixElements_Beam.at(i).GetLambda())[matrixElements_Beam.at(i).GetInitialState()][matrixElements_Beam.at(i).GetFinalState()]
+					<< std::setw(15) << std::left << res[parct] 
+					<< std::setw(15) << std::left << unc[parct]
+					<< std::endl;
+      			++parct;
+    		}
+		else {
+			fNucleus_Beam.SetMatrixElement(matrixElements_Beam.at(i).GetLambda(),
                                      matrixElements_Beam.at(i).GetInitialState(),
                                      matrixElements_Beam.at(i).GetFinalState(),
                                      matrixElements_Beam.at(i).GetMatrixElement());
-      std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
-                << std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
-                << std::setw(15) << std::left << fNucleus_Beam.GetMatrixElements().at(matrixElements_Beam.at(i).GetLambda())[matrixElements_Beam.at(i).GetInitialState()][matrixElements_Beam.at(i).GetFinalState()] << std::endl;
-    }
+			std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
+					<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
+					<< std::setw(15) << std::left << fNucleus_Beam.GetMatrixElements().at(matrixElements_Beam.at(i).GetLambda())[matrixElements_Beam.at(i).GetInitialState()][matrixElements_Beam.at(i).GetFinalState()] << std::endl;
+		}
 	}
-  std::cout	<< "Relative Beam matrix elements:"
-            << std::endl;
+	std::cout	<< "Relative Beam matrix elements:"
+            		<< std::endl;
   for(size_t i=0;i<relativeElements_Beam.size();i++){
 		std::cout	<< std::setw(10) << std::left << relativeElements_Beam.at(i).GetInitialState()
               << std::setw(10) << std::left << relativeElements_Beam.at(i).GetFinalState();
