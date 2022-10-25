@@ -441,17 +441,25 @@ double GOSIASimMinFCN::operator()(const double* par){
 	}
 
 	std::string	str;
-  	RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");
+	str = "./gosia < "+beamGOSIAFile_inp+"> /dev/null";
+	const char*	c_b = str.c_str();
+	system(c_b);
+	//std::cout	<< workingDir << std::endl;
+  	//RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");
 	if(exptData_Target.size() > 0){
-  		RunGosia(targetGOSIAFile_inp, workingDir, "dump.out");
+		str = "./gosia < "+targetGOSIAFile_inp+"> /dev/null";
+		const char*	c_t = str.c_str();
+		system(c_t);
+  	//	RunGosia(targetGOSIAFile_inp, workingDir, "dump.out");
 	}
-	GOSIAReader	beam_gosiaReader(&nucl_b,(workingDir+beamGOSIAFile_out).c_str());	//	Grab the GOSIA yields
+	std::cout	<< beamGOSIAFile_out << std::endl;
+	GOSIAReader	beam_gosiaReader(&nucl_b,beamGOSIAFile_out.c_str());	//	Grab the GOSIA yields
+	EffectiveCrossSection_Beam.clear();	
 	std::vector<ExperimentData>	beamCalc	= beam_gosiaReader.GetGOSIAData();
 	
 	std::vector<ExperimentData>	targetCalc;
 	if(exptData_Target.size() > 0){
 		GOSIAReader	target_gosiaReader(&nucl_t,(workingDir+targetGOSIAFile_out).c_str());	//	Grab the GOSIA yields
-		EffectiveCrossSection_Beam.clear();	
 		EffectiveCrossSection_Target.clear();	
 		targetCalc	= target_gosiaReader.GetGOSIAData();
 	}
@@ -464,7 +472,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 			int	init		= beamCalc.at(i).GetData().at(j).GetInitialIndex();
 			int	fina		= beamCalc.at(i).GetData().at(j).GetFinalIndex();
 			double 	counts 		= beamCalc.at(i).GetData().at(j).GetCounts();
-			if(false && i==0){
+			if(true && i==0){
 				std::cout	<< std::setw( 6) << std::left << init
 						<< std::setw( 6) << std::left << fina
 						<< std::setw(12) << std::left << counts	
@@ -517,8 +525,8 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::setw(14) << std::left << "Err:"
 					<< std::setw(14) << std::left << "C/E:"
 					<< std::setw(14) << std::left << "Chisq:"
-      << std::setw(20) << std::left << " "
-      << std::setw( 6) << std::left << "Init:"
+					<< std::setw(20) << std::left << " "
+					<< std::setw( 6) << std::left << "Init:"
 					<< std::setw( 6) << std::left << "Finl:"
 					<< std::setw(14) << std::left << "Calc:"
 					<< std::setw(14) << std::left << "Expt:"
@@ -672,31 +680,31 @@ double GOSIASimMinFCN::operator()(const double* par){
 			sigma_prime		/= expt_weights.at(i);
 			if(exptCounts > 0 && sigma > 0){
 				if(true){// && ((index_init == 1 && index_final ==  0) || (index_init == 7 && index_final == 4))){
-          if (verbose) {
-            if(fLikelihood){
-              std::cout 	<< std::setw( 6) << std::left << index_init 
-                          << std::setw( 6) << std::left << index_final 
-                          << std::setw(14) << std::left << calcCounts 
-                          << std::setw(14) << std::left << exptCounts 
-                          << std::setw(14) << std::left << calcCounts/exptCounts
-                          << std::setw(14) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts)) << std::endl << "              ";
-            }
-            else{
-              std::cout 	<< std::setw( 6) << std::left << index_init 
-                          << std::setw( 6) << std::left << index_final 
-                          << std::setw(14) << std::left << calcCounts 
-                          << std::setw(14) << std::left << exptCounts 
-                          << std::setw(14) << std::left << exptData_Beam.at(i).GetData().at(t).GetUpUnc()
-                          << std::setw(14) << std::left << calcCounts/exptCounts
-                          << std::setw(14) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
-              if (t%2 == 0) {
-                std::cout << std::setw(20) << std::left << " ";
-                if (t==exptData_Beam.at(i).GetData().size()-1) { std::cout << std::endl; }
-              }
-              else { std::cout << std::endl << std::setw(14) << std::left << " "; }
-            }
-          }
-        }
+          				if (verbose) {
+						if(fLikelihood){
+              						std::cout 	<< std::setw( 6) << std::left << index_init 
+						                        << std::setw( 6) << std::left << index_final 
+									<< std::setw(14) << std::left << calcCounts 
+									<< std::setw(14) << std::left << exptCounts 
+									<< std::setw(14) << std::left << calcCounts/exptCounts
+									<< std::setw(14) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts)) << std::endl << "              ";
+						}
+						else{
+							std::cout 	<< std::setw( 6) << std::left << index_init 
+									<< std::setw( 6) << std::left << index_final 
+									<< std::setw(14) << std::left << calcCounts 
+									<< std::setw(14) << std::left << exptCounts 
+									<< std::setw(14) << std::left << exptData_Beam.at(i).GetData().at(t).GetUpUnc()
+									<< std::setw(14) << std::left << calcCounts/exptCounts
+									<< std::setw(14) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
+									if (t%2 == 0) {
+										std::cout << std::setw(20) << std::left << " ";
+										if (t==exptData_Beam.at(i).GetData().size()-1) { std::cout << std::endl; }
+	  								}
+									else { std::cout << std::endl << std::setw(14) << std::left << " "; }
+						}
+					}
+        			}
 				if(fLikelihood){
 					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
 					beamchisq	+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
@@ -728,25 +736,25 @@ double GOSIASimMinFCN::operator()(const double* par){
 			sigma_prime		/= expt_weights.at(i);
 			if(calcCounts > 0 && sigma > 0){
 				if(true){// && ((index_init == 1 && index_final ==  0) || (index_init == 7 && index_final == 4))){
-          if (verbose) {
-            if(fLikelihood){
-              std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2
-                          << std::setw( 6) << std::left << index_final1*100 + index_final2
-                          << std::setw(10) << std::left << calcCounts 
-                          << std::setw(10) << std::left << exptCounts 
-                          << std::setw(10) << std::left << calcCounts/exptCounts
-                          << std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
-            }
-            else{
-              std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2 
-                          << std::setw( 6) << std::left << index_final1*100 + index_final2
-                          << std::setw(10) << std::left << calcCounts 
-                          << std::setw(10) << std::left << exptCounts 
-                          << std::setw(10) << std::left << exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc()
-                          << std::setw(10) << std::left << calcCounts/exptCounts
-                          << std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
-            }
-          }
+					if (verbose) {
+						if(fLikelihood){
+							std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2
+									<< std::setw( 6) << std::left << index_final1*100 + index_final2
+									<< std::setw(10) << std::left << calcCounts 
+									<< std::setw(10) << std::left << exptCounts 
+									<< std::setw(10) << std::left << calcCounts/exptCounts
+									<< std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
+						}
+						else{
+							std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2 
+									<< std::setw( 6) << std::left << index_final1*100 + index_final2
+									<< std::setw(10) << std::left << calcCounts 
+									<< std::setw(10) << std::left << exptCounts 
+									<< std::setw(10) << std::left << exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc()
+									<< std::setw(10) << std::left << calcCounts/exptCounts
+									<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
+						}
+					}
 				}
 				if(fLikelihood){
 					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
@@ -788,7 +796,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 			}
 			std::cout 	<< std::endl;
 		}
-    std::cout 	<< std::endl;
+		std::cout 	<< std::endl;
 	}
 	else if(verbose){
 		std::cout 	<< std::setw( 7) << std::left << "Target:"
@@ -833,25 +841,25 @@ double GOSIASimMinFCN::operator()(const double* par){
 			sigma_prime		/= expt_weights.at(i); 
 			if(calcCounts > 0 && sigma > 0){
 				if(true){
-          if (verbose) {
-					if(fLikelihood){
-						std::cout 	<< std::setw( 6) << std::left << index_init 
-								<< std::setw( 6) << std::left << index_final 
-								<< std::setw(10) << std::left << calcCounts 
-								<< std::setw(10) << std::left << exptCounts 
-								<< std::setw(10) << std::left << calcCounts/exptCounts
-								<< std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
+					if (verbose) {
+						if(fLikelihood){
+							std::cout 	<< std::setw( 6) << std::left << index_init 
+									<< std::setw( 6) << std::left << index_final 
+									<< std::setw(10) << std::left << calcCounts 
+									<< std::setw(10) << std::left << exptCounts 
+									<< std::setw(10) << std::left << calcCounts/exptCounts
+									<< std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
+						}
+						else{
+							std::cout 	<< std::setw( 6) << std::left << index_init 
+									<< std::setw( 6) << std::left << index_final 
+									<< std::setw(10) << std::left << calcCounts 
+									<< std::setw(10) << std::left << exptCounts 
+									<< std::setw(10) << std::left << exptData_Target.at(i).GetData().at(t).GetUpUnc() 
+									<< std::setw(10) << std::left << calcCounts/exptCounts
+									<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Target.at(i).GetData().at(t).GetUpUnc(),2);
+						}
 					}
-					else{
-						std::cout 	<< std::setw( 6) << std::left << index_init 
-								<< std::setw( 6) << std::left << index_final 
-								<< std::setw(10) << std::left << calcCounts 
-								<< std::setw(10) << std::left << exptCounts 
-								<< std::setw(10) << std::left << exptData_Target.at(i).GetData().at(t).GetUpUnc() 
-								<< std::setw(10) << std::left << calcCounts/exptCounts
-								<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Target.at(i).GetData().at(t).GetUpUnc(),2);
-					}
-          }
 				}
 				if(fLikelihood){
 					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
@@ -884,25 +892,25 @@ double GOSIASimMinFCN::operator()(const double* par){
 			sigma_prime		/= expt_weights.at(i);
 			if(calcCounts > 0 && sigma > 0){
 				if(true){// && ((index_init == 1 && index_final ==  0) || (index_init == 7 && index_final == 4))){
-          if (verbose) {
-					if(fLikelihood){
-						std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2
-								<< std::setw( 6) << std::left << index_final1*100 + index_final2
-								<< std::setw(10) << std::left << calcCounts 
-								<< std::setw(10) << std::left << exptCounts 
-								<< std::setw(10) << std::left << calcCounts/exptCounts
-								<< std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
+					if (verbose) {
+						if(fLikelihood){
+							std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2
+									<< std::setw( 6) << std::left << index_final1*100 + index_final2
+									<< std::setw(10) << std::left << calcCounts 
+									<< std::setw(10) << std::left << exptCounts 
+									<< std::setw(10) << std::left << calcCounts/exptCounts
+									<< std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
+						}
+						else{
+							std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2 
+									<< std::setw( 6) << std::left << index_final1*100 + index_final2
+									<< std::setw(10) << std::left << calcCounts 
+									<< std::setw(10) << std::left << exptCounts 
+									<< std::setw(10) << std::left << exptData_Target.at(i).GetDoublet().at(t).GetUpUnc()
+									<< std::setw(10) << std::left << calcCounts/exptCounts
+									<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Target.at(i).GetData().at(t).GetUpUnc(),2);
+						}
 					}
-					else{
-						std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2 
-								<< std::setw( 6) << std::left << index_final1*100 + index_final2
-								<< std::setw(10) << std::left << calcCounts 
-								<< std::setw(10) << std::left << exptCounts 
-								<< std::setw(10) << std::left << exptData_Target.at(i).GetDoublet().at(t).GetUpUnc()
-								<< std::setw(10) << std::left << calcCounts/exptCounts
-								<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Target.at(i).GetData().at(t).GetUpUnc(),2);
-					}
-          }
 				}
 				if(fLikelihood){
 					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
