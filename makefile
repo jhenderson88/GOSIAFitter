@@ -35,7 +35,7 @@ TARGET = bin/libGOSIAFitter.so
 main: $(TARGET) bin/gosia 
 	@printf "Make complete\n"
 
-$(TARGET): $(OBJECTS) bin/DictOutput.cxx lib bin obj/gosia.o
+$(TARGET): $(OBJECTS) bin/DictOutput.cxx lib obj/gosia.o
 	@printf "Now compiling shared library $@\n"
 	@$(CPP) $(CFLAGS) -I$(INCDIR) -I. $(LIBRS) -o $@ -shared bin/DictOutput.cxx $(OBJECTS) obj/gosia.o
 
@@ -43,8 +43,8 @@ bin/DictOutput.cxx: $(HEAD)
 	@printf "Linking libraries\n"
 	@rootcint -f $@ -c -p $(HEAD) lib/linkdef.h
 
-lib bin:
-	@mkdir -p bin lib
+bin:
+	@mkdir -p bin
 
 obj/gosia.o: src/gosia_20081208.18.tjg.f include/Gosia.h obj
 	@printf "Now compiling object gosia.o\n"
@@ -64,5 +64,7 @@ bin/gosia: bin src/gosia_20081208.18.f
 clean:  
 	@printf "Tidying up...\n"
 	@rm $(OBJECTS)
-	@rm -r bin/*
-	@rm -r obj/*
+	@rm -r bin
+	@rm -r obj
+#	@rmdir bin
+#	@rmdir obj

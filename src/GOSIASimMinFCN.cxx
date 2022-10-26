@@ -59,13 +59,13 @@ double GOSIASimMinFCN::operator()(const double* par){
 		}      
 	}
 	//relativematrixelements
-	for(unsignedinti=0;i<ME_BeamRel.size();i++){
-		doubleme=nucl_b.GetMatrixElements().at(ME_BeamRel.at(i).GetLambdaRel())[ME_BeamRel.at(i).GetInitialStateRel()][ME_BeamRel.at(i).GetFinalStateRel()];
+	for(unsigned int i=0;i<ME_BeamRel.size();i++){
+		double me = nucl_b.GetMatrixElements().at(ME_BeamRel.at(i).GetLambdaRel())[ME_BeamRel.at(i).GetInitialStateRel()][ME_BeamRel.at(i).GetFinalStateRel()];
 		if(ME_BeamRel.at(i).GetFixed()){
-			me=me*ME_BeamRel.at(i).GetRelativeElement();
+			me = me * ME_BeamRel.at(i).GetRelativeElement();
 		}
 		else{
-			me=me*par[parct];
+			me = me*par[parct];
 			parameters.push_back(par[parct]);
 			++parct;
 			++nRelBeam;
@@ -197,16 +197,16 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (BR - calcBR) / litBranchingRatios_Beam.at(i).GetDnUnc();
 			chisq += tmp * tmp;
 			br_chisq += tmp*tmp;
-      if (verbose) {
-			std::cout	<< std::setw(10) << std::left << index_init 
-					<< std::setw(10) << std::left << index_final1
-					<< std::setw(10) << std::left << index_final2
-					<< std::setw(10) << std::left << calcBR
-					<< std::setw(10) << std::left << BR
-					<< std::setw(10) << std::left << litBranchingRatios_Beam.at(i).GetUpUnc()
-					<< std::setw(10) << std::left << tmp*tmp 
-					<< std::endl;
-      }
+			if (verbose) {
+				std::cout	<< std::setw(10) << std::left << index_init 
+						<< std::setw(10) << std::left << index_final1
+						<< std::setw(10) << std::left << index_final2
+						<< std::setw(10) << std::left << calcBR
+						<< std::setw(10) << std::left << BR
+						<< std::setw(10) << std::left << litBranchingRatios_Beam.at(i).GetUpUnc()
+						<< std::setw(10) << std::left << tmp*tmp 
+						<< std::endl;
+      			}
 		}
 		NDF++;
 		NDF_lit++;
@@ -233,15 +233,15 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (delta - calcDelta) / litMixingRatios_Beam.at(i).GetDnUnc();
 			chisq += tmp * tmp;		
 			mr_chisq += tmp*tmp;
-      if (verbose) {
-			std::cout	<< std::setw(10) << std::left << index_init 
-					<< std::setw(10) << std::left << index_final
-					<< std::setw(10) << std::left << calcDelta
-					<< std::setw(10) << std::left << delta
-					<< std::setw(10) << std::left << litMixingRatios_Beam.at(i).GetUpUnc()
-					<< std::setw(10) << std::left << tmp*tmp 
-					<< std::endl;
-      }
+			if (verbose) {
+				std::cout	<< std::setw(10) << std::left << index_init 
+						<< std::setw(10) << std::left << index_final
+						<< std::setw(10) << std::left << calcDelta
+						<< std::setw(10) << std::left << delta
+						<< std::setw(10) << std::left << litMixingRatios_Beam.at(i).GetUpUnc()
+						<< std::setw(10) << std::left << tmp*tmp 
+						<< std::endl;
+      			}
 		}
 		NDF++;
 		NDF_lit++;
@@ -269,16 +269,16 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (ME - calcME) / litMatrixElements_Beam.at(i).GetDnUnc();
 			chisq += tmp * tmp;		
 			me_chisq += tmp*tmp;
-      if (verbose) {
-			std::cout	<< std::setw(10) << std::left << index_init 
-					<< std::setw(10) << std::left << index_final
-					<< std::setw(10) << std::left << mult
-					<< std::setw(14) << std::left << calcME
-					<< std::setw(14) << std::left << ME
-					<< std::setw(14) << std::left << litMatrixElements_Beam.at(i).GetUpUnc()
-					<< std::setw(14) << std::left << tmp*tmp 
-					<< std::endl;
-      }
+			if (verbose) {
+				std::cout	<< std::setw(10) << std::left << index_init 
+						<< std::setw(10) << std::left << index_final
+						<< std::setw(10) << std::left << mult
+						<< std::setw(14) << std::left << calcME
+						<< std::setw(14) << std::left << ME
+						<< std::setw(14) << std::left << litMatrixElements_Beam.at(i).GetUpUnc()
+						<< std::setw(14) << std::left << tmp*tmp 
+						<< std::endl;
+      			}
 		}
 		NDF++;
 		NDF_lit++;
@@ -334,25 +334,25 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (BR - calcBR) / litBranchingRatios_Target.at(i).GetDnUnc();
 			chisq += tmp * tmp;
 			br_chisq += tmp*tmp;
-      if (verbose) {
-			std::cout	<< std::setw(10) << std::left << index_init 
-					<< std::setw(10) << std::left << index_final1
-					<< std::setw(10) << std::left << index_final2
-					<< std::setw(10) << std::left << calcBR
-					<< std::setw(10) << std::left << BR
-					<< std::setw(10) << std::left << litBranchingRatios_Target.at(i).GetUpUnc()
-					<< std::setw(10) << std::left << tmp*tmp 
-					<< std::endl;
-      }
+			if (verbose) {
+				std::cout	<< std::setw(10) << std::left << index_init 
+						<< std::setw(10) << std::left << index_final1
+						<< std::setw(10) << std::left << index_final2
+						<< std::setw(10) << std::left << calcBR
+						<< std::setw(10) << std::left << BR
+						<< std::setw(10) << std::left << litBranchingRatios_Target.at(i).GetUpUnc()
+						<< std::setw(10) << std::left << tmp*tmp 
+						<< std::endl;
+		      }
 		}
 		NDF++;
 		NDF_lit++;
 	}
 	if(litMixingRatios_Target.size()>0)
-    if (verbose) {
-		std::cout	<< "Delta (Target):" 
-				<< std::endl;
-    }
+	if (verbose) {
+	    	std::cout	<< "Delta (Target):" 
+    				<< std::endl;
+	}
 	for(unsigned int i=0;i<litMixingRatios_Target.size();i++){
 		double tmp;
 		int 	index_init	= litMixingRatios_Target.at(i).GetInitialIndex();
@@ -371,21 +371,21 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (delta - calcDelta) / litMixingRatios_Target.at(i).GetDnUnc();
 			chisq += tmp * tmp;		
 			mr_chisq += tmp*tmp;
-      if (verbose) {
-			std::cout	<< std::setw(10) << std::left << index_init 
-					<< std::setw(10) << std::left << index_final
-					<< std::setw(10) << std::left << calcDelta
-					<< std::setw(10) << std::left << delta
-					<< std::setw(10) << std::left << litMixingRatios_Target.at(i).GetUpUnc()
-					<< std::setw(10) << std::left << tmp*tmp 
-					<< std::endl;
-      }
+			if (verbose) {
+				std::cout	<< std::setw(10) << std::left << index_init 
+						<< std::setw(10) << std::left << index_final
+						<< std::setw(10) << std::left << calcDelta
+						<< std::setw(10) << std::left << delta
+						<< std::setw(10) << std::left << litMixingRatios_Target.at(i).GetUpUnc()
+						<< std::setw(10) << std::left << tmp*tmp 
+						<< std::endl;
+			}
 		}
 		NDF++;
 		NDF_lit++;
 	}
 	if(litMatrixElements_Target.size()>0){
-	    if (verbose) {
+		if (verbose) {
 			std::cout 	<< "Matrix Elements (Target)"
 					<< std::endl;
     		}
