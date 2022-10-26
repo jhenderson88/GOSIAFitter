@@ -42,99 +42,99 @@ double GOSIASimMinFCN::operator()(const double* par){
     
 	parameters.clear();
 
-  int parct = 0;
-  int nRelBeam = 0;
-  int nRelTarget = 0;
-  int nBeamME = 0;
-  int nTargetME = 0;
+	int parct = 0;
+	int nRelBeam = 0;
+	int nRelTarget = 0;
+	int nBeamME = 0;
+	int nTargetME = 0;
 	for(unsigned int i=0;i<ME_Beam.size();i++){
-    if (!ME_Beam.at(i).GetFixed()) {
-      nucl_b.SetMatrixElement(ME_Beam.at(i).GetLambda(),ME_Beam.at(i).GetInitialState(),ME_Beam.at(i).GetFinalState(),par[parct]);
-      parameters.push_back(par[parct]);
-      ++parct;
-      ++nBeamME;
-    }
-    else {
-      nucl_b.SetMatrixElement(ME_Beam.at(i).GetLambda(),ME_Beam.at(i).GetInitialState(),ME_Beam.at(i).GetFinalState(),ME_Beam.at(i).GetMatrixElement());
-    }      
+		if (!ME_Beam.at(i).GetFixed()) {
+			nucl_b.SetMatrixElement(ME_Beam.at(i).GetLambda(),ME_Beam.at(i).GetInitialState(),ME_Beam.at(i).GetFinalState(),par[parct]);
+			parameters.push_back(par[parct]);
+			++parct;
+			++nBeamME;
+		}
+		else {
+			nucl_b.SetMatrixElement(ME_Beam.at(i).GetLambda(),ME_Beam.at(i).GetInitialState(),ME_Beam.at(i).GetFinalState(),ME_Beam.at(i).GetMatrixElement());
+		}      
 	}
-  //relative matrix elements
-  for(unsigned int i=0;i<ME_BeamRel.size();i++){
-    double me = nucl_b.GetMatrixElements().at(ME_BeamRel.at(i).GetLambdaRel())[ME_BeamRel.at(i).GetInitialStateRel()][ME_BeamRel.at(i).GetFinalStateRel()];
-    if (ME_BeamRel.at(i).GetFixed()) {
-      me = me * ME_BeamRel.at(i).GetRelativeElement();
-    }
-    else {
-      me = me * par[parct];
-      parameters.push_back(par[parct]);
-      ++parct;
-      ++nRelBeam;
-    }
+	//relativematrixelements
+	for(unsignedinti=0;i<ME_BeamRel.size();i++){
+		doubleme=nucl_b.GetMatrixElements().at(ME_BeamRel.at(i).GetLambdaRel())[ME_BeamRel.at(i).GetInitialStateRel()][ME_BeamRel.at(i).GetFinalStateRel()];
+		if(ME_BeamRel.at(i).GetFixed()){
+			me=me*ME_BeamRel.at(i).GetRelativeElement();
+		}
+		else{
+			me=me*par[parct];
+			parameters.push_back(par[parct]);
+			++parct;
+			++nRelBeam;
+		}
 		nucl_b.SetMatrixElement(ME_BeamRel.at(i).GetLambda(),ME_BeamRel.at(i).GetInitialState(),ME_BeamRel.at(i).GetFinalState(),me);
 	}
   
 	for(unsigned int i=0;i<ME_Target.size();i++){
-    if (!ME_Target.at(i).GetFixed()) {
-      nucl_t.SetMatrixElement(ME_Target.at(i).GetLambda(),ME_Target.at(i).GetInitialState(),ME_Target.at(i).GetFinalState(),par[parct]);
-      parameters.push_back(par[parct]);     
-      ++parct;
-      ++nTargetME;
-    }
-    else {
-      nucl_t.SetMatrixElement(ME_Target.at(i).GetLambda(),ME_Target.at(i).GetInitialState(),ME_Target.at(i).GetFinalState(),ME_Target.at(i).GetMatrixElement());
-    }
+		if(!ME_Target.at(i).GetFixed()){
+			nucl_t.SetMatrixElement(ME_Target.at(i).GetLambda(),ME_Target.at(i).GetInitialState(),ME_Target.at(i).GetFinalState(),par[parct]);
+			parameters.push_back(par[parct]);
+			++parct;
+			++nTargetME;
+		}
+		else{
+			nucl_t.SetMatrixElement(ME_Target.at(i).GetLambda(),ME_Target.at(i).GetInitialState(),ME_Target.at(i).GetFinalState(),ME_Target.at(i).GetMatrixElement());
+		}
 	}
 
-  //relative matrix elements
-  for(unsigned int i=0;i<ME_TargetRel.size();i++){
-    double me = nucl_t.GetMatrixElements().at(ME_TargetRel.at(i).GetLambdaRel())[ME_TargetRel.at(i).GetInitialStateRel()][ME_TargetRel.at(i).GetFinalStateRel()];
-    if (ME_TargetRel.at(i).GetFixed()) {
-      me = me * ME_TargetRel.at(i).GetRelativeElement();
-    }
-    else {
-      me = me * par[parct];
-      parameters.push_back(par[parct]);
-      ++parct;
-      ++nRelTarget;
-    }
+	// Relative matrix elements
+	for(unsigned int i=0;i<ME_TargetRel.size();i++){
+		double me = nucl_t.GetMatrixElements().at(ME_TargetRel.at(i).GetLambdaRel())[ME_TargetRel.at(i).GetInitialStateRel()][ME_TargetRel.at(i).GetFinalStateRel()];
+		if (ME_TargetRel.at(i).GetFixed()) {
+			me = me * ME_TargetRel.at(i).GetRelativeElement();
+		}
+		else {
+			me = me * par[parct];
+			parameters.push_back(par[parct]);
+			++parct;
+			++nRelTarget;
+		}
 		nucl_t.SetMatrixElement(ME_TargetRel.at(i).GetLambda(),ME_TargetRel.at(i).GetInitialState(),ME_TargetRel.at(i).GetFinalState(),me);
 	}
 
 	if(verbose){
 		std::cout	<< std::endl;
 		std::cout	<< parct << " Parameters:";
-    int linect = 0;
-    for (unsigned int i=0; i<parct; ++i) {
-      if (linect%12 == 0) {
-        std::cout	<< std::endl;
-        std::cout << std::setw(20) << std::left;      
-        if (i == 0) {
-          std::cout << "Beam: ";
-          linect = 0;
-        }
-        else {
-          std::cout << " ";
-        }
-      }
-      if (i == nBeamME) {
-        std::cout << std::endl;
-        std::cout << std::setw(20) << std::left << "Relative Beam: ";
-        linect = 0;
-      }
-      else if (i == nBeamME + nRelBeam) {
-        std::cout << std::endl;
-        std::cout << std::setw(20) << std::left << "Target: ";
-        linect = 0;
-      }
-      else if (i == nBeamME + nRelBeam + nRelTarget) {
-        std::cout << std::endl;
-        std::cout << std::setw(20) << std::left << "Relative Target: ";
-        linect = 0;
-      }
-      std::cout	<< std::setw(12) << std::left << par[i];
-      ++linect;
-    }
-    std::cout	<< std::endl;
+		int linect = 0;
+		for (unsigned int i=0; i<parct; ++i) {
+			if (linect%12 == 0) {
+				std::cout	<< std::endl;
+				std::cout << std::setw(20) << std::left;      
+				if (i == 0) {
+					std::cout << "Beam: ";
+					linect = 0;
+				}
+				else {
+					std::cout << " ";
+				}
+			}
+			if (i == nBeamME) {
+				std::cout << std::endl;
+				std::cout << std::setw(20) << std::left << "Relative Beam: ";
+				linect = 0;
+			}
+			else if (i == nBeamME + nRelBeam) {
+				std::cout << std::endl;
+				std::cout << std::setw(20) << std::left << "Target: ";
+				linect = 0;
+			}
+			else if (i == nBeamME + nRelBeam + nRelTarget) {
+				std::cout << std::endl;
+				std::cout << std::setw(20) << std::left << "Relative Target: ";
+				linect = 0;
+			}
+			std::cout	<< std::setw(12) << std::left << par[i];
+			++linect;
+		}
+		std::cout	<< std::endl;
 	}
 
 	// 	COMPARE WITH LITERATURE CONSTRAINTS:
@@ -161,15 +161,15 @@ double GOSIASimMinFCN::operator()(const double* par){
 				tmp = (calcLifetime - lifetime) / litLifetimes_Beam.at(i).GetDnUnc();
 			chisq += tmp * tmp;
 			lifetime_chisq += tmp*tmp;
-      if (verbose) {
-      std::cout	<< std::setw(14) << std::left << "Lifetime:"
-                << std::setw(10) << std::left << index 
-                << std::setw(10) << std::left << calcLifetime
-                << std::setw(10) << std::left << lifetime
-                << std::setw(10) << std::left << litLifetimes_Beam.at(i).GetUpUnc()
-                << std::setw(10) << std::left << tmp*tmp 
-                << std::endl;
-      }
+			if (verbose) {
+				std::cout	<< std::setw(14) << std::left << "Lifetime:"
+						<< std::setw(10) << std::left << index 
+						<< std::setw(10) << std::left << calcLifetime
+						<< std::setw(10) << std::left << lifetime
+						<< std::setw(10) << std::left << litLifetimes_Beam.at(i).GetUpUnc()
+						<< std::setw(10) << std::left << tmp*tmp 
+						<< std::endl;
+			}
 		}
 		NDF++;
 		NDF_lit++;
@@ -441,15 +441,15 @@ double GOSIASimMinFCN::operator()(const double* par){
 	}
 
 	std::string	str;
-	str = "./gosia < "+beamGOSIAFile_inp+"> /dev/null";
-	const char*	c_b = str.c_str();
-	system(c_b);
-  	//RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");
+	//str = "./gosia < "+beamGOSIAFile_inp+"> /dev/null";
+	//const char*	c_b = str.c_str();
+	//system(c_b);
+  	RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");
 	if(exptData_Target.size() > 0){
-		str = "./gosia < "+targetGOSIAFile_inp+"> /dev/null";
-		const char*	c_t = str.c_str();
-		system(c_t);
-  	//	RunGosia(targetGOSIAFile_inp, workingDir, "dump.out");
+	//	str = "./gosia < "+targetGOSIAFile_inp+"> /dev/null";
+	//	const char*	c_t = str.c_str();
+	//	system(c_t);
+  		RunGosia(targetGOSIAFile_inp, workingDir, "dump.out");
 	}
 	GOSIAReader	beam_gosiaReader(&nucl_b,beamGOSIAFile_out.c_str());	//	Grab the GOSIA yields
 	EffectiveCrossSection_Beam.clear();	
