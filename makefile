@@ -46,9 +46,12 @@ bin/DictOutput.cxx: $(HEAD)
 lib bin:
 	@mkdir -p bin lib
 
-obj/gosia.o: src/gosia_20081208.18.tjg.f include/Gosia.h
+obj/gosia.o: src/gosia_20081208.18.tjg.f include/Gosia.h obj
 	@printf "Now compiling object gosia.o\n"
 	@gfortran -fPIC -std=legacy -m64 -o obj/gosia.o -c src/gosia_20081208.18.tjg.f $(FORTRAN_LIBS)
+
+obj:
+	@mkdir -p obj
 
 lib/%.so: src/%.cxx include/%.h 
 	@printf "Now compiling library $@\n"
