@@ -116,6 +116,8 @@ void Run(){
 		double 	beamIntensity = 1e5;			//	Beam intensity in pps
 		double	detectionEff = 0.1;			//	Detection efficiency, for simplicity this is assumed to be constant
 
+		double	nDet = 1/14.;				// 	Number of detectors defined in GOSIA, needs to be divided out
+
 		TRandom3 rand;
 
 		//	Output text file where we will write our simulated yields
@@ -144,6 +146,7 @@ void Run(){
 				tmpYld *= runningSeconds;
 				tmpYld *= beamIntensity;
 				tmpYld *= detectionEff;
+				tmpYld *= nDet;
 				if(tmpYld > 0){
 					//	Determine a simuated yield, based on random sampling of a Poisson distributions
 					double tmpYldPoiss = rand.PoissonD(tmpYld);
@@ -189,6 +192,7 @@ void Run(){
 				tmpYld *= runningSeconds;
 				tmpYld *= beamIntensity;
 				tmpYld *= detectionEff;
+				tmpYld *= nDet;
 				if(tmpYld > 0){
 					//	Determine a simuated yield, based on random sampling of a Poisson distributions
 					double tmpYldPoiss = rand.PoissonD(tmpYld);

@@ -40,7 +40,7 @@ Nucleus::Nucleus(const Nucleus& n) : MatrixElements(n.MatrixElements.size()), Ma
 		MatrixElementsLL.at(i) = n.MatrixElementsLL.at(i);
 	}
 
-  for(std::size_t i=0;i<n.ConversionCoefficients.size();i++){
+  	for(std::size_t i=0;i<n.ConversionCoefficients.size();i++){
 		ConversionCoefficients.at(i).ResizeTo(n.ConversionCoefficients.at(i).GetNcols(),n.ConversionCoefficients.at(i).GetNrows());
 		ConversionCoefficients.at(i) = n.ConversionCoefficients.at(i);
 	}
@@ -78,7 +78,7 @@ Nucleus& Nucleus::operator = (const Nucleus& n){
 		MatrixElementsLL.at(i) = n.MatrixElementsLL.at(i);
 	}
 
-  ConversionCoefficients.resize((size_t)n.ConversionCoefficients.size());
+  	ConversionCoefficients.resize((size_t)n.ConversionCoefficients.size());
 	for(size_t i=0;i<n.ConversionCoefficients.size();i++){
 		ConversionCoefficients.at(i).ResizeTo(n.ConversionCoefficients.at(i).GetNrows(),n.ConversionCoefficients.at(i).GetNcols());
 		ConversionCoefficients.at(i) = n.ConversionCoefficients.at(i);
@@ -94,7 +94,7 @@ void Nucleus::SetMaxLambda(int mL){
 	MatrixElements.resize(mL);
 	MatrixElementsUL.resize(mL);
 	MatrixElementsLL.resize(mL);
-  ConversionCoefficients.resize(mL);	
+	ConversionCoefficients.resize(mL);	
 }
 
 void Nucleus::SetNstates(int nS){
@@ -108,7 +108,7 @@ void Nucleus::SetNstates(int nS){
 		MatrixElements[i].ResizeTo(nS,nS);
 		MatrixElementsUL[i].ResizeTo(nS,nS);
 		MatrixElementsLL[i].ResizeTo(nS,nS);
-    ConversionCoefficients[i].ResizeTo(nS,nS);
+    		ConversionCoefficients[i].ResizeTo(nS,nS);
 	}
 	
 }
@@ -148,8 +148,8 @@ void Nucleus::SetMatrixElement(int l, int s1, int s2, double me){
 	int	dP = GetLevelP().at(s1)/GetLevelP().at(s2);
 	if(dP_Lambda != dP){
 		std::cout << "Parity conservation broken! Check state parities and transition multipolarities." << std::endl;
-    std::cout << s1 << "   " << s2 << std::endl;
-    std::cout << GetLevelP().at(s1) << "   " << GetLevelP().at(s2) << std::endl;
+    		std::cout << s1 << "   " << s2 << std::endl;
+    		std::cout << GetLevelP().at(s1) << "   " << GetLevelP().at(s2) << std::endl;
 		std::cout 	<< std::setw(25) << std::left << "Transition mult:" 
 				<< std::setw(25) << std::left << "P change (transition):" 
 				<< std::setw(25) << std::left << "P change (levels):"
@@ -238,8 +238,8 @@ void Nucleus::PrintState(int s) const{
 
 void Nucleus::SetConversionCoefficients(std::string bricc_idx, std::string bricc_icc) {
   BrIccReader bricc(bricc_idx, bricc_icc);
-
   int bricc_lambda[8] = {0,1,2,3,4,-1,5,6};  //BRICC does not have E6 conversion, so M1 and M2 are indices 5 and 6
+
 
   for (int l = 0; l<maxLambda; ++l) {
     for (int i = 0; i<nStates; ++i) {

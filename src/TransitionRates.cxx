@@ -168,7 +168,7 @@ void TransitionRates::SetMatrixElements(){
 			for(unsigned int i=0;i<TransitionStrengths.size();i++){
         //TJG  - adding internal conversion
 				SummedGammaTransitionStrengths[y][x] += (TMath::Power(TMath::Abs(StateE.at(x)-StateE.at(y)),power[i]) * TransitionStrengths.at(i)[y][x]) / multfactor[i];
-
+//		std::cout << fNucleus->GetConversionCoeffients().at(i)[y][x] << std::endl;
         SummedTransitionStrengths[y][x] += (TMath::Power(TMath::Abs(StateE.at(x)-StateE.at(y)),power[i]) * TransitionStrengths.at(i)[y][x]) * (1.0 + fNucleus->GetConversionCoeffients().at(i)[y][x]) / multfactor[i];        
 			}
 			if(SummedTransitionStrengths[y][x]>0)        
@@ -187,7 +187,7 @@ void TransitionRates::SetMatrixElements(){
 	}
 
 	StateLifetimes.ResizeTo(SummedTransitionStrengths.GetNcols());
-  StateGammaLifetimes.ResizeTo(SummedGammaTransitionStrengths.GetNcols());	
+  	StateGammaLifetimes.ResizeTo(SummedGammaTransitionStrengths.GetNcols());	
 	StateDecayProb.ResizeTo(SummedTransitionStrengths.GetNcols());
 	for(int x=0;x<SummedTransitionStrengths.GetNcols();x++){
 		double tmp = 0;
@@ -201,11 +201,11 @@ void TransitionRates::SetMatrixElements(){
 
 	}
 
-  for(int x=0;x<SummedGammaTransitionStrengths.GetNcols();x++){
+  	for(int x=0;x<SummedGammaTransitionStrengths.GetNcols();x++){
 		double tmp = 0;
 		for(int y=0;y<SummedGammaTransitionStrengths.GetNrows();y++)
 			tmp+=SummedGammaTransitionStrengths[y][x] * 1e-12;
-    if(tmp>0)
+    		if(tmp>0)
 			StateGammaLifetimes[x] = 1/tmp;
 		else
 			StateGammaLifetimes[x] = 0;

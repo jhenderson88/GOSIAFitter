@@ -142,6 +142,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 	TransitionRates rates_b(&nucl_b);
 
 	//rates_b.Print();
+	std::cout	<< nucl_b.GetMatrixElements().at(1)[0][1]	<< "\t" << rates_b.GetLifetimes()[1] * TMath::Log(2) << std::endl;	
 
 	double lifetime_chisq = 0;	
 	for(unsigned int i=0;i<litLifetimes_Beam.size();i++){
@@ -288,6 +289,8 @@ double GOSIASimMinFCN::operator()(const double* par){
 	TransitionRates rates_t;
 	if(exptData_Target.size() > 0)
 		rates_t = TransitionRates(&nucl_t);
+
+	std::cout	<< nucl_t.GetMatrixElements().at(1)[0][1]	<< "\t" << rates_t.GetLifetimes()[1] * TMath::Log(2) << std::endl;	
 	for(unsigned int i=0;i<litLifetimes_Target.size();i++){
 		double 	tmp = 0;
 		int	index		= litLifetimes_Target.at(i).GetIndex();
@@ -441,15 +444,15 @@ double GOSIASimMinFCN::operator()(const double* par){
 	}
 
 	std::string	str;
-	//str = "./gosia < "+beamGOSIAFile_inp+"> /dev/null";
-	//const char*	c_b = str.c_str();
-	//system(c_b);
-  	RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");
+	str = "./gosia < "+beamGOSIAFile_inp+"> /dev/null";
+	const char*	c_b = str.c_str();
+	system(c_b);
+  	//RunGosia(beamGOSIAFile_inp, workingDir, "dump.out");	// Removed for now
 	if(exptData_Target.size() > 0){
-	//	str = "./gosia < "+targetGOSIAFile_inp+"> /dev/null";
-	//	const char*	c_t = str.c_str();
-	//	system(c_t);
-  		RunGosia(targetGOSIAFile_inp, workingDir, "dump.out");
+		str = "./gosia < "+targetGOSIAFile_inp+"> /dev/null";
+		const char*	c_t = str.c_str();
+		system(c_t);
+  	//	RunGosia(targetGOSIAFile_inp, workingDir, "dump.out"); // Removed for now
 	}
 	GOSIAReader	beam_gosiaReader(&nucl_b,beamGOSIAFile_out.c_str());	//	Grab the GOSIA yields
 	EffectiveCrossSection_Beam.clear();	

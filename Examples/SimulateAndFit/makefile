@@ -1,6 +1,6 @@
-LIBS = -lGOSIAFitter -lSpectrum -lTreePlayer -lMathMore
+LIBS = `root-config --glibs` -lGOSIAFitter -lSpectrum -lTreePlayer -lMathMore
 CPP = g++
-CFLAGS = -std=c++0x `root-config --cflags --libs --glibs`
+CFLAGS = -std=c++11 -g -fPIC `root-config --cflags --libs --glibs` `gsl-config --cflags` -Wno-unused-parameter
 INCDIR = $(shell pwd)/../../include
 LIBDIR = $(shell pwd)/../../bin
 CURDIR = $(shell pwd)
@@ -15,11 +15,11 @@ all : $(EXES)
 $(BINDIR)/%: $(CURDIR)/%.cxx gosia
 	@mkdir -p $(BINDIR)
 	@printf "Creating executable $@ from $<\n"
-	@$(CPP) $(CFLAGS) -I$(INCDIR) -L$(LIBDIR) $(LIBS) $< -o $@
+	@$(CPP) $< -o $@ $(CFLAGS) -I$(INCDIR) -L$(LIBDIR) $(LIBS)
 
 gosia: $(LIBDIR)/gosia
 	@cp $(LIBDIR)/gosia gosia
 
 clean:
-	@printf "Cleaning up\n" 
+	@printf "Cleaning up\n"
 	@rm $(EXES)

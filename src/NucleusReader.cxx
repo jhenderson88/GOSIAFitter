@@ -79,8 +79,8 @@ void NucleusReader::ReadNucleusFile(const char *filename){
 					ss >> tmpI1 >> tmpI2 >> tmp_ME >> tmp_Lambda;	
 				}
 				fNucleus->SetMatrixElement(tmp_Lambda-1,tmpI1,tmpI2,tmp_ME);
-        present.at(tmp_Lambda-1)[tmpI1][tmpI2] = 1.0;
-        present.at(tmp_Lambda-1)[tmpI2][tmpI1] = 1.0;
+        			present.at(tmp_Lambda-1)[tmpI1][tmpI2] = 1.0;
+			        present.at(tmp_Lambda-1)[tmpI2][tmpI1] = 1.0;
 			}
 
 			counter++;
