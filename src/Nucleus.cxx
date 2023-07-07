@@ -219,7 +219,7 @@ void Nucleus::PrintNucleus() const{
 		double max = 0;
 		for(int i=0;i<GetMatrixElements().at(l).GetNcols();i++){
 			for(int j=0;j<GetMatrixElements().at(l).GetNrows();j++){
-				if(GetMatrixElements().at(l)[j][i] > max) max = GetMatrixElements().at(l)[j][i];
+				if(abs(GetMatrixElements().at(l)[j][i]) > abs(max)) max = abs(GetMatrixElements().at(l)[j][i]);
 			}
 		}
 

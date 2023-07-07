@@ -1,10 +1,16 @@
 #include "ScalingParameter.h"
 
-void ScalingParameter::SetScalingValue(double v, double vll, double vul){
+ScalingParameter::ScalingParameter(const ScalingParameter& g) {
 
-	scaling 	= v;
-	scaling_LL 	= vll;
-	scaling_UL 	= vul;	
+	experimentNumber	= g.GetExperimentNumbers();
+	experimentNRM		= g.GetExperimentNRMs();
 
 }
+ScalingParameter& ScalingParameter::operator = (const ScalingParameter& g){
 
+	experimentNumber	= g.GetExperimentNumbers();
+	experimentNRM		= g.GetExperimentNRMs();
+
+	return *this;
+
+}

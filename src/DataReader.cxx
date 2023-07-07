@@ -96,8 +96,8 @@ void	DataReader::ReadGOSIAData(const char* datafilename){
 	while(std::getline(infile,line)){
 		std::istringstream ss(line);
 		if(lineCounter == 0){ // First line
-			int	tmp1,tmp2,tmp3,tmp4,tmp5,tmp6;
-			float	tmp7;
+			int	tmp1,tmp2,tmp3,tmp4,tmp6;
+			float	tmp7,tmp5;
 			ss	>> tmp1 >> tmp2 >> tmp3 >> tmp4 >> tmp5 >> tmp6 >> tmp7;
 			nData	= tmp6;
 		}
@@ -112,8 +112,8 @@ void	DataReader::ReadGOSIAData(const char* datafilename){
 			exptData.push_back(tmpExpt);
 			tmpExpt.ClearData();
 			exptCounter++;
-			int	tmp1,tmp2,tmp3,tmp4,tmp5,tmp6;
-			float	tmp7;
+			int	tmp1,tmp2,tmp3,tmp4,tmp6;
+			float	tmp7,tmp5;
 			ss	>> tmp1 >> tmp2 >> tmp3 >> tmp4 >> tmp5 >> tmp6 >> tmp7;
 			nData	= tmp6;
 			dataCounter = 0;
@@ -125,6 +125,7 @@ void	DataReader::ReadGOSIAData(const char* datafilename){
 		exptData.push_back(tmpExpt);
 		tmpExpt.ClearData();
 	}
+
 }
 
 

@@ -72,7 +72,7 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 
 		virtual void ClearAll();	/*!< Clear all vectors */
 
-  		void SetWorkingDir(std::string s) { workingDir = s; }
+  		void 	SetWorkingDir(std::string s) { workingDir = s; }
   
 		void	SetBeamGOSIAInput(std::string s)				{ beamGOSIAFile_inp = s;		}
 		void	SetTargetGOSIAInput(std::string s)				{ targetGOSIAFile_inp = s;		}

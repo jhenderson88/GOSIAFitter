@@ -59,7 +59,7 @@ lib/%.so: src/%.cxx include/%.h
 
 bin/gosia: bin src/gosia_20081208.18.f
 	@printf "Compiling GOSIA \n" 
-	@gfortran src/gosia_20081208.18.f -o bin/gosia 
+	@gfortran src/gosia_20081208.18.f -o bin/gosia -ffpe-summary=none
 
 clean:  
 	@printf "Tidying up...\n"

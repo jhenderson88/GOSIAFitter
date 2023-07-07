@@ -25,12 +25,12 @@ GOSIASimFitter::GOSIASimFitter()
 
 	chisq		= -1;
 
-  workingDir = "./";
+  	workingDir = "./";
 
 }
 
 GOSIASimFitter::GOSIASimFitter(const GOSIASimFitter& g) {
-  workingDir = g.workingDir;
+  	workingDir = g.workingDir;
 
 	index				= g.index;
 
@@ -108,7 +108,7 @@ GOSIASimFitter::GOSIASimFitter(const GOSIASimFitter& g) {
 }
 GOSIASimFitter& GOSIASimFitter::operator = (const GOSIASimFitter& g){
 
-  workingDir = g.workingDir;
+  	workingDir = g.workingDir;
 	index				= g.index;
 
 	chisq				= g.chisq;
@@ -187,42 +187,126 @@ GOSIASimFitter& GOSIASimFitter::operator = (const GOSIASimFitter& g){
 }
 
 void GOSIASimFitter::UpdateMEs() {
-  for(unsigned int i=0;i<matrixElements_Beam.size();i++){
-    fNucleus_Beam.SetMatrixElement(matrixElements_Beam.at(i).GetLambda(),matrixElements_Beam.at(i).GetInitialState(),matrixElements_Beam.at(i).GetFinalState(),matrixElements_Beam.at(i).GetMatrixElement());
+  	for(unsigned int i=0;i<matrixElements_Beam.size();i++){
+    		fNucleus_Beam.SetMatrixElement(matrixElements_Beam.at(i).GetLambda(),matrixElements_Beam.at(i).GetInitialState(),matrixElements_Beam.at(i).GetFinalState(),matrixElements_Beam.at(i).GetMatrixElement());
 	}
-  for(unsigned int i=0;i<relativeElements_Beam.size();i++){
-    double me = fNucleus_Beam.GetMatrixElements().at(relativeElements_Beam.at(i).GetLambdaRel())[relativeElements_Beam.at(i).GetInitialStateRel()][relativeElements_Beam.at(i).GetFinalStateRel()];
-    me = me * relativeElements_Beam.at(i).GetRelativeElement();
+  	for(unsigned int i=0;i<relativeElements_Beam.size();i++){
+    		double me = fNucleus_Beam.GetMatrixElements().at(relativeElements_Beam.at(i).GetLambdaRel())[relativeElements_Beam.at(i).GetInitialStateRel()][relativeElements_Beam.at(i).GetFinalStateRel()];
+    		me = me * relativeElements_Beam.at(i).GetRelativeElement();
 		fNucleus_Beam.SetMatrixElement(relativeElements_Beam.at(i).GetLambda(),relativeElements_Beam.at(i).GetInitialState(),relativeElements_Beam.at(i).GetFinalState(),me);
 	}
-  for(unsigned int i=0;i<matrixElements_Target.size();i++){
-	  fNucleus_Target.SetMatrixElement(matrixElements_Target.at(i).GetLambda(),matrixElements_Target.at(i).GetInitialState(),matrixElements_Target.at(i).GetFinalState(),matrixElements_Target.at(i).GetMatrixElement());
+  	for(unsigned int i=0;i<matrixElements_Target.size();i++){
+	  	fNucleus_Target.SetMatrixElement(matrixElements_Target.at(i).GetLambda(),matrixElements_Target.at(i).GetInitialState(),matrixElements_Target.at(i).GetFinalState(),matrixElements_Target.at(i).GetMatrixElement());
 	}
-  for(unsigned int i=0;i<relativeElements_Target.size();i++){
-    double me = fNucleus_Target.GetMatrixElements().at(relativeElements_Target.at(i).GetLambdaRel())[relativeElements_Target.at(i).GetInitialStateRel()][relativeElements_Target.at(i).GetFinalStateRel()];
-    me = me * relativeElements_Target.at(i).GetRelativeElement();
+  	for(unsigned int i=0;i<relativeElements_Target.size();i++){
+    		double me = fNucleus_Target.GetMatrixElements().at(relativeElements_Target.at(i).GetLambdaRel())[relativeElements_Target.at(i).GetInitialStateRel()][relativeElements_Target.at(i).GetFinalStateRel()];
+    		me = me * relativeElements_Target.at(i).GetRelativeElement();
 		fNucleus_Target.SetMatrixElement(relativeElements_Target.at(i).GetLambda(),relativeElements_Target.at(i).GetInitialState(),relativeElements_Target.at(i).GetFinalState(),me);
 	}
 }
 
 void GOSIASimFitter::WriteBST() {
-  std::ofstream	beam_bst(workingDir+"/"+beamBSTFile);
+  	std::ofstream	beam_bst(workingDir+"/"+beamBSTFile);
 	for(size_t i=0;i<beamMapping_i.size();i++){
 		beam_bst << fNucleus_Beam.GetMatrixElements().at(beamMapping_l.at(i))[beamMapping_f.at(i)][beamMapping_i.at(i)] << "\n";
 	}
 	beam_bst.close();
-  std::ofstream	target_bst(workingDir+"/"+targetBSTFile);
+  	std::ofstream	target_bst(workingDir+"/"+targetBSTFile);
 	for(size_t i=0;i<targetMapping_i.size();i++){
 		target_bst << fNucleus_Target.GetMatrixElements().at(targetMapping_l.at(i))[targetMapping_f.at(i)][targetMapping_i.at(i)] << "\n";
 	}
 	target_bst.close();
 }
 
+void GOSIASimFitter::SetupParameters(){
+
+	names.clear();
+	parameters.clear();
+	par_LL.clear();
+	par_UL.clear();
+	int nBeamMatrixElements = 0;
+	for(unsigned int i=0;i<matrixElements_Beam.size();i++){
+		if (!matrixElements_Beam.at(i).GetFixed()) {
+			parameters.push_back(matrixElements_Beam.at(i).GetMatrixElement());
+			par_LL.push_back(matrixElements_Beam.at(i).GetMatrixElementLowerLimit());
+			par_UL.push_back(matrixElements_Beam.at(i).GetMatrixElementUpperLimit());
+			names.push_back("Beam-ME-"+std::to_string(i));
+			++nBeamMatrixElements;
+		}
+	}
+	int nRelativeBeam = 0;
+	for(unsigned int i=0;i<relativeElements_Beam.size();i++){
+		if (!relativeElements_Beam.at(i).GetFixed()) {
+			++nRelativeBeam;
+			parameters.push_back(relativeElements_Beam.at(i).GetRelativeElement());
+			par_LL.push_back(relativeElements_Beam.at(i).GetRelativeElementLowerLimit());
+			par_UL.push_back(relativeElements_Beam.at(i).GetRelativeElementUpperLimit());
+			names.push_back("Beam-RelME-"+std::to_string(i));
+		}
+	}
+	int nTargetMatrixElements = 0;
+	for(unsigned int i=0;i<matrixElements_Target.size();i++){
+		if (!matrixElements_Target.at(i).GetFixed()) {
+			parameters.push_back(matrixElements_Target.at(i).GetMatrixElement());
+			par_LL.push_back(matrixElements_Target.at(i).GetMatrixElementLowerLimit());
+			par_UL.push_back(matrixElements_Target.at(i).GetMatrixElementUpperLimit());
+			names.push_back("Target-ME-"+std::to_string(i));
+		}
+	}
+	int nRelativeTarget = 0;
+	for(unsigned int i=0;i<relativeElements_Target.size();i++){
+		if (!relativeElements_Target.at(i).GetFixed()) {
+			++nRelativeTarget;
+			parameters.push_back(relativeElements_Target.at(i).GetRelativeElement());
+			par_LL.push_back(relativeElements_Target.at(i).GetRelativeElementLowerLimit());
+			par_UL.push_back(relativeElements_Target.at(i).GetRelativeElementUpperLimit());
+			names.push_back("Target-RelME-"+std::to_string(i));
+		}
+	}  
+
+	std::cout 	<< std::setw(12) << std::left << "Parameters:" 
+                	<< std::endl;
+	for(unsigned int i=0;i<nBeamMatrixElements;i++){
+		std::cout	<< std::setw(13) << std::left << "Beam ME:" 
+				<< std::setw(4) << std::left << i+1;
+	}
+  	for(unsigned int i=0;i<nRelativeBeam;i++){
+		std::cout	<< std::setw(13) << std::left << "Rel Beam ME:" 
+				<< std::setw(4) << std::left << i+1;
+	}
+	for(unsigned int i=0;i<nTargetMatrixElements;i++){
+		std::cout	<< std::setw(13) << std::left << "Target ME:" 
+              			<< std::setw(4) << std::left << i+1;
+	}
+ 	for(unsigned int i=0;i<nRelativeTarget;i++){
+		std::cout	<< std::setw(13) << std::left << "Rel Beam ME:" 
+				<< std::setw(4) << std::left << i+1;
+	}
+	std::cout	<< std::endl;
+	for(unsigned int i=0;i<parameters.size();i++){
+		std::cout 	<< std::setw(13) << std::left << parameters.at(i) 
+				<< std::setw(4) << std::left << "";
+	}
+	std::cout << std::endl;
+
+	Nexpts = 0;
+	if(exptData_Beam.size() > exptData_Target.size())
+		Nexpts = exptData_Beam.size();
+	else
+		Nexpts = exptData_Target.size();
+
+	if(expt_weights.size() != Nexpts){
+		expt_weights.resize(Nexpts);
+		std::fill(expt_weights.begin(),expt_weights.end(),1);
+	}
+
+}
+
 void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	GOSIASimMinFCN theFCN(exptData_Beam,exptData_Target);
 
-  theFCN.SetWorkingDir(workingDir);
+  	theFCN.SetWorkingDir(workingDir);
 	theFCN.SetBeamGOSIAInput(GetBeamGOSIAInput());
 	theFCN.SetBeamGOSIAOutput(GetBeamGOSIAOutput());
 	theFCN.SetTargetGOSIAInput(GetTargetGOSIAInput());
@@ -233,9 +317,9 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 	theFCN.SetTargetMapping(targetMapping_i,targetMapping_f,targetMapping_l);
 
 	theFCN.SetBeamMatrixElements(matrixElements_Beam);
-  theFCN.SetBeamRelativeElements(relativeElements_Beam);
+  	theFCN.SetBeamRelativeElements(relativeElements_Beam);
 	theFCN.SetTargetMatrixElements(matrixElements_Target);
-  theFCN.SetTargetRelativeElements(relativeElements_Target);
+  	theFCN.SetTargetRelativeElements(relativeElements_Target);
 	theFCN.SetScalingParameters(scalingParameters);
 
 	theFCN.SetBeamLitLifetimes(litLifetimes_Beam);
@@ -264,95 +348,17 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	theFCN.SetLikelihoodFit(fLikelihood);
 
-	size_t	Nexpts = 0;
-	if(exptData_Beam.size() > exptData_Target.size())
-		Nexpts = exptData_Beam.size();
-	else
-		Nexpts = exptData_Target.size();
-
-	if(expt_weights.size() != Nexpts){
-		expt_weights.resize(Nexpts);
-		std::fill(expt_weights.begin(),expt_weights.end(),1);
+	if (verbose) {
+		for(size_t m=0;m<matrixElements_Beam.size();m++)
+			matrixElements_Beam.at(m).Print();
+		for(size_t m=0;m<matrixElements_Target.size();m++)
+			matrixElements_Target.at(m).Print();
 	}
+
+	SetupParameters();
 
 	theFCN.SetWeights(expt_weights);
 
-  if (verbose) {
-	for(size_t m=0;m<matrixElements_Beam.size();m++)
-		matrixElements_Beam.at(m).Print();
-	for(size_t m=0;m<matrixElements_Target.size();m++)
-		matrixElements_Target.at(m).Print();
-  }
-
-  std::vector<std::string> names;
-	parameters.clear();
-	par_LL.clear();
-	par_UL.clear();
-  int nBeamMatrixElements = 0;
-	for(unsigned int i=0;i<matrixElements_Beam.size();i++){
-    if (!matrixElements_Beam.at(i).GetFixed()) {
-      parameters.push_back(matrixElements_Beam.at(i).GetMatrixElement());
-      par_LL.push_back(matrixElements_Beam.at(i).GetMatrixElementLowerLimit());
-      par_UL.push_back(matrixElements_Beam.at(i).GetMatrixElementUpperLimit());
-      names.push_back("Beam-ME-"+std::to_string(i));
-      ++nBeamMatrixElements;
-    }
-	}
-  int nRelativeBeam = 0;
-  for(unsigned int i=0;i<relativeElements_Beam.size();i++){
-    if (!relativeElements_Beam.at(i).GetFixed()) {
-      ++nRelativeBeam;
-      parameters.push_back(relativeElements_Beam.at(i).GetRelativeElement());
-      par_LL.push_back(relativeElements_Beam.at(i).GetRelativeElementLowerLimit());
-      par_UL.push_back(relativeElements_Beam.at(i).GetRelativeElementUpperLimit());
-      names.push_back("Beam-RelME-"+std::to_string(i));
-    }
-	}
-  int nTargetMatrixElements = 0;
-	for(unsigned int i=0;i<matrixElements_Target.size();i++){
-    if (!matrixElements_Target.at(i).GetFixed()) {
-      parameters.push_back(matrixElements_Target.at(i).GetMatrixElement());
-      par_LL.push_back(matrixElements_Target.at(i).GetMatrixElementLowerLimit());
-      par_UL.push_back(matrixElements_Target.at(i).GetMatrixElementUpperLimit());
-      names.push_back("Target-ME-"+std::to_string(i));
-    }
-	}
-  int nRelativeTarget = 0;
-  for(unsigned int i=0;i<relativeElements_Target.size();i++){
-    if (!relativeElements_Target.at(i).GetFixed()) {
-      ++nRelativeTarget;
-      parameters.push_back(relativeElements_Target.at(i).GetRelativeElement());
-      par_LL.push_back(relativeElements_Target.at(i).GetRelativeElementLowerLimit());
-      par_UL.push_back(relativeElements_Target.at(i).GetRelativeElementUpperLimit());
-      names.push_back("Target-RelME-"+std::to_string(i));
-    }
-	}  
-
-  std::cout 	<< std::setw(12) << std::left << "Parameters:" 
-                << std::endl;
-	for(unsigned int i=0;i<nBeamMatrixElements;i++){
-		std::cout	<< std::setw(13) << std::left << "Beam ME:" 
-				<< std::setw(4) << std::left << i+1;
-	}
-  for(unsigned int i=0;i<nRelativeBeam;i++){
-		std::cout	<< std::setw(13) << std::left << "Rel Beam ME:" 
-				<< std::setw(4) << std::left << i+1;
-	}
-	for(unsigned int i=0;i<nTargetMatrixElements;i++){
-		std::cout	<< std::setw(13) << std::left << "Target ME:" 
-              << std::setw(4) << std::left << i+1;
-	}
-  for(unsigned int i=0;i<nRelativeTarget;i++){
-		std::cout	<< std::setw(13) << std::left << "Rel Beam ME:" 
-				<< std::setw(4) << std::left << i+1;
-	}
-	std::cout	<< std::endl;
-	for(unsigned int i=0;i<parameters.size();i++){
-		std::cout 	<< std::setw(13) << std::left << parameters.at(i) 
-				<< std::setw(4) << std::left << "";
-	}
-	std::cout << std::endl;
-  
 	theFCN.SetNpar(parameters.size());
 
 	ROOT::Math::Minimizer *min =
@@ -388,8 +394,11 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 			<< std::endl;
 
 	for(unsigned int i=0; i<parameters.size(); i++){
-    min->SetLimitedVariable(i,names.at(i),parameters.at(i),0.0001,par_LL.at(i),par_UL.at(i));
-    std::cout	<< names.at(i) << std::setw(4) << " " << std::setw(10) << std::left << parameters.at(i) << std::endl;
+    		min->SetLimitedVariable(i,names.at(i),parameters.at(i),0.0001,par_LL.at(i),par_UL.at(i));
+	   	std::cout	<< names.at(i) 
+				<< std::setw(4) << " " 
+				<< std::setw(10) << std::left << parameters.at(i) 
+				<< std::endl;
 	}
 
 	std::cout << std::endl;
@@ -517,11 +526,13 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 					<< std::endl;
 
 		}
-	}  
-	resultFile	<< "Target matrix elements:"
-			<< std::endl;
-	std::cout	<< "Target matrix elements:"
-			<< std::endl;
+	} 
+	if(exptData_Target.size()>0){ 
+		resultFile	<< "Target matrix elements:"
+				<< std::endl;
+		std::cout	<< "Target matrix elements:"
+				<< std::endl;
+	}
 	for(size_t i=0;i<matrixElements_Target.size();i++){
     		if (!matrixElements_Target.at(i).GetFixed()) {
       			matrixElements_Target.at(i).SetMatrixElement(res[parct]);
@@ -671,7 +682,7 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	for(int i=0;i<covMat.GetNcols();i++){
 		for(int j=0;j<covMat.GetNrows();j++){
-			resultFile	<< std::setw(10) << std::left << covMat[i][j];
+			resultFile	<< std::setw(14) << std::left << covMat[i][j];
 		}
 		resultFile	<< std::endl;
 	}
@@ -683,7 +694,7 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	for(int i=0;i<corMat.GetNcols();i++){
 		for(int j=0;j<corMat.GetNrows();j++){
-			resultFile	<< std::setw(10) << std::left << corMat[i][j];
+			resultFile	<< std::setw(14) << std::left << corMat[i][j];
 		}
 		resultFile	<< std::endl;
 	}
@@ -704,8 +715,19 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 void GOSIASimFitter::CreateScalingParameter(std::vector<int> expnum){
 
+	std::vector<float>	expNRM(expnum.size(),1);
+
 	ScalingParameter tmpScaling;
-	tmpScaling.SetExperimentVector(expnum);
+	tmpScaling.SetExperimentVector(expnum,expNRM);
+
+	scalingParameters.push_back(tmpScaling);
+
+}
+
+void GOSIASimFitter::CreateScalingParameter(std::vector<int> expnum, std::vector<float> expNRM){
+
+	ScalingParameter tmpScaling;
+	tmpScaling.SetExperimentVector(expnum,expNRM);
 
 	scalingParameters.push_back(tmpScaling);
 
@@ -717,33 +739,33 @@ void GOSIASimFitter::AddBeamFittingMatrixElement(int lambda, int init, int fin, 
 }
 
 void GOSIASimFitter::SetBeamFittingMatrixElement(int lambda, int init, int fin, double ME, double LL, double UL){
-  for (int j=0; j<matrixElements_Beam.size(); ++j) {
-    if (matrixElements_Beam[j].GetLambda() == lambda &&
-        matrixElements_Beam[j].GetInitialState() == init &&
-        matrixElements_Beam[j].GetFinalState() == fin) {
-      matrixElements_Beam[j].SetMatrixElement(ME);
-      matrixElements_Beam[j].SetMatrixElementLowerLimit(LL);
-      matrixElements_Beam[j].SetMatrixElementLowerLimit(UL);
-    }
-  }
+  	for (int j=0; j<matrixElements_Beam.size(); ++j) {
+    		if (matrixElements_Beam[j].GetLambda() == lambda &&
+        	matrixElements_Beam[j].GetInitialState() == init &&
+        	matrixElements_Beam[j].GetFinalState() == fin) {
+      			matrixElements_Beam[j].SetMatrixElement(ME);
+      			matrixElements_Beam[j].SetMatrixElementLowerLimit(LL);
+      			matrixElements_Beam[j].SetMatrixElementLowerLimit(UL);
+    		}
+  	}
 }
 
 void GOSIASimFitter::AddBeamRelativeMatrixElement(int lambda, int init,int fin,int lambda2,int init2,int fin2 ,double ME, double ME_LL, double ME_UL, bool fixed, bool relative) {
-  double rel = 1.0;
-  double rel_ll = 1.0; 
-  double rel_ul = 1.0;
-  if (relative == true ) {
-    rel = ME;
-    rel_ll = ME_LL;
-    rel_ul = ME_UL;
-  }
-  else {
-    rel = ME/fNucleus_Beam.GetMatrixElements().at(lambda2 )[init2][fin2];
-    rel_ll = ME_LL/fNucleus_Beam.GetMatrixElements().at(lambda2)[init2][fin2];
-    rel_ul = ME_UL/fNucleus_Beam.GetMatrixElements().at(lambda2)[init2][fin2];
-  }    
-  RelativeMatrixElement tmpME(relativeElements_Beam.size(),lambda,init,fin,lambda2,init2,fin2,rel,rel_ll,rel_ul,fixed);
-  relativeElements_Beam.push_back(tmpME);
+	double rel = 1.0;
+  	double rel_ll = 1.0; 
+  	double rel_ul = 1.0;
+  	if (relative == true ) {
+    		rel = ME;
+    		rel_ll = ME_LL;
+    		rel_ul = ME_UL;
+  	}
+  	else {
+    		rel = ME/fNucleus_Beam.GetMatrixElements().at(lambda2 )[init2][fin2];
+    		rel_ll = ME_LL/fNucleus_Beam.GetMatrixElements().at(lambda2)[init2][fin2];
+    		rel_ul = ME_UL/fNucleus_Beam.GetMatrixElements().at(lambda2)[init2][fin2];
+	}    
+  	RelativeMatrixElement tmpME(relativeElements_Beam.size(),lambda,init,fin,lambda2,init2,fin2,rel,rel_ll,rel_ul,fixed);
+  	relativeElements_Beam.push_back(tmpME);
 }
 
 void GOSIASimFitter::AddTargetFittingMatrixElement(int lambda, int init, int fin, double ME, double LL, double UL){
@@ -752,21 +774,21 @@ void GOSIASimFitter::AddTargetFittingMatrixElement(int lambda, int init, int fin
 }
 
 void GOSIASimFitter::AddTargetRelativeMatrixElement(int lambda, int init,int fin,int lambda2,int init2,int fin2 ,double ME, double ME_LL, double ME_UL, bool fixed, bool relative) {
-  double rel = 1.0;
-  double rel_ll = 1.0; 
-  double rel_ul = 1.0;
-  if (relative == true ) {
-    rel = ME;
-    rel_ll = ME_LL;
-    rel_ul = ME_UL;
-  }
-  else {
-    rel = ME/fNucleus_Target.GetMatrixElements().at(lambda2)[init2][fin2];
-    rel_ll = ME_LL/fNucleus_Target.GetMatrixElements().at(lambda2)[init2][fin2];
-    rel_ul = ME_UL/fNucleus_Target.GetMatrixElements().at(lambda2)[init2][fin2];
-  }    
-  RelativeMatrixElement tmpME(relativeElements_Target.size(),lambda,init,fin,lambda2,init2,fin2,rel,rel_ll,rel_ul,fixed);
-  relativeElements_Target.push_back(tmpME);
+  	double rel = 1.0;
+  	double rel_ll = 1.0; 
+  	double rel_ul = 1.0;
+  	if (relative == true ) {
+    		rel = ME;
+    		rel_ll = ME_LL;
+    		rel_ul = ME_UL;
+  	}
+  	else {
+    		rel = ME/fNucleus_Target.GetMatrixElements().at(lambda2)[init2][fin2];
+    		rel_ll = ME_LL/fNucleus_Target.GetMatrixElements().at(lambda2)[init2][fin2];
+    		rel_ul = ME_UL/fNucleus_Target.GetMatrixElements().at(lambda2)[init2][fin2];
+  	}    
+  	RelativeMatrixElement tmpME(relativeElements_Target.size(),lambda,init,fin,lambda2,init2,fin2,rel,rel_ll,rel_ul,fixed);
+  	relativeElements_Target.push_back(tmpME);
 }
 
 
@@ -1137,8 +1159,8 @@ void GOSIASimFitter::Print() const{
 }
 
 void GOSIASimFitter::WriteYieldGraphs(TFile *file, std::vector<double> angles, std::vector<double> norms) {
-  file->cd();
-  TransitionRates rates_b(&fNucleus_Beam);
+  	file->cd();
+  	TransitionRates rates_b(&fNucleus_Beam);
 
 	const char	*b_out = beamGOSIAFile_out.c_str();
 	GOSIAReader	beam_gosiaReader(&fNucleus_Beam,b_out);	//	Grab the GOSIA yields
@@ -1160,7 +1182,7 @@ void GOSIASimFitter::WriteYieldGraphs(TFile *file, std::vector<double> angles, s
 		EffectiveCrossSection_Beam.push_back(tmpMat);
 	}
 
-  std::vector<double>	scaling;
+  	std::vector<double>	scaling;
 	scaling.resize(exptData_Beam.size());
 	for(size_t s=0;s<scalingParameters.size();s++){
 		std::vector<double>	sc_expt;
@@ -1200,9 +1222,9 @@ void GOSIASimFitter::WriteYieldGraphs(TFile *file, std::vector<double> angles, s
 					}				
 				}
 			}
-    }
+    		}
 
-    if(sc_expt.size() > 0){
+    		if(sc_expt.size() > 0){
 			ScalingFitFCN theFCN;
 
 			theFCN.SetData(sc_expt,sc_expt_unc,sc_calc);
@@ -1233,18 +1255,18 @@ void GOSIASimFitter::WriteYieldGraphs(TFile *file, std::vector<double> angles, s
 
 	}
 
-  int			counter = 0;
+  	int			counter = 0;
 
 
-  std::map<std::pair<int, int>, TGraph* > calcGraphs;
-  std::map<std::pair<int, int>, TGraphErrors* > expGraphs;
-  std::map<std::pair<int, int>, TMultiGraph* > graphs;
+  	std::map<std::pair<int, int>, TGraph* > calcGraphs;
+  	std::map<std::pair<int, int>, TGraphErrors* > expGraphs;
+  	std::map<std::pair<int, int>, TMultiGraph* > graphs;
 
-  std::map<std::pair<int, int>, TGraph* > normCalcGraphs;
-  std::map<std::pair<int, int>, TGraphErrors* > normExpGraphs;
-  std::map<std::pair<int, int>, TMultiGraph* > normGraphs;
+  	std::map<std::pair<int, int>, TGraph* > normCalcGraphs;
+  	std::map<std::pair<int, int>, TGraphErrors* > normExpGraphs;
+  	std::map<std::pair<int, int>, TMultiGraph* > normGraphs;
   
-  std::map<std::pair<int, int>, int > write;
+  	std::map<std::pair<int, int>, int > write;
 
 	for(unsigned int i=0;i<exptData_Beam.size();i++){
     
@@ -1257,82 +1279,82 @@ void GOSIASimFitter::WriteYieldGraphs(TFile *file, std::vector<double> angles, s
 			int	index_init 	= exptData_Beam.at(i).GetData().at(t).GetInitialIndex();
 			int	index_final 	= exptData_Beam.at(i).GetData().at(t).GetFinalIndex();
 
-      TGraph *calcGraph;
-      TGraphErrors *expGraph;
-      TMultiGraph *graph;
+      	TGraph *calcGraph;
+      	TGraphErrors *expGraph;
+      	TMultiGraph *graph;
       
-      TGraph *normCalcGraph;
-      TGraphErrors *normExpGraph;
-      TMultiGraph *normGraph;
+      	TGraph *normCalcGraph;
+      	TGraphErrors *normExpGraph;
+      	TMultiGraph *normGraph;
       
-      if (calcGraphs.find({index_init, index_final}) == calcGraphs.end()) {
-        calcGraph = new TGraph();
-        expGraph = new TGraphErrors();
-        graph = new TMultiGraph();
+      	if (calcGraphs.find({index_init, index_final}) == calcGraphs.end()) {
+        	calcGraph = new TGraph();
+        	expGraph = new TGraphErrors();
+        	graph = new TMultiGraph();
 
-        normCalcGraph = new TGraph();
-        normExpGraph = new TGraphErrors();
-        normGraph = new TMultiGraph();
-        
-        calcGraphs[{index_init, index_final}] = calcGraph;
-        expGraphs[{index_init, index_final}] = expGraph;
-        graphs[{index_init, index_final}] = graph;
+		normCalcGraph = new TGraph();
+		normExpGraph = new TGraphErrors();
+		normGraph = new TMultiGraph();
+		
+		calcGraphs[{index_init, index_final}] = calcGraph;
+		expGraphs[{index_init, index_final}] = expGraph;
+		graphs[{index_init, index_final}] = graph;
 
-        normCalcGraphs[{index_init, index_final}] = normCalcGraph;
-        normExpGraphs[{index_init, index_final}] = normExpGraph;
-        normGraphs[{index_init, index_final}] = normGraph;
+		normCalcGraphs[{index_init, index_final}] = normCalcGraph;
+		normExpGraphs[{index_init, index_final}] = normExpGraph;
+		normGraphs[{index_init, index_final}] = normGraph;
 
-        TString calcname;
-        calcname.Form("calcYields_%i_%i", index_init, index_final);
-        TString expname;
-        expname.Form("expYields_%i_%i", index_init, index_final);
+		TString calcname;
+		calcname.Form("calcYields_%i_%i", index_init, index_final);
+		TString expname;
+		expname.Form("expYields_%i_%i", index_init, index_final);
 
-        TString normcalcname;
-        normcalcname.Form("calcYieldsNrm_%i_%i", index_init, index_final);
-        TString normexpname;
-        normexpname.Form("expYieldsNrm_%i_%i", index_init, index_final);
-        
-        calcGraph->SetName(calcname.Data());
-        calcGraph->SetLineWidth(2);
-        calcGraph->SetLineColor(kRed);
+		TString normcalcname;
+		normcalcname.Form("calcYieldsNrm_%i_%i", index_init, index_final);
+		TString normexpname;
+		normexpname.Form("expYieldsNrm_%i_%i", index_init, index_final);
+		
+		calcGraph->SetName(calcname.Data());
+		calcGraph->SetLineWidth(2);
+		calcGraph->SetLineColor(kRed);
 
-        expGraph->SetMarkerStyle(kFullCircle);
-        expGraph->SetName(expname.Data());
+		expGraph->SetMarkerStyle(kFullCircle);
+		expGraph->SetName(expname.Data());
 
-        normCalcGraph->SetName(normcalcname.Data());
-        normCalcGraph->SetLineWidth(2);
-        normCalcGraph->SetLineColor(kRed);
+		normCalcGraph->SetName(normcalcname.Data());
+		normCalcGraph->SetLineWidth(2);
+		normCalcGraph->SetLineColor(kRed);
 
-        normExpGraph->SetMarkerStyle(kFullCircle);
-        normExpGraph->SetName(normexpname.Data());
-        
-        TString name;
-        name.Form("yields_%i_%i", index_init, index_final);
-        graph->SetName(name.Data());
-        graph->Add(calcGraph, "L");
-        graph->Add(expGraph, "P");
+		normExpGraph->SetMarkerStyle(kFullCircle);
+		normExpGraph->SetName(normexpname.Data());
+		
+		TString name;
+		name.Form("yields_%i_%i", index_init, index_final);
+		graph->SetName(name.Data());
+		graph->Add(calcGraph, "L");
+		graph->Add(expGraph, "P");
 
-        TString normname;
-        normname.Form("yieldsNrm_%i_%i", index_init, index_final);
-        normGraph->SetName(normname.Data());
-        normGraph->Add(normCalcGraph, "L");
-        normGraph->Add(normExpGraph, "P");        
-      }
-      else {
-        calcGraph =         calcGraphs[{index_init, index_final}];
-        expGraph =           expGraphs[{index_init, index_final}];
-        graph =           graphs[{index_init, index_final}];
+		TString normname;
+		normname.Form("yieldsNrm_%i_%i", index_init, index_final);
+		normGraph->SetName(normname.Data());
+		normGraph->Add(normCalcGraph, "L");
+		normGraph->Add(normExpGraph, "P");        
+      	}
+      	else {
+		calcGraph =         calcGraphs[{index_init, index_final}];
+		expGraph =           expGraphs[{index_init, index_final}];
+		graph =           graphs[{index_init, index_final}];
 
-        normCalcGraph =         normCalcGraphs[{index_init, index_final}];
-        normExpGraph =           normExpGraphs[{index_init, index_final}];
-        normGraph =           normGraphs[{index_init, index_final}];       
-      }
-      
-			double 	calcCounts 	= scaling.at(i) * EffectiveCrossSection_Beam.at(i)[index_final][index_init];
-			double 	exptCounts 	= exptData_Beam.at(i).GetData().at(t).GetCounts();
-			double	sigma		= exptData_Beam.at(i).GetData().at(t).GetUpUnc() * exptData_Beam.at(i).GetData().at(t).GetDnUnc();
-			double	sigma_prime	= (exptData_Beam.at(i).GetData().at(t).GetUpUnc() - exptData_Beam.at(i).GetData().at(t).GetDnUnc());
-			sigma			/= expt_weights.at(i);
+		normCalcGraph =         normCalcGraphs[{index_init, index_final}];
+		normExpGraph =           normExpGraphs[{index_init, index_final}];
+		normGraph =           normGraphs[{index_init, index_final}];       
+      	}
+     
+	double 	calcCounts 	= scaling.at(i) * EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+     double 	exptCounts 	= exptData_Beam.at(i).GetData().at(t).GetCounts();
+     double	sigma		= exptData_Beam.at(i).GetData().at(t).GetUpUnc() * exptData_Beam.at(i).GetData().at(t).GetDnUnc();
+     double	sigma_prime	= (exptData_Beam.at(i).GetData().at(t).GetUpUnc() - exptData_Beam.at(i).GetData().at(t).GetDnUnc());
+     sigma			/= expt_weights.at(i);
       sigma_prime	/= expt_weights.at(i);
 
       calcGraph->AddPoint(i+1, calcCounts);

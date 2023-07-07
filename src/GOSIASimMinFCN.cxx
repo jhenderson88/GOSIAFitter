@@ -3,21 +3,23 @@
 
 void GOSIASimMinFCN::SetupCalculation(){
 
+	std::cout	<< exptData_Beam.size() 	<< std::endl;
+	std::cout	<< scalingParameters.size() 	<< std::endl;
 	exptIndex.resize(exptData_Beam.size());
-	for(unsigned int i=0;i<scalingParameters.size();i++)
-		for(unsigned int s=0;s<scalingParameters.at(i).GetExperimentNumbers().size();s++)
+	for(size_t i=0;i<scalingParameters.size();i++)
+		for(size_t s=0;s<scalingParameters.at(i).GetExperimentNumbers().size();s++)
 			exptIndex[scalingParameters.at(i).GetExperimentNumbers().at(s)] = (int)i;
 
-  if (verbose) {
-	std::cout	<< std::setw(13) << std::left << "Experiment: "
-			<< std::setw(14) << std::left << "Scaling index: "
-			<< std::endl;
-	for(unsigned int i=0;i<exptIndex.size();i++){
-		std::cout	<< std::setw(13) << std::left << i+1
-				<< std::setw(14) << std::left << exptIndex.at(i)
+ 	if (verbose) {
+		std::cout	<< std::setw(13) << std::left << "Experiment: "
+				<< std::setw(14) << std::left << "Scaling index: "
 				<< std::endl;
-	}
-  }
+		for(size_t i=0;i<exptIndex.size();i++){
+			std::cout	<< std::setw(13) << std::left << i+1
+					<< std::setw(14) << std::left << exptIndex.at(i)
+					<< std::endl;
+		}
+  	}
 
 }
 
@@ -47,7 +49,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 	int nRelTarget = 0;
 	int nBeamME = 0;
 	int nTargetME = 0;
-	for(unsigned int i=0;i<ME_Beam.size();i++){
+	for(size_t i=0;i<ME_Beam.size();i++){
 		if (!ME_Beam.at(i).GetFixed()) {
 			nucl_b.SetMatrixElement(ME_Beam.at(i).GetLambda(),ME_Beam.at(i).GetInitialState(),ME_Beam.at(i).GetFinalState(),par[parct]);
 			parameters.push_back(par[parct]);
@@ -59,7 +61,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 		}      
 	}
 	//relativematrixelements
-	for(unsigned int i=0;i<ME_BeamRel.size();i++){
+	for(size_t i=0;i<ME_BeamRel.size();i++){
 		double me = nucl_b.GetMatrixElements().at(ME_BeamRel.at(i).GetLambdaRel())[ME_BeamRel.at(i).GetInitialStateRel()][ME_BeamRel.at(i).GetFinalStateRel()];
 		if(ME_BeamRel.at(i).GetFixed()){
 			me = me * ME_BeamRel.at(i).GetRelativeElement();
@@ -73,7 +75,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 		nucl_b.SetMatrixElement(ME_BeamRel.at(i).GetLambda(),ME_BeamRel.at(i).GetInitialState(),ME_BeamRel.at(i).GetFinalState(),me);
 	}
   
-	for(unsigned int i=0;i<ME_Target.size();i++){
+	for(size_t i=0;i<ME_Target.size();i++){
 		if(!ME_Target.at(i).GetFixed()){
 			nucl_t.SetMatrixElement(ME_Target.at(i).GetLambda(),ME_Target.at(i).GetInitialState(),ME_Target.at(i).GetFinalState(),par[parct]);
 			parameters.push_back(par[parct]);
@@ -86,7 +88,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 	}
 
 	// Relative matrix elements
-	for(unsigned int i=0;i<ME_TargetRel.size();i++){
+	for(size_t i=0;i<ME_TargetRel.size();i++){
 		double me = nucl_t.GetMatrixElements().at(ME_TargetRel.at(i).GetLambdaRel())[ME_TargetRel.at(i).GetInitialStateRel()][ME_TargetRel.at(i).GetFinalStateRel()];
 		if (ME_TargetRel.at(i).GetFixed()) {
 			me = me * ME_TargetRel.at(i).GetRelativeElement();
@@ -104,7 +106,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 		std::cout	<< std::endl;
 		std::cout	<< parct << " Parameters:";
 		int linect = 0;
-		for (unsigned int i=0; i<parct; ++i) {
+		for (size_t i=0; i<parct; ++i) {
 			if (linect%12 == 0) {
 				std::cout	<< std::endl;
 				std::cout << std::setw(20) << std::left;      
@@ -116,17 +118,17 @@ double GOSIASimMinFCN::operator()(const double* par){
 					std::cout << " ";
 				}
 			}
-			if (i == nBeamME) {
+			if (i == nBeamME && nRelBeam > 0) {
 				std::cout << std::endl;
 				std::cout << std::setw(20) << std::left << "Relative Beam: ";
 				linect = 0;
 			}
-			else if (i == nBeamME + nRelBeam) {
+			else if (i == nBeamME + nRelBeam && nTargetME > 0) {
 				std::cout << std::endl;
 				std::cout << std::setw(20) << std::left << "Target: ";
 				linect = 0;
 			}
-			else if (i == nBeamME + nRelBeam + nRelTarget) {
+			else if (i == nBeamME + nRelBeam + nTargetME && nRelTarget > 0) {
 				std::cout << std::endl;
 				std::cout << std::setw(20) << std::left << "Relative Target: ";
 				linect = 0;
@@ -142,10 +144,13 @@ double GOSIASimMinFCN::operator()(const double* par){
 	TransitionRates rates_b(&nucl_b);
 
 	//rates_b.Print();
-	std::cout	<< nucl_b.GetMatrixElements().at(1)[0][1]	<< "\t" << rates_b.GetLifetimes()[1] * TMath::Log(2) << std::endl;	
+	//std::cout	<< nucl_b.GetMatrixElements().at(1)[0][1]	<< "\t" << rates_b.GetLifetimes()[1] * TMath::Log(2) << std::endl;	
 
 	double lifetime_chisq = 0;	
-	for(unsigned int i=0;i<litLifetimes_Beam.size();i++){
+	if(litLifetimes_Beam.size()>0 && verbose)    
+		std::cout	<< "Lifetimes (Beam):" 
+				<< std::endl;
+	for(size_t i=0;i<litLifetimes_Beam.size();i++){
 		double 	tmp = 0;
 		int	index		= litLifetimes_Beam.at(i).GetIndex();
 		double	lifetime	= litLifetimes_Beam.at(i).GetLifetime();
@@ -179,7 +184,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 	if(litBranchingRatios_Beam.size()>0 && verbose)    
 		std::cout	<< "BR (Beam):" 
 				<< std::endl;
-	for(unsigned int i=0;i<litBranchingRatios_Beam.size();i++){
+	for(size_t i=0;i<litBranchingRatios_Beam.size();i++){
 		double 	tmp 		= 0;
 		int	index_init 	= litBranchingRatios_Beam.at(i).GetInitialIndex();
 		int	index_final1	= litBranchingRatios_Beam.at(i).GetFinalIndex_1();
@@ -216,7 +221,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 	if(litMixingRatios_Beam.size()>0 && verbose)
 		std::cout	<< "Delta (Beam):" 
 				<< std::endl;
-	for(unsigned int i=0;i<litMixingRatios_Beam.size();i++){
+	for(size_t i=0;i<litMixingRatios_Beam.size();i++){
 		double 	tmp;
 		int 	index_init	= litMixingRatios_Beam.at(i).GetInitialIndex();
 		int	index_final	= litMixingRatios_Beam.at(i).GetFinalIndex();
@@ -251,7 +256,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 	if(litMatrixElements_Beam.size()>0 && verbose)
 		std::cout 	<< "Matrix Elements (Beam)"
 				<< std::endl;
-	for(unsigned int i=0;i<litMatrixElements_Beam.size();i++){
+	for(size_t i=0;i<litMatrixElements_Beam.size();i++){
 		double tmp;
 		int	mult		= litMatrixElements_Beam.at(i).GetMultipolarity();
 		int 	index_init	= litMatrixElements_Beam.at(i).GetInitialIndex();
@@ -287,11 +292,11 @@ double GOSIASimMinFCN::operator()(const double* par){
 	// 	Now, compare with the literature for the target:
 	
 	TransitionRates rates_t;
-	if(exptData_Target.size() > 0)
+	if(exptData_Target.size() > 0){
 		rates_t = TransitionRates(&nucl_t);
-
-	std::cout	<< nucl_t.GetMatrixElements().at(1)[0][1]	<< "\t" << rates_t.GetLifetimes()[1] * TMath::Log(2) << std::endl;	
-	for(unsigned int i=0;i<litLifetimes_Target.size();i++){
+		std::cout	<< nucl_t.GetMatrixElements().at(1)[0][1]	<< "\t" << rates_t.GetLifetimes()[1] * TMath::Log(2) << std::endl;	
+	}
+	for(size_t i=0;i<litLifetimes_Target.size();i++){
 		double 	tmp = 0;
 		int	index		= litLifetimes_Target.at(i).GetIndex();
 		double	lifetime	= litLifetimes_Target.at(i).GetLifetime();
@@ -318,7 +323,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::endl;
     		}
 	}
-	for(unsigned int i=0;i<litBranchingRatios_Target.size();i++){
+	for(size_t i=0;i<litBranchingRatios_Target.size();i++){
 		double 	tmp 		= 0;
 		int	index_init 	= litBranchingRatios_Target.at(i).GetInitialIndex();
 		int	index_final1	= litBranchingRatios_Target.at(i).GetFinalIndex_1();
@@ -351,12 +356,13 @@ double GOSIASimMinFCN::operator()(const double* par){
 		NDF++;
 		NDF_lit++;
 	}
-	if(litMixingRatios_Target.size()>0)
-	if (verbose) {
-	    	std::cout	<< "Delta (Target):" 
-    				<< std::endl;
+	if(litMixingRatios_Target.size()>0){
+		if (verbose) {
+	    		std::cout	<< "Delta (Target):" 
+    					<< std::endl;
+		}
 	}
-	for(unsigned int i=0;i<litMixingRatios_Target.size();i++){
+	for(size_t i=0;i<litMixingRatios_Target.size();i++){
 		double tmp;
 		int 	index_init	= litMixingRatios_Target.at(i).GetInitialIndex();
 		int	index_final	= litMixingRatios_Target.at(i).GetFinalIndex();
@@ -393,7 +399,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 					<< std::endl;
     		}
 	}
-	for(unsigned int i=0;i<litMatrixElements_Target.size();i++){
+	for(size_t i=0;i<litMatrixElements_Target.size();i++){
 		double tmp;
 		int	mult		= litMatrixElements_Target.at(i).GetMultipolarity();
 		int 	index_init	= litMatrixElements_Target.at(i).GetInitialIndex();
@@ -518,7 +524,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				<< std::endl;
 		std::cout 	<< std::setw( 4) << std::left << " ";
 		std::cout	<< std::setw(10) << std::left << "Scaling:";
-//		for(unsigned int t=0;t<exptData_Beam.at(exptData_Beam.size()-1).GetData().size();t++){
+//		for(size_t t=0;t<exptData_Beam.at(exptData_Beam.size()-1).GetData().size();t++){
 			std::cout 	<< std::setw( 6) << std::left << "Init:"
 					<< std::setw( 6) << std::left << "Finl:"
 					<< std::setw(14) << std::left << "Calc:"
@@ -542,7 +548,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				<< std::endl;
 		std::cout 	<< std::setw( 4) << std::left << " ";
 		std::cout	<< std::setw(10) << std::left << "Scaling:";
-		for(unsigned int t=0;t<exptData_Beam.at(exptData_Beam.size()-1).GetData().size();t++){
+		for(size_t t=0;t<exptData_Beam.at(exptData_Beam.size()-1).GetData().size();t++){
 			std::cout	<< std::setw( 6) << std::left << "Init:"
 					<< std::setw( 6) << std::left << "Finl:"
 					<< std::setw(10) << std::left << "Calc:"
@@ -560,7 +566,8 @@ double GOSIASimMinFCN::operator()(const double* par){
 		std::vector<double>	sc_expt_unc;
 		std::vector<double>	sc_calc;
 		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
-			size_t i = scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			size_t  i = scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			float	ynrm = scalingParameters.at(s).GetExperimentNRMs().at(ss);	// Relative scaling parameter
 			if(expt_weights.at(i) == 0) 
 				continue;
 			if(i < exptData_Beam.size()){
@@ -568,6 +575,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 					int	index_init 	= exptData_Beam.at(i).GetData().at(t).GetInitialIndex();
 					int	index_final 	= exptData_Beam.at(i).GetData().at(t).GetFinalIndex();
 					double 	calcCounts 	= EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+					calcCounts		*= ynrm;
 					double 	exptCounts 	= exptData_Beam.at(i).GetData().at(t).GetCounts();
 					double	sigma		= (exptData_Beam.at(i).GetData().at(t).GetUpUnc() + exptData_Beam.at(i).GetData().at(t).GetDnUnc())/2.;  // Average uncertainty
 					sigma 	/= expt_weights.at(i);
@@ -583,6 +591,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 					int	index_init2 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex2();
 					int	index_final2 	= exptData_Beam.at(i).GetDoublet().at(t).GetFinalIndex2();
 					double 	calcCounts 	= EffectiveCrossSection_Beam.at(i)[index_final1][index_init1] + EffectiveCrossSection_Beam.at(i)[index_final2][index_init2];
+					calcCounts		*= ynrm;
 					double 	exptCounts 	= exptData_Beam.at(i).GetDoublet().at(t).GetCounts();
 					double	sigma		= (exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc() + exptData_Beam.at(i).GetDoublet().at(t).GetDnUnc())/2.;  // Average uncertainty
 					sigma 	/= expt_weights.at(i);
@@ -598,6 +607,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 					int	index_init 	= exptData_Target.at(i).GetData().at(t).GetInitialIndex();
 					int	index_final 	= exptData_Target.at(i).GetData().at(t).GetFinalIndex();
 					double 	calcCounts 	= EffectiveCrossSection_Target.at(i)[index_final][index_init];
+					calcCounts		*= ynrm;
 					double 	exptCounts 	= exptData_Target.at(i).GetData().at(t).GetCounts();
 					double	sigma		= (exptData_Target.at(i).GetData().at(t).GetUpUnc() + exptData_Target.at(i).GetData().at(t).GetDnUnc())/2.;  // Average uncertainty
 					sigma 	/= expt_weights.at(i);
@@ -613,6 +623,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 					int	index_init2 	= exptData_Target.at(i).GetDoublet().at(t).GetInitialIndex2();
 					int	index_final2 	= exptData_Target.at(i).GetDoublet().at(t).GetFinalIndex2();
 					double 	calcCounts 	= EffectiveCrossSection_Target.at(i)[index_final1][index_init1] + EffectiveCrossSection_Target.at(i)[index_final2][index_init2];
+					calcCounts		*= ynrm;
 					double 	exptCounts 	= exptData_Target.at(i).GetDoublet().at(t).GetCounts();
 					double	sigma		= (exptData_Target.at(i).GetDoublet().at(t).GetUpUnc() + exptData_Target.at(i).GetDoublet().at(t).GetDnUnc())/2.;  // Average uncertainty
 					sigma 	/= expt_weights.at(i);
@@ -637,13 +648,11 @@ double GOSIASimMinFCN::operator()(const double* par){
 			min->SetVariable(0,"Scaling",1,0.000001);
 			min->SetTolerance(0.001);
 			min->Minimize();
-
-
-			//min->PrintResults();
 		
 			for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
 				size_t i 	= scalingParameters.at(s).GetExperimentNumbers().at(ss);
-				scaling[i]	= min->X()[0];
+				float ynrm 	= scalingParameters.at(s).GetExperimentNRMs().at(ss);	// Relative scaling parameter
+				scaling[i]	= min->X()[0] * ynrm;
 			}
 		}
 		else{
@@ -661,7 +670,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 	std::vector<double>	beamexptchisq;
 	int			counter = 0;
 
-	for(unsigned int i=0;i<exptData_Beam.size();i++){
+	for(size_t i=0;i<exptData_Beam.size();i++){
 		double	exptchisq	= 0;
 		if(expt_weights.at(i) == 0) 
 			continue;
@@ -669,7 +678,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 			std::cout	<< std::setw(4) << std::left << i+1;
 			std::cout	<< std::setw(10) << std::left << scaling.at(i);
 		}
-		for(unsigned int t=0;t<exptData_Beam.at(i).GetData().size();++t){
+		for(size_t t=0;t<exptData_Beam.at(i).GetData().size();++t){
 			double 	tmp 		= 0;
 			int	index_init 	= exptData_Beam.at(i).GetData().at(t).GetInitialIndex();
 			int	index_final 	= exptData_Beam.at(i).GetData().at(t).GetFinalIndex();
@@ -723,7 +732,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				NDF_beam++;
 			}
 		}
-		for(unsigned int t=0;t<exptData_Beam.at(i).GetDoublet().size();++t){
+		for(size_t t=0;t<exptData_Beam.at(i).GetDoublet().size();++t){
 			double 	tmp 		= 0;
 			int	index_init1 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex1();
 			int	index_final1 	= exptData_Beam.at(i).GetDoublet().at(t).GetFinalIndex1();
@@ -786,7 +795,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 		std::cout 	<< std::setw( 4) << std::left << "";
 		std::cout	<< std::setw(10) << std::left << "Scaling:";
 		if(exptData_Target.size() > 0){
-			for(unsigned int t=0;t<exptData_Target.at(exptData_Target.size()-1).GetData().size();t++){
+			for(size_t t=0;t<exptData_Target.at(exptData_Target.size()-1).GetData().size();t++){
 				std::cout	<< std::setw( 6) << std::left << "Init:"
 						<< std::setw( 6) << std::left << "Finl:"
 						<< std::setw(10) << std::left << "Calc:"
@@ -805,7 +814,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 		std::cout 	<< std::setw( 4) << std::left << " ";
 		std::cout	<< std::setw(10) << std::left << "Scaling:";
 		if(exptData_Target.size() > 0){
-			for(unsigned int t=0;t<exptData_Target.at(exptData_Target.size()-1).GetData().size();t++){
+			for(size_t t=0;t<exptData_Target.at(exptData_Target.size()-1).GetData().size();t++){
 				std::cout	<< std::setw( 6) << std::left << "Init:"
 						<< std::setw( 6) << std::left << "Finl:"
 						<< std::setw(10) << std::left << "Calc:"
@@ -822,7 +831,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 	std::vector<double>	targexptchisq;
 	counter = 0;
 
-	for(unsigned int i=0;i<exptData_Target.size();i++){
+	for(size_t i=0;i<exptData_Target.size();i++){
 		double	exptchisq	= 0;
 		if(expt_weights.at(i) == 0.)
 			continue;
@@ -830,7 +839,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 			std::cout	<< std::setw(4) << std::left << i+1;
 			std::cout	<< std::setw(10) << std::left << scaling.at(i);
 		}
-		for(unsigned int t=0;t<exptData_Target.at(i).GetData().size();++t){
+		for(size_t t=0;t<exptData_Target.at(i).GetData().size();++t){
 			double 	tmp 		= 0;
 			int	index_init 	= exptData_Target.at(i).GetData().at(t).GetInitialIndex();
 			int	index_final 	= exptData_Target.at(i).GetData().at(t).GetFinalIndex();
@@ -879,7 +888,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				NDF_targ++;
 			}
 		}
-		for(unsigned int t=0;t<exptData_Target.at(i).GetDoublet().size();++t){
+		for(size_t t=0;t<exptData_Target.at(i).GetDoublet().size();++t){
 			double 	tmp 		= 0;
 			int	index_init1 	= exptData_Target.at(i).GetDoublet().at(t).GetInitialIndex1();
 			int	index_final1 	= exptData_Target.at(i).GetDoublet().at(t).GetFinalIndex1();
@@ -939,7 +948,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 	if(verbose){
 		std::cout	<< std::setw(16) << std::left << "Beam expt.:";
 		for(size_t i=0;i<beamdata.size();i++)
-			std::cout << std::setw(8) << std::left << beamdata.at(i);
+			std::cout << std::setw(8) << std::left << beamdata.at(i) + 1;
 		std::cout	<< std::endl;
 		std::cout	<< std::setw(16) << std::left << "Chi-squared:";
 		for(size_t i=0;i<beamexptchisq.size();i++)
@@ -947,7 +956,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 		std::cout	<< std::endl;
 		std::cout	<< std::setw(16) << std::left << "Target expt.:";
 		for(size_t i=0;i<targdata.size();i++)
-			std::cout << std::setw(8) << std::left << targdata.at(i);
+			std::cout << std::setw(8) << std::left << targdata.at(i) + 1;
 		std::cout	<< std::endl;
 		std::cout	<< std::setw(16) << std::left << "Chi-squared:";
 		for(size_t i=0;i<targexptchisq.size();i++)
@@ -994,6 +1003,8 @@ double GOSIASimMinFCN::operator()(const double* par){
 				<< std::setw(12) << std::left << litchisq 
 				<< std::setw(24) << std::left << ms.count() 
 				<< "\r" << std::flush;
+	if((iter % 1000) == 0 && !verbose && iter != 0)
+		std::cout	<< std::endl;
 
 	return chisq;	
 

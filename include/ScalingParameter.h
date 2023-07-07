@@ -25,20 +25,21 @@
 class ScalingParameter{
 
 	public:
+		ScalingParameter(const ScalingParameter& g);				/*!< Copy constructor */
+		ScalingParameter& operator = (const ScalingParameter& g);		/*!< Assignment operator */
+
 		ScalingParameter() 		{ 
 							experimentNumber.clear();
-							scaling = 1;
+							experimentNRM.clear();
 						}
-
-		void	SetScalingValue(double v, double vll, double vul);		/*!< Define the scaling value, v, with lower and upper limits of vll and vul */
 		void	AddExperiment(int i)			{ experimentNumber.push_back(i);	}	/*!< Add experiment of index, i, to this common scaling */
 		void	ClearExperiments()			{ experimentNumber.clear();		}	/*!< Delete all experiments coupled to this scaling */
-		void	SetExperimentVector(std::vector<int> s)	{ experimentNumber = s;			}	/*!< Define the vector experimental indices coupled to this common scaling */
-		void	SetScalingParameter(double v)		{ scaling = v;				}
+		void	SetExperimentVector(std::vector<int> s, std::vector<float> n)	
+								{ 
+									experimentNumber 	= s;			
+									experimentNRM		= n;	
+								}	/*!< Define the vector experimental indices coupled to this common scaling */
 
-		double	GetScalingParameter()		const	{ return scaling;			}	/*!< Return common scaling */
-		double	GetScalingLowerLimit()		const	{ return scaling_LL;			}	/*!< Return common scaling lower allowed limit */
-		double 	GetScalingUpperLimit()		const	{ return scaling_UL;			}	/*!< Return common scaling upper allowed limit */
 		std::vector<int> GetExperimentNumbers()	const	{ return experimentNumber;		}	/*!< Return the vector of experimental indices coupled to this common scaling */
 		int	GetExperimentNumber(int i)	const	{
 									if( (unsigned)i < experimentNumber.size() )
@@ -49,12 +50,20 @@ class ScalingParameter{
 									}
 								}	/*!< Get the experiment number for index i */
 
+		std::vector<float> GetExperimentNRMs()	const	{ return experimentNRM;			}
+		float	GetExperimentNRM(int i)		const	{
+									if( (unsigned)i < experimentNRM.size() )
+										return experimentNRM.at(i);
+									else{
+										std::cout << "Experiment number out of range" << std::endl;
+										return -1;
+									}
+								}
+
 
 	private:
-		std::vector<int>		experimentNumber;
-		double				scaling;
-		double				scaling_UL;
-		double				scaling_LL;
+		std::vector<int>		experimentNumber;	/*! < Vector of experiment numbers to be commonly normalized */
+		std::vector<float>		experimentNRM;		/*! < Relative normalization of each experiment */
 
 };
 #endif
