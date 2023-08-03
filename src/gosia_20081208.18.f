@@ -5,11 +5,11 @@ C
 C       http://www.pas.rochester.edu/~cline/Gosia/index.html
 C
 C       Gosia was developed in 1980 by T. Czosnyka, D. Cline and C.Y. Wu at
-C       the University of Rochester, Rochester, NY, USA.  
+C       the University of Rochester, Rochester, NY, USA.
 C
 C       The coding of the Gosia suite of codes was maintained by Tomasz
 C       Czosnyka from 1980 until his untimely death in 2006. Since 2007 Nigel
-C       Warr has upgraded and maintained the coding of Gosia and Gosia2. 
+C       Warr has upgraded and maintained the coding of Gosia and Gosia2.
 C
 C       Responsibility for the management and development of the Gosia suite
 C       of codes was assumed by the Steering Committee of the Gosia Users Group
@@ -19,7 +19,7 @@ C       The Gosia Steering Committee comprises:
 C          Douglas Cline,(University of Rochester)
 C          Adam Hayes,  (University fo Rochester)
 C          Pawel Napiorkowski, (Warsaw University)
-C          Nigel Warr,  (University of Cologne)  
+C          Nigel Warr,  (University of Cologne)
 C
 C       Valuable to Gosia contributions were made by:
 C          L. Hasselgren (Uppsala)
@@ -29,23 +29,23 @@ C          A.E. Kavka (Uppsala and Rochester)
 C          B. Kotlinski (Warsaw and Rochester)
 C          J. Srebrny  (Warsaw)
 C          Eh. Vogt (Munchen and Rochester)
-C   
+C
 C       References and Credits
 C          T. Czosnyka, D. Cline and C. Y. Wu,
 C          Bull. Am. Phys. Soc. 28, 745 (1983)
 C          Internal laboratory report UR/NSRL 308/1986
-C 
-C          Some concepts used come from the 1978 Winther, de Boer code 
-C          COULEX and from the deexcitation code CEGRY developed by Cline 
-C          and coworkers at Rochester.  However, the parts taken from 
-C          both codes are in most cases completely rewritten, so the 
+C
+C          Some concepts used come from the 1978 Winther, de Boer code
+C          COULEX and from the deexcitation code CEGRY developed by Cline
+C          and coworkers at Rochester.  However, the parts taken from
+C          both codes are in most cases completely rewritten, so the
 C          similarity of variable and routine names may be misleading.
 C
 C       Resources
-C          It is recommended that users check the GOSIA website at 
-C          Rochester periodically for important updates to the code and 
-C          the manual, as well as sample input and output files and other 
-C          information. Chapter 11 of this manual provides novice users 
+C          It is recommended that users check the GOSIA website at
+C          Rochester periodically for important updates to the code and
+C          the manual, as well as sample input and output files and other
+C          information. Chapter 11 of this manual provides novice users
 C          with instructions, tutorials, etc.
 C
 C          http://www.pas.rochester.edu/~cline/Gosia/index.html
@@ -53,7 +53,7 @@ C
 C          If you need additional information, please contact:
 C
 C          Prof. Douglas Cline
-C          Department of Physics and Astronomy 
+C          Department of Physics and Astronomy
 C          University of Rochester
 C          Rochester, NY 14627, U.S.A.           Phone (585)275-4934
 C          Cline@pas.rochester.edu
@@ -87,7 +87,7 @@ C            - Catch errors in input.
 C          (28 November 2016, N.Warr) gosia-20081208.14
 C            - Explicitly convert to avoid warnings.
 C          (07 March 2014, J.M. Allmond) gosia-20081208.13
-C            - Fix a bug which could use wrong sign for Ikin flag 
+C            - Fix a bug which could use wrong sign for Ikin flag
 C          (7 November 2011, N. Warr) gosia-20081208.12
 C            - Fix bug in lambda=6 mu=3 collision functions
 C          (10 October 2011, N. Warr) gosia-20081208.11
@@ -129,7 +129,7 @@ C              values for the meshpoints are given as angles for the recoiling
 C              target nuclei in the laboratory frame. This should help in
 C              inverse kinematics cases.
 C          (30 June 2008, N. Warr) gosia-20080630
-C            - Reordering of all variable declarations so variables in 
+C            - Reordering of all variable declarations so variables in
 C              common blocks are together.
 C            - Increased size of arrays for levels from 75 to 100.
 C            - Change in many format statements to accomodate 100 levels
@@ -169,7 +169,7 @@ C            - Reorder DATA statement in NEWCNV for portability.
 C            - Use LAGRAN for interpolation if there are less than three
 C              data points even if ISPL = 1.
 C          (26 June 2008, N. Warr) gosia-20080519.1
-C          Bug fixes        
+C          Bug fixes
 C            - CC array is initialised properly (all 50 elements, not just
 C               first 20).
 C            - Various GOTOs which go to the ENDDO statement of a loop are
@@ -200,7 +200,7 @@ C            Reordered the declarations for each common block to facilitate
 C            building singl program file.
 C            Added variable to Gosia to reduce differences between Gosia and
 C            Gosia2.
-C  
+C
 C          (8 May 2008, N. Warr) gosia-20080508
 C            Increased number of matrix elements from 500 to 999
 C            Added OP,SELE to incorporate the separate program SELECT into
@@ -215,19 +215,19 @@ C            Corrected constants in SEQ
 C            Added SPL option to CONT
 C
 C          (18 April 2008, N. Warr) gosia-20080418
-C            Increased the size of varios arrays for interpolation  
-C    
+C            Increased the size of varios arrays for interpolation
+C
 C          (July 2007, N. Warr) Changes to the Input Format:
-C            Tapes 1 and 2 in the pre-2007 versions have been reassigned 
-C            to tapes 11 and 12, respectively, in order to make switching 
+C            Tapes 1 and 2 in the pre-2007 versions have been reassigned
+C            to tapes 11 and 12, respectively, in order to make switching
 C            between Gosia and Gosia2 (the mutual excitation code) easier.
-C            This change affects only OP,FILE (optional--see below) and 
+C            This change affects only OP,FILE (optional--see below) and
 C            the default naming of files.  For example, on a typical Unix-like
-C            system, the file formerly called "fort.2" will now be called 
-C            "fort.12" and will contain the best set of matrix elements 
+C            system, the file formerly called "fort.2" will now be called
+C            "fort.12" and will contain the best set of matrix elements
 C            written at the end of the minimization.
-C     
-C          (July 2007, N. Warr) Bugs Fixed  
+C
+C          (July 2007, N. Warr) Bugs Fixed
 C            The routine DJMM relies on the values of DJM being
 C            preserved between repeated calls to DJMM, which occurred
 C            automatically on many older systems (e.g. DEC Alpha, VAX).
@@ -237,11 +237,11 @@ C            negative values of chi-squared.  This was fixed by adding
 C            the command "SAVE DJM" to the routine DJMM.
 C            The routine ALLOC now handles error conditions gracefully,
 C            and execution is halted in the event of a fatal error.
-C            The WRN,X. switch in the CONT section of OP,GOSI and 
+C            The WRN,X. switch in the CONT section of OP,GOSI and
 C            OP,COUL was unintentionally disabled in the 2007 version.
 C            It is restored in the present update.
 C
-C          (July 2007, N. Warr) Explicit 64-bit Precision Upgrade 
+C          (July 2007, N. Warr) Explicit 64-bit Precision Upgrade
 C            All routines and functions including the main routine now
 C            have "IMPLICIT NONE" declared, and all variables are
 C            explicitly defined as either REAL*8, COMPLEX*16, or
@@ -252,8 +252,8 @@ C            preserve 64-bit precision during type-conversions.
 C            (Precision in type conversion may be limited in some cases
 C            by the compiler.)
 C
-C          (July 2007, N. Warr) Structure and Standards  
-C            Sections of the code have been restructured using Spag 
+C          (July 2007, N. Warr) Structure and Standards
+C            Sections of the code have been restructured using Spag
 C            (Polyhedron Software) under the academic license.  This
 C            included unraveling of loops and goto statements, and
 C            indenting the source code to make loops and if statements
@@ -263,7 +263,7 @@ C            the 2007 version of Gosia2.  Other sections have been
 C            restructured for clarity, without altering their function
 C            (e.g. WTHREJ).
 C
-C          (July 2007, N. Warr) Common Blocks 
+C          (July 2007, N. Warr) Common Blocks
 C            The common blocks ME2D, CCC, KIN, COEX, CAUX0, and LCZP
 C            were re-ordered so that the 64-bit real variables come
 C            before the 32-bit integer variables in order to
@@ -275,12 +275,12 @@ C            All instances of the following archaic functions have
 C            been replaced by their modern counterparts.
 C
 C                Archaic    Replacement        Archaic    Replacement
-C                IFIX       INT                MIN0       MIN  
-C                FLOAT      REAL               AMIN1      MIN  
-C                IABS       ABS                ALOG10     LOG10 
-C                MAX0       MAX                ALOG       LOG     
-C                AMAX1      MAX                
-C         
+C                IFIX       INT                MIN0       MIN
+C                FLOAT      REAL               AMIN1      MIN
+C                IABS       ABS                ALOG10     LOG10
+C                MAX0       MAX                ALOG       LOG
+C                AMAX1      MAX
+C
 C          (June 2006, T. Czosnyka) - The size of the array of
 C            internal conversion coefficients (CC) has been increased
 C            to 50.
@@ -295,7 +295,7 @@ C          (July 1997, T. Czosnyka) - Known matrix elements of all
 C            multipolarities may now be entered as data in OP,YIEL.
 C            Note that this necessitates adding the multipole order
 C            LAMBDA as the first field in the new input format:
-C            LAMBDA, NS1, NS2, ME, DME 
+C            LAMBDA, NS1, NS2, ME, DME
 C            where LAMBDA=7 and 8 represent M1 and M2, respectively.
 C
 C          (September 1996, T. Czosnyka) - The PIN diode particle
@@ -322,8 +322,8 @@ C
 C          (November 1990, T. Czosnyka) - The level scheme data
 C            arrays have been increased to the following sizes:
 C            number of levels   = 75
-C            gamma-ray yields   = 32 x 1500 
-C            magnetic substates = 600 
+C            gamma-ray yields   = 32 x 1500
+C            magnetic substates = 600
 C            matrix elements    = 500
 C
 C
@@ -519,67 +519,67 @@ C      ZV     - energy meshpoints
 
       PROGRAM GOSIA
       IMPLICIT NONE
-      REAL*8 acof , ap , ARCCOS , ARCTG , arg , ax , bcof , be2 , 
+      REAL*8 acof , ap , ARCCOS , ARCTG , arg , ax , bcof , be2 ,
      &       be2a , be2b , be2c
-      REAL*8 bk , bl , bm , bmx , bten , bu , ccc , 
-     &       ccd , cf , chilo , chiok , chis0 , chisl , chisq , chiss , 
+      REAL*8 bk , bl , bm , bmx , bten , bu , ccc ,
+     &       ccd , cf , chilo , chiok , chis0 , chisl , chisq , chiss ,
      &       cnst
       REAL*8 cocos , conu , d , decen , dedx , dsd , dsig , dst
       REAL*8 dsx , dsxm , effi , eh1 , elmi , ELMT , emhl1 , emn , emx ,
      &       enb
       REAL*8 enh , esd , esp , ess , fi0 , fi1 , fic , fiex1 , figl ,
      &       fipo1 , fm , gth
-      REAL*8 hen , het , p , pfi , 
+      REAL*8 hen , het , p , pfi ,
      &       ph1 , ph2 , pi , po1 , po2 , polm , pop1 , pr , pv
-      REAL*8 q1 , q2 , qc , qfac , qr , qui , r , r1 , r2 , r3 , r4 , 
+      REAL*8 q1 , q2 , qc , qfac , qr , qui , r , r1 , r2 , r3 , r4 ,
      &       rem , remax , rl , rlr , rm , rx , ry
-      REAL*8 rz , s , s11 , s12 , s21 , s22 , sbe , sf , sh , sh1 , 
+      REAL*8 rz , s , s11 , s12 , s21 , s22 , sbe , sf , sh , sh1 ,
      &       sh2 , SIMIN , slim
       REAL*8 summm , sz1 , sz2 , TACOS , test , tetrc , tfac , thc ,
      &       title , tmn , tmx , todfi
-      REAL*8 tta , tth , tting , ttttt , txx , u , 
-     &       val , waga , wph , wpi , WSIXJ , wth , wthh , 
+      REAL*8 tta , tth , tting , ttttt , txx , u ,
+     &       val , waga , wph , wpi , WSIXJ , wth , wthh ,
      &       WTHREJ
-      REAL*8 xep , xi1 , xi2 , xk1 , xk2 , xl1 , xlevb , 
-     &       xlk , xm1 , xm2 , xm3 , xtest , xw , xx , xxi , 
+      REAL*8 xep , xi1 , xi2 , xk1 , xk2 , xl1 , xlevb ,
+     &       xlk , xm1 , xm2 , xm3 , xtest , xw , xx , xxi ,
      &       ycorr
       REAL*8 yy , yyd1 , yydd , yyy , zmir , zp , zz
       REAL*8 ttttx ! Only gosia1 and pawel
-      INTEGER*4 i , i122 , iapx , ib , ibaf , icg , icll , ict , ictl , 
+      INTEGER*4 i , i122 , iapx , ib , ibaf , icg , icll , ict , ictl ,
      &          id , ideff , idf
-      INTEGER*4 idr , iecd , ient , ifbp , ifc , ifm , ifwd , 
+      INTEGER*4 idr , iecd , ient , ifbp , ifc , ifm , ifwd ,
      &          ig1 , ig2 , ih1 , ih2 , ihlm , ihuj , ii , ij
-      INTEGER*4 ija0 , ijaja , ijan , ijk , ijx , ile1 , ilevls , 
-     &          ilx , im , imode , in1 , in2 , inclus , ind , 
+      INTEGER*4 ija0 , ijaja , ijan , ijk , ijx , ile1 , ilevls ,
+     &          ilx , im , imode , in1 , in2 , inclus , ind ,
      &          ind1 , ind2 , indx
-      INTEGER*4 inko , inm1 , inm2 , inn , inpo , intend , intvh , 
+      INTEGER*4 inko , inm1 , inm2 , inn , inpo , intend , intvh ,
      &          inva , inx1 , iobl , iocc , iopri , iosr , ipd , iph
-      INTEGER*4 ipine , ipinf , ipo1 , ipo2 , ipo3 , ipp , iprc , 
+      INTEGER*4 ipine , ipinf , ipo1 , ipo2 , ipo3 , ipp , iprc ,
      &          ipri , irea , irep , irfix , irix , isip , iske , iskf
-      INTEGER*4 isko , iskok , isoh , ispa , ispb , itno , 
+      INTEGER*4 isko , iskok , isoh , ispa , ispb , itno ,
      &          itp , iuy , iva , iva1 , ivarh , ivari , ivrh
-      INTEGER*4 ixj , ixl , ixm , iyr , izcap , j , ja , 
+      INTEGER*4 ixj , ixl , ixm , iyr , izcap , j , ja ,
      &          jan , jan1 , jb , jb1 , jb2 , jd , jde , jdy , je
       INTEGER*4 jex , jexp , jfi , jfre , jgd , jgl , jgl1 , jgr , jgs ,
-     &          jj , jj1 , jjjj , jjlx , jjx , jk , jkloo , jktt , jl , 
+     &          jj , jj1 , jjjj , jjlx , jjx , jk , jkloo , jktt , jl ,
      &          jmm , jmpin
-      INTEGER*4 jp , jphd , jpin , jrls , js , jt , jtp , jyi , jyi1 , 
+      INTEGER*4 jp , jphd , jpin , jrls , js , jt , jtp , jyi , jyi1 ,
      &          jyi2 , jyv , jz , k , kb , kclust , kerf , kex
-      INTEGER*4 kh , kh1 , kh2 , kk , kk1 , kk2 , kkk , kl , kloop , 
+      INTEGER*4 kh , kh1 , kh2 , kk , kk1 , kk2 , kkk , kl , kloop ,
      &          kmat , kq , ktt , kuku , l , la , la1 , lam , lamd
-      INTEGER*4 lamh , lb , lck1 , lck2 , levl , lex , lexp , 
+      INTEGER*4 lamh , lb , lck1 , lck2 , levl , lex , lexp ,
      &          lfagg , lfini , lh1 , lh2 , liscl , lkj
-      INTEGER*4 lkj1 , ll , lli , lll , lmax1 , lmaxh , locat , 
+      INTEGER*4 lkj1 , ll , lli , lll , lmax1 , lmaxh , locat ,
      &          loct , lp0 , lpin
       INTEGER*4 ltrn , ltrn1 , ltrn2 , lu , lx , lxd , magh , MEM
-      INTEGER*4 memax1 , memh , memx4 , mend , mexl , 
-     &          mfla , mlt , mm , mpin , ms , n , na , na1 , naa , 
+      INTEGER*4 memax1 , memh , memx4 , mend , mexl ,
+     &          mfla , mlt , mm , mpin , ms , n , na , na1 , naa ,
      &          nallow
-      INTEGER*4 naxfl , nb1 , nb2 , nbands , nch , ndima , ndum , 
-     &          ne , nf , nfd , nfdd , 
+      INTEGER*4 naxfl , nb1 , nb2 , nbands , nch , ndima , ndum ,
+     &          ne , nf , nfd , nfdd ,
      &          nfi , nflr , nft , nged
-      INTEGER*4 ngpr , ni , nksi , nl , nmaxh , nmemx , nnl , 
-     &          nogeli , npce , npce1 , npct , npct1 , 
+      INTEGER*4 ngpr , ni , nksi , nl , nmaxh , nmemx , nnl ,
+     &          nogeli , npce , npce1 , npct , npct1 ,
      &          npt , nptl , nptx , ns1
       INTEGER*4 ns2 , ntap , ntt , numcl , nval , nz
       INTEGER*4 iskin_protect , levmax
@@ -592,8 +592,8 @@ C      ZV     - energy meshpoints
      &          levl(50) , xlevb(50,2) , bm(8,20,20,3) , mlt(1500) ,
      &          ivari(1500) , jpin(50) , ideff(50) , iskin_protect(50)
       INTEGER*4 ICLUST , LASTCL , IRAWEX
-      REAL*8 SUMCL      
-      COMMON /CLUST / ICLUST(50,200) , LASTCL(50,20) , SUMCL(20,1500) , 
+      REAL*8 SUMCL
+      COMMON /CLUST / ICLUST(50,200) , LASTCL(50,20) , SUMCL(20,1500) ,
      &                IRAWEX(50)
       INTEGER*4 NDST
       COMMON /CCCDS / NDST(50)
@@ -613,7 +613,7 @@ C      ZV     - energy meshpoints
       COMMON /DIMX  / DIX(4) , ODL(200)
       REAL*8 DELTA, ENDEC, ENZ
       INTEGER*4 ITMA
-      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) , 
+      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) ,
      &                ENZ(200)
       REAL*8 CNOR
       INTEGER*4 INNR
@@ -636,9 +636,9 @@ C      ZV     - energy meshpoints
       COMMON /DFTB  / DEVD(1500) , DEVU(1500)
       INTEGER*4 KFERR
       COMMON /ERRAN / KFERR
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       INTEGER*4 ISKIN
       COMMON /SECK  / ISKIN(50)
@@ -652,8 +652,8 @@ C      ZV     - energy meshpoints
       COMMON /BRNCH / BRAT(50,3) , IBRC(2,50) , NBRA
       REAL*8 YEXP, CORF , DYEX , UPL , YNRM
       INTEGER*4 IY , NYLDE , IDRN , ILE
-      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) , 
-     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) , 
+      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) ,
+     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) ,
      &                YNRM(32,50) , IDRN , ILE(32)
       REAL*8 YGN , YGP
       INTEGER*4 IFMO
@@ -678,17 +678,17 @@ C      ZV     - energy meshpoints
       REAL*8 XI
       COMMON /CXI   / XI(1500)
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       INTEGER*4 IMIN , LNORM
       COMMON /MINNI / IMIN , LNORM(50)
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       INTEGER*4 MAGEXC , MEMAX , LMAXE , MEMX6 , IVAR
       COMMON /CEXC  / MAGEXC , MEMAX , LMAXE , MEMX6 , IVAR(1500)
@@ -979,7 +979,7 @@ C.............................................................................
 C     Start reading input file.
  100  READ (JZB,99001) op1 , op2
 99001 FORMAT (1A3,1A4)
-      
+
       IF ( op1.EQ.'OP, ' ) THEN
          IF ( op2.EQ.'GOSI' ) oph = op2
          IF ( op2.EQ.'GOSI' ) opcja = op2
@@ -990,7 +990,7 @@ C        Treat OP,FILE (attach files to fortran units)
             GOTO 100 ! End of OP,FILE - back to input loop
          ENDIF
 
-C        Print header         
+C        Print header
          IF ( jphd.EQ.1 ) WRITE (22,99002)
 99002    FORMAT ('1'/1X,125('*')/1X,125('*')/1X,50('*'),25X,50('*')/1X,
      &           50('*'),10X,'GOSIA',10X,50('*')/1X,50('*'),25X,50('*')
@@ -1042,7 +1042,7 @@ C           attenuation coefficients
                   DO l = 1 , 10
                      arg = (eng(l)-eng(ind))**2
                      qc = (qui(k,ind)*cf(k,2)+cf(k,1)*arg)/(cf(k,2)+arg)
-                     WRITE (22,99006) eng(l) , qc , qui(k,l) , 
+                     WRITE (22,99006) eng(l) , qc , qui(k,l) ,
      &                                100.*(qc-qui(k,l))/qui(k,l)
 99006                FORMAT (8X,1F4.2,6X,1F9.4,5X,1F9.4,3X,1E10.2)
                   ENDDO
@@ -1121,7 +1121,7 @@ C        Treat other options
 
 C           Treat OP,RE,A (release A)
             IF ( op2.EQ.'RE,A' ) GOTO 900
-           
+
 C           Treat OP,RE,F (release F)
             IF ( op2.EQ.'RE,F' ) GOTO 900
 
@@ -1214,7 +1214,7 @@ C              Treat OP,EXIT
 
 C              Treat OP,MINI
                ELSEIF ( op2.EQ.'MINI' ) THEN
-                  READ (JZB,*) imode , nptl , chiok , conu , xtest , 
+                  READ (JZB,*) imode , nptl , chiok , conu , xtest ,
      &                 LOCKF , NLOCK , IFBFL , LOCKS , DLOCK
                   op2 = opcja
                   IMIN = IMIN + 1
@@ -1307,7 +1307,7 @@ C              Treat OP,INTG
                      enh = EP(lx)
                      DO mpin = 1 , lpin ! For each pin diode
                         IF ( iecd(lx).EQ.1 ) THEN ! Circular detector
-                           READ (JZB,*) ne , ntt , emn , emx , wth , 
+                           READ (JZB,*) ne , ntt , emn , emx , wth ,
      &                          wph , wthh
                            mfla = 1
                            CALL COORD(wth,wph,wthh,ntt,0,pfi,wpi,tth,lx,
@@ -1322,10 +1322,10 @@ C              Treat OP,INTG
                         jan1 = NDST(lx)
                         IF ( IRAWEX(lx).EQ.0 ) jan1 = jan
                         IF ( iecd(lx).EQ.1 ) THEN ! Circular detector
-                           WRITE (14,*) ne , ntt , emn , emx , tmn , 
+                           WRITE (14,*) ne , ntt , emn , emx , tmn ,
      &                                  tmx , jan1 , wth , wph , wthh
                         ELSE
-                           WRITE (14,*) ne , ntt , emn , emx , tmn , 
+                           WRITE (14,*) ne , ntt , emn , emx , tmn ,
      &                                  tmx , jan1 , tmx , tmx , tmx
                         ENDIF
                         READ (JZB,*) (XV(i),i=1,ne)
@@ -1342,7 +1342,7 @@ C              Treat OP,INTG
                                  IF ( iecd(lx).NE.1 ) THEN
                                     IF ( kloop.EQ.1 ) THEN
                                        READ (JZB,*) nfi ! Number of phi ranges
-                                       READ (JZB,*) 
+                                       READ (JZB,*)
      &                                    (fiex1(ktt,jfi,1),fiex1(ktt,
      &                                    jfi,2),jfi=1,nfi)
                                        IF ( tth.LT.0. ) THEN
@@ -1472,14 +1472,14 @@ C              Treat OP,INTG
                                  dsx = dsig
                                  IF ( mfla.NE.1 ) dsx = dsig*todfi
                                  dsxm(mpin,kloop,ktt) = dsx
-                                 WRITE (17,*) lx , mpin , kloop , ktt , 
+                                 WRITE (17,*) lx , mpin , kloop , ktt ,
      &                                  dsx
-                                 WRITE (14,*) lx , enb , tting , ija0 , 
-     &                                  dsx , 
+                                 WRITE (14,*) lx , enb , tting , ija0 ,
+     &                                  dsx ,
      &                                  (GRAD(jyi)*dsig*ax,jyi=1,idr)
                                  IF ( IPRM(11).EQ.1 ) THEN
-                                    WRITE (22,99048) lx , ija0 , enb , 
-     &                                 tta
+                                    WRITE (22,99048) lx , ija0 , enb ,
+     &                                 tta,dsig
                                     IF ( tta.LT.0. ) WRITE (22,99017)
      &                                 tting
 99017                               FORMAT (5X,
@@ -1488,8 +1488,8 @@ C              Treat OP,INTG
                                     DO jyi = 1 , idr
                                        ni = KSEQ(jyi,3)
                                        nf = KSEQ(jyi,4)
-                                       WRITE (22,99049) ni , nf , 
-     &                                    SPIN(ni) , SPIN(nf) , 
+                                       WRITE (22,99049) ni , nf ,
+     &                                    SPIN(ni) , SPIN(nf) ,
      &                                    GRAD(jyi)*dsig*ax , GRAD(jyi)
      &                                    /GRAD(IDRN)
                                     ENDDO ! Loop on decays jyi
@@ -1499,7 +1499,7 @@ C              Treat OP,INTG
                            ENDDO ! Loop on theta angles ktt
                         ENDDO ! Loop on energy meshpoints kloop
                      ENDDO ! Loop on pin diodes mpin
-                      
+
                      EP(lx) = enh
                      TLBDG(lx) = tth
                   ENDDO ! Loop on experiments lx
@@ -1516,7 +1516,7 @@ C                 meshpoints, so now we start the integration
 C                    Read tape 17
                      REWIND 17
                      DO ijaja = 1 , 300000
-                        READ (17,*,END=134) jjlx , jmpin , jkloo , 
+                        READ (17,*,END=134) jjlx , jmpin , jkloo ,
      &                        jktt , dsx
                         IF ( jjlx.EQ.lx ) dsxm(jmpin,jkloo,jktt) = dsx
                      ENDDO
@@ -1551,7 +1551,7 @@ C                    Read tape 17
                         IF ( ilx.NE.1 )
      &                       CALL TAPMA(lx,iske,isko,iskf,nflr,idr,0,
      &                       nft,enb)
-                        READ (14,*) ne , ntt , emn , emx , tmn , tmx , 
+                        READ (14,*) ne , ntt , emn , emx , tmn , tmx ,
      &                              jan , wth , wph , wthh
                         iocc = (ne+ntt)*idr
                         IF ( iocc.GT.izcap ) GOTO 1800
@@ -1567,7 +1567,7 @@ C                    Read tape 17
      &                          (pfi(j),j=1,npct1)
                         ENDIF
                         het = het/57.2957795 ! Step in theta in radians
-                        
+
 C                       Interpolate stopping power for each of the energies
 C                       that we need. esp is an array of energies and dedx is
 C                       an array containing the stopping powers at those
@@ -1583,8 +1583,8 @@ C                       with the number of steps specified.
      &                        CALL SPLNER(esp,dedx,npt,xx,yy,3)
                            HLMLM(j) = 1./yy
                         ENDDO
-                         
-C                       Now we calculate for all the mesh points. 
+
+C                       Now we calculate for all the mesh points.
                         naa = NDST(lx)
                         IF ( IRAWEX(lx).EQ.0 ) naa = NANG(lx)
                         iskf = naa - 1
@@ -1675,7 +1675,7 @@ C                                Interpolate Rutherford cross-section for this e
                                  XI(jt) = yy*HLMLM(jt)
                               ENDDO ! Loop on equal energy steps
 
-C   So now after this loop, we have XI containing the angle-integrated yield times dE for 
+C   So now after this loop, we have XI containing the angle-integrated yield times dE for
 C   a set of equally spaced energies, so we use Simpson's rule to integrate them and store
 C   in GRAD(jd). The first time, we also have in HLM a set of Rutherford cross-sections for
 C   equally spaced energies, which we integrate in the same way.
@@ -1691,7 +1691,7 @@ C   equally spaced energies, which we integrate in the same way.
      &                            'INTEGRATED RUTHERFORD CROSS SECTION='
      &                            ,1E9.4,2X,'FOR EXP.',1I2///)
 
-                           WRITE (22,99019) lx , ja , emn , emx , tmn , 
+                           WRITE (22,99019) lx , ja , emn , emx , tmn ,
      &                            tmx
 99019                      FORMAT (1X,//50X,'INTEGRATED YIELDS'//5X,
      &                             'EXPERIMENT ',1I2,2X,'DETECTOR ',
@@ -1707,7 +1707,7 @@ C   equally spaced energies, which we integrate in the same way.
                            DO jd = 1 , idr
                               ni = KSEQ(jd,3)
                               nf = KSEQ(jd,4)
-                              WRITE (22,99049) ni , nf , SPIN(ni) , 
+                              WRITE (22,99049) ni , nf , SPIN(ni) ,
      &                               SPIN(nf) , GRAD(jd) , GRAD(jd)
      &                               /GRAD(IDRN) ! IDRN is the normalising transition
                            ENDDO
@@ -1717,7 +1717,7 @@ C   equally spaced energies, which we integrate in the same way.
                            IF ( jpin(lx).EQ.0 ) THEN
                               CALL COORD(wth,wph,wthh,1,2,pfi,wpi,
      &                           TLBDG(lx),lx,txx,txx)
-                              WRITE (22,99020) FIEX(lx,1)*57.2957795 , 
+                              WRITE (22,99020) FIEX(lx,1)*57.2957795 ,
      &                               FIEX(lx,2)*57.2957795 , lx
 99020                         FORMAT (//5X,
      &                          'WARNING: THE PHI ANGLE WAS REPLACED BY'
@@ -1800,7 +1800,7 @@ C              Treat OP,INTI
                      enh = EP(lx)
                      DO mpin = 1 , lpin ! For each pin diode
                         IF ( iecd(lx).EQ.1 ) THEN ! Circular detector
-                           READ (JZB,*) ne , ntt , emn , emx , wth , 
+                           READ (JZB,*) ne , ntt , emn , emx , wth ,
      &                          wph , wthh
                            mfla = 1
                            CALL COORD(wth,wph,wthh,ntt,0,pfi,wpi,tth,lx,
@@ -1815,10 +1815,10 @@ C              Treat OP,INTI
                         jan1 = NDST(lx)
                         IF ( IRAWEX(lx).EQ.0 ) jan1 = jan
                         IF ( iecd(lx).EQ.1 ) THEN ! Circular detector
-                           WRITE (14,*) ne , ntt , emn , emx , tmn , 
+                           WRITE (14,*) ne , ntt , emn , emx , tmn ,
      &                                  tmx , jan1 , wth , wph , wthh
                         ELSE
-                           WRITE (14,*) ne , ntt , emn , emx , tmn , 
+                           WRITE (14,*) ne , ntt , emn , emx , tmn ,
      &                                  tmx , jan1 , tmx , tmx , tmx
                         ENDIF
                         READ (JZB,*) (XV(i),i=1,ne)
@@ -1840,7 +1840,7 @@ C              Treat OP,INTI
                                  IF ( iecd(lx).NE.1 ) THEN
                                     IF ( kloop.EQ.1 ) THEN
                                        READ (JZB,*) nfi ! Number of phi ranges
-                                       READ (JZB,*) 
+                                       READ (JZB,*)
      &                                    (fiex1(ktt,jfi,1),fiex1(ktt,
      &                                    jfi,2),jfi=1,nfi)
                                        IF ( tth.LT.0. ) THEN
@@ -1970,21 +1970,21 @@ C              Treat OP,INTI
                                  dsx = dsig
                                  IF ( mfla.NE.1 ) dsx = dsig*todfi
                                  dsxm(mpin,kloop,ktt) = dsx
-                                 WRITE (17,*) lx , mpin , kloop , ktt , 
+                                 WRITE (17,*) lx , mpin , kloop , ktt ,
      &                                  dsx
-                                 WRITE (14,*) lx , enb , tting , ija0 , 
-     &                                  dsx , 
+                                 WRITE (14,*) lx , enb , tting , ija0 ,
+     &                                  dsx ,
      &                                  (GRAD(jyi)*dsig*ax,jyi=1,idr)
                                  IF ( IPRM(11).EQ.1 ) THEN
-                                    WRITE (22,99048) lx , ija0 , enb , 
-     &                                 tta
+                                    WRITE (22,99048) lx , ija0 , enb ,
+     &                                 tta, dsig
                                     IF ( tta.LT.0. ) WRITE (22,99017)
      &                                 tting
                                     DO jyi = 1 , idr
                                        ni = KSEQ(jyi,3)
                                        nf = KSEQ(jyi,4)
-                                       WRITE (22,99049) ni , nf , 
-     &                                    SPIN(ni) , SPIN(nf) , 
+                                       WRITE (22,99049) ni , nf ,
+     &                                    SPIN(ni) , SPIN(nf) ,
      &                                    GRAD(jyi)*dsig*ax , GRAD(jyi)
      &                                    /GRAD(IDRN)
                                     ENDDO ! Loop on decays jyi
@@ -1994,7 +1994,7 @@ C              Treat OP,INTI
                            ENDDO ! Loop on theta angles ktt
                         ENDDO ! Loop on energy meshpoints kloop
                      ENDDO ! Loop on pin diodes mpin
-                      
+
                      EP(lx) = enh
                      TLBDG(lx) = tth
                   ENDDO ! Loop on experiments lx
@@ -2011,7 +2011,7 @@ C                 meshpoints, so now we start the integration
 C                    Read tape 17
                      REWIND 17
                      DO ijaja = 1 , 300000
-                        READ (17,*,END=434) jjlx , jmpin , jkloo , 
+                        READ (17,*,END=434) jjlx , jmpin , jkloo ,
      &                        jktt , dsx
                         IF ( jjlx.EQ.lx ) dsxm(jmpin,jkloo,jktt) = dsx
                      ENDDO
@@ -2046,7 +2046,7 @@ C                    Read tape 17
                         IF ( ilx.NE.1 )
      &                       CALL TAPMA(lx,iske,isko,iskf,nflr,idr,0,
      &                       nft,enb)
-                        READ (14,*) ne , ntt , emn , emx , tmn , tmx , 
+                        READ (14,*) ne , ntt , emn , emx , tmn , tmx ,
      &                              jan , wth , wph , wthh
                         iocc = (ne+ntt)*idr
                         IF ( iocc.GT.izcap ) GOTO 1800
@@ -2062,7 +2062,7 @@ C                    Read tape 17
      &                          (pfi(j),j=1,npct1)
                         ENDIF
                         het = het/57.2957795 ! Step in theta in radians
-                        
+
 C                       Interpolate stopping power for each of the energies
 C                       that we need. esp is an array of energies and dedx is
 C                       an array containing the stopping powers at those
@@ -2078,8 +2078,8 @@ C                       with the number of steps specified.
      &                        CALL SPLNER(esp,dedx,npt,xx,yy,3)
                            HLMLM(j) = 1./yy
                         ENDDO
-                         
-C                       Now we calculate for all the mesh points. 
+
+C                       Now we calculate for all the mesh points.
                         naa = NDST(lx)
                         IF ( IRAWEX(lx).EQ.0 ) naa = NANG(lx)
                         iskf = naa - 1
@@ -2170,7 +2170,7 @@ C                                Interpolate Rutherford cross-section for this e
                                  XI(jt) = yy*HLMLM(jt)
                               ENDDO ! Loop on equal energy steps
 
-C   So now after this loop, we have XI containing the angle-integrated yield times dE for 
+C   So now after this loop, we have XI containing the angle-integrated yield times dE for
 C   a set of equally spaced energies, so we use Simpson's rule to integrate them and store
 C   in GRAD(jd). The first time, we also have in HLM a set of Rutherford cross-sections for
 C   equally spaced energies, which we integrate in the same way.
@@ -2183,7 +2183,7 @@ C   equally spaced energies, which we integrate in the same way.
                            IF ( ja.EQ.1 ) dst = dst + DS
                            IF ( ja.EQ.1 ) WRITE (22,99018) DS , lx
 
-                           WRITE (22,99019) lx , ja , emn , emx , tmn , 
+                           WRITE (22,99019) lx , ja , emn , emx , tmn ,
      &                            tmx
                            DO jd = 1 , idr
                               WRITE (15,*) GRAD(jd)
@@ -2191,7 +2191,7 @@ C   equally spaced energies, which we integrate in the same way.
                            DO jd = 1 , idr
                               ni = KSEQ(jd,3)
                               nf = KSEQ(jd,4)
-                              WRITE (22,99049) ni , nf , SPIN(ni) , 
+                              WRITE (22,99049) ni , nf , SPIN(ni) ,
      &                               SPIN(nf) , GRAD(jd) , GRAD(jd)
      &                               /GRAD(IDRN) ! IDRN is the normalising transition
                            ENDDO
@@ -2201,7 +2201,7 @@ C   equally spaced energies, which we integrate in the same way.
                            IF ( jpin(lx).EQ.0 ) THEN
                               CALL COORD(wth,wph,wthh,1,2,pfi,wpi,
      &                           TLBDG(lx),lx,txx,txx)
-                              WRITE (22,99020) FIEX(lx,1)*57.2957795 , 
+                              WRITE (22,99020) FIEX(lx,1)*57.2957795 ,
      &                               FIEX(lx,2)*57.2957795 , lx
                               IF ( TLBDG(lx).LT.0 ) THEN
                                  FIEX(lx,1) = FIEX(lx,1) + 3.14159265
@@ -2289,9 +2289,9 @@ C                 Treat OP,SIXJ
                            DO ms = 1 , 5
                               mend = 2*(ms-3) + ixj
                               WRITE (14,*) WSIXJ(l,4,4,ixj,mend,ixj-4) ,
-     &                               WSIXJ(l,4,4,ixj,mend,ixj-2) , 
-     &                               WSIXJ(l,4,4,ixj,mend,ixj) , 
-     &                               WSIXJ(l,4,4,ixj,mend,ixj+2) , 
+     &                               WSIXJ(l,4,4,ixj,mend,ixj-2) ,
+     &                               WSIXJ(l,4,4,ixj,mend,ixj) ,
+     &                               WSIXJ(l,4,4,ixj,mend,ixj+2) ,
      &                               WSIXJ(l,4,4,ixj,mend,ixj+4)
                            ENDDO
                         ENDDO
@@ -2349,7 +2349,7 @@ C                    Read input from standard input
 
 C                 Treat OP,MAP
                   ELSEIF ( op2.EQ.'MAP ' ) THEN
-                     GOTO 1200 ! End of OP,MAP 
+                     GOTO 1200 ! End of OP,MAP
                   ENDIF ! IF ( op2.EQ.'SIXJ' )
                ENDIF
             ENDIF
@@ -2393,7 +2393,7 @@ C     Treat suboption LEVE (levels)
             prp = '+'
             IF ( ipo2.EQ.-1 ) prp = '-'
             if (ipo1 .GT. levmax) levmax = ipo1
-            IF ( ABS(IPRM(1)).EQ.1 ) WRITE (22,99025) ipo1 , prp , 
+            IF ( ABS(IPRM(1)).EQ.1 ) WRITE (22,99025) ipo1 , prp ,
      &           SPIN(ipo1) , EN(ipo1)
 99025       FORMAT (5X,1I3,11X,1A1,10X,1F4.1,8X,1F10.4)
          ENDDO
@@ -2633,7 +2633,7 @@ C     Else we don't recognize the suboption
       ENDIF
       GOTO 200 ! Get next suboption
 
-C     Handle OP,ERRO      
+C     Handle OP,ERRO
  400  IF ( ICS.EQ.1 ) THEN
          REWIND 11
          DO kh1 = 1 , LP4
@@ -2751,13 +2751,13 @@ C     Handle OP,ERRO
      &              be2a = 0.
                be2a = be2a**2/sbe
                be2b = be2b**2/sbe
-               WRITE (22,99052) kh2 , LEAD(2,kh2) , LEAD(1,kh2) , be2 , 
+               WRITE (22,99052) kh2 , LEAD(2,kh2) , LEAD(1,kh2) , be2 ,
      &                          be2a - be2 , be2b - be2
             ELSE
                ispb = INT(SPIN(ispa))*2
                qfac = 3.170662*WTHREJ(ispb,4,ispb,-ispb,0,ispb)
-               WRITE (22,99052) kh2 , LEAD(2,kh2) , LEAD(1,kh2) , 
-     &                          HLM(kh2)*qfac , DEVD(kh2)*qfac , 
+               WRITE (22,99052) kh2 , LEAD(2,kh2) , LEAD(1,kh2) ,
+     &                          HLM(kh2)*qfac , DEVD(kh2)*qfac ,
      &                          DEVU(kh2)*qfac
             ENDIF
          ENDIF
@@ -2897,7 +2897,7 @@ C     Handle OP,ERRO
                   DO k = 1 , ISMAX ! For substates
                      pr = pr + DBLE(ARM(k,5))**2 + DIMAG(ARM(k,5))**2
                      IF ( op2.EQ.'STAR' .OR. IPRM(19).EQ.1 )
-     &                    WRITE (22,99035) INT(CAT(k,1)) , CAT(k,2) , 
+     &                    WRITE (22,99035) INT(CAT(k,1)) , CAT(k,2) ,
      &                    CAT(k,3) , DBLE(ARM(k,5)) , DIMAG(ARM(k,5))
 99035                FORMAT (7X,1I2,3X,1F4.1,2X,1F5.1,2X,1E14.6,2X,
      &                       1E14.6)
@@ -2943,7 +2943,7 @@ C     Handle OP,ERRO
                   DO jgl = 1 , nogeli ! For each detector angle
                      IF ( IRAWEX(IEXP).NE.0 ) THEN
                         IF ( op2.EQ.'POIN' .AND. IPRM(20).EQ.1 )
-     &                       WRITE (23,99037) IEXP , jgl , EP(IEXP) , 
+     &                       WRITE (23,99037) IEXP , jgl , EP(IEXP) ,
      &                       TLBDG(IEXP)
 99037                   FORMAT (1x//50x,'CALCULATED YIELDS'//5x,
      &                          'EXPERIMENT ',1I2,2x,'DETECTOR ',1I2/5x,
@@ -2993,7 +2993,7 @@ C     Handle OP,ERRO
                            decen = decen*(1.+BETAR(IEXP)*cocos)
                            CALL EFFIX(IEXP,ipd,decen,effi)
                            IF ( op2.EQ.'POIN' .AND. IPRM(20).EQ.1 )
-     &                          WRITE (23,99049) ni , nf , SPIN(ni) , 
+     &                          WRITE (23,99049) ni , nf , SPIN(ni) ,
      &                                 SPIN(nf) , decen , effi
                            YGN(jyi) = YGN(jyi)*effi
                         ENDDO
@@ -3012,8 +3012,8 @@ C     Handle OP,ERRO
                      jgl1 = jgl1 + 1
                      lu = ILE(jgl1)
                      IF ( op2.EQ.'POIN' .OR. IPRM(11).EQ.1 )
-     &                    WRITE (22,99048) IEXP , jgl1 , EP(IEXP) , 
-     &                    TLBDG(IEXP)
+     &                    WRITE (22,99048) IEXP , jgl1 , EP(IEXP) ,
+     &                    TLBDG(IEXP), dsig
                      jmm = 0
 C---- this bit removed in gosia2 start
                      ttttx = TLBDG(IEXP)/57.2957795
@@ -3027,7 +3027,7 @@ C---- this bit removed in gosia2 end
                         ni = KSEQ(jyi,3)
                         nf = KSEQ(jyi,4)
                         IF ( op2.EQ.'POIN' .OR. IPRM(11).EQ.1 )
-     &                       WRITE (22,99049) ni , nf , SPIN(ni) , 
+     &                       WRITE (22,99049) ni , nf , SPIN(ni) ,
      &                       SPIN(nf) , YGN(jyi) , YGN(jyi)/YGN(IDRN)
                         IF ( ifwd.EQ.1 ) THEN
                            IF ( (YGN(jyi)/YGN(IDRN)).GE.slim ) THEN
@@ -3078,12 +3078,12 @@ C---- this bit removed in gosia2 end
                      ENDDO
                      IF ( ifwd.EQ.1 ) THEN
                         xw = 1.
-                        WRITE (4,*) IEXP , jgl1 , ABS(IZ1(IEXP)) , 
-     &                              ABS(XA1(IEXP)) , ABS(EP(IEXP)) , 
+                        WRITE (4,*) IEXP , jgl1 , ABS(IZ1(IEXP)) ,
+     &                              ABS(XA1(IEXP)) , ABS(EP(IEXP)) ,
      &                              jmm , xw
                         DO jyi = 1 , jmm
-                           WRITE (4,*) INT(CORF(jyi,1)) , 
-     &                                 INT(CORF(jyi,2)) , CORF(jyi,3) , 
+                           WRITE (4,*) INT(CORF(jyi,1)) ,
+     &                                 INT(CORF(jyi,2)) , CORF(jyi,3) ,
      &                                 CORF(jyi,4)
                         ENDDO
                      ENDIF
@@ -3101,7 +3101,7 @@ C---- this bit removed in gosia2 end
                         ENDIF
                         jgl1 = jgl1 + 1
                         READ (3,*) ne , na , zp , ap , xep , nval , waga
-                        WRITE (4,*) ne , na , zp , ap , EP(IEXP) , 
+                        WRITE (4,*) ne , na , zp , ap , EP(IEXP) ,
      &                              nval , waga
                         WRITE (22,99038) IEXP , jgl1
 99038                   FORMAT (///10X,'EXPERIMENT',1X,I2,8X,'DETECTOR',
@@ -3109,7 +3109,7 @@ C---- this bit removed in gosia2 end
      &                          'YCOR',8X,'COR.F'/)
                         ile1 = ILE(jgl1)
                         DO itp = 1 , nval
-                           READ (3,*) ns1 , ns2 , fiex1(1,1,1) , 
+                           READ (3,*) ns1 , ns2 , fiex1(1,1,1) ,
      &                                fiex1(1,1,2)
                            ltrn = IY(ile1+itp-1,jgl1)
                            IF ( ltrn.LT.1000 ) THEN
@@ -3124,10 +3124,10 @@ C---- this bit removed in gosia2 end
                               ns2 = ns2 + KSEQ(ltrn2,4)
                            ENDIF
                            ycorr = YEXP(jgl1,ile1+itp-1)*cnst ! Not multiplied by cnst in gosia2
-                           WRITE (4,*) ns1 , ns2 , ycorr , 
+                           WRITE (4,*) ns1 , ns2 , ycorr ,
      &                                 DYEX(jgl1,ile1+itp-1)*cnst ! Not multiplied by cnst in gosia2
-                           WRITE (22,99039) ns1 , ns2 , 
-     &                            CORF(ile1+itp-1,jgl1) , ycorr , 
+                           WRITE (22,99039) ns1 , ns2 ,
+     &                            CORF(ile1+itp-1,jgl1) , ycorr ,
      &                            ycorr/CORF(ile1+itp-1,jgl1)
 99039                      FORMAT (5X,I4,5X,I4,3X,E8.3,4X,E8.3,4X,E8.3)
                         ENDDO ! Loop over itp
@@ -3435,7 +3435,7 @@ C     Handle map
                   WRITE (22,99054)
                   DO kex = 1 , 10
                      xxi = XIR(lex,jex)*(kex-1)/9.
-                     WRITE (22,99055) xxi , 
+                     WRITE (22,99055) xxi ,
      &                                (PARXM(jex,ilx,kex,lex),ilx=1,4)
                   ENDDO
                   IF ( MAGA(jex).NE.0 ) THEN
@@ -3547,7 +3547,7 @@ C     Handle OP,EXIT
                   WRITE (22,99012) iva , TAU(iva)
 99012             FORMAT (6X,1I3,7X,1E10.4)
                   GOTO 124
- 122              WRITE (22,99013) iva , TAU(iva) , TIMEL(1,iva1) , 
+ 122              WRITE (22,99013) iva , TAU(iva) , TIMEL(1,iva1) ,
      &                   -TIMEL(2,iva1) , TIMEL(3,iva1)
 99013             FORMAT (6X,1I3,7X,1E10.4,5X,1E10.4,4X,1E10.4,4X,
      &              1E10.4)
@@ -3571,7 +3571,7 @@ C     Handle OP,EXIT
                            ELSE
                              dsd = EAMX(kq,3)
                            ENDIF
-                           WRITE (22,99016) ni , nf , esd , ess , 
+                           WRITE (22,99016) ni , nf , esd , ess ,
      &                        (ess-esd)/dsd
 99016                      FORMAT (4x,1I3,1x,1I3,1x,1F9.4,1x,1F9.4,1x,
      &                              1F9.4)
@@ -3587,9 +3587,9 @@ C     Handle OP,EXIT
 
 99048 FORMAT (1X//50X,'CALCULATED YIELDS'//5X,'EXPERIMENT ',1I2,2X,
      &        'DETECTOR ',1I2/5X,'ENERGY ',1F10.3,1X,'MEV',2X,'THETA ',
-     &        1F7.3,1X,'DEG'//5X,'NI',5X,'NF',5X,'II',5X,'IF',5X,
-     &        'YIELD',5X,'NORMALIZED YIELD'/)
-C99049 FORMAT (4X,1I3,4X,1I3,3X,1F4.1,3X,1F4.1,3X,1E11.5,3X,1E11.5)
+     &        1F7.3,1X,'DEG',1X,'DSIG ',1F15.3,1X//5X,'NI',5X,'NF',5X,
+     &        'II',5X,'IF',5X,'YIELD',5X,'NORMALIZED YIELD'/)
+C99049 FORMAT (4X,1I3,4X,1I3,3X,1F4.1,3X,1F4.1,3X,1E11.5,3X,1E11.5,3X,1E11.5)
 99049 FORMAT (4X,1I3,4X,1I3,3X,1F4.1,3X,1F4.1,3X,F70.60,8X,1E11.5)
 99050 FORMAT (1X///44X,'OVERALL')
 99051 FORMAT (1X///43X,'DIAGONAL')
@@ -3603,7 +3603,7 @@ C99049 FORMAT (4X,1I3,4X,1I3,3X,1F4.1,3X,1F4.1,3X,1E11.5,3X,1E11.5)
      &  'IT WAS NECESSARY TO SWITCH OFF THE TIME-OF-FLIGHT CORRECTION '
      &  'FOR EXPT ',I3,' LEVEL ', I3, ' TAU=',1E9.4)
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION ARCOS
 C
@@ -3619,7 +3619,7 @@ C      Pi     - Pi must be set to 3.14159... before calling ARCCOS
 C
 C Return value:
 C      arccosine(A) within range of F
- 
+
       REAL*8 FUNCTION ARCCOS(A,F,Pi)
       IMPLICIT NONE
       REAL*8 A , an , F , Pi , q , qa , qap , TACOS
@@ -3642,7 +3642,7 @@ C      arccosine(A) within range of F
  100  ARCCOS = qa
       IF ( (qa-F).GT.Pi/2. ) ARCCOS = qap
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION ARCTG
 C
@@ -3657,7 +3657,7 @@ C      Pi     - Pi must be set to 3.14159... before calling ARCTG
 C
 C Return value:
 C      arctangent(A) within range of F
- 
+
       REAL*8 FUNCTION ARCTG(A,F,Pi)
       IMPLICIT NONE
       REAL*8 A , an , F , Pi , q , qa , qap
@@ -3680,7 +3680,7 @@ C      arctangent(A) within range of F
  100  ARCTG = qa
       IF ( (qa-F).GT.Pi/4. ) ARCTG = qap
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE LOAD
 C
@@ -3732,27 +3732,27 @@ C      Ient   - Flag : 1, 2, 3 (read only)
 C      Icg    - Flag : 1 = full coulex, 2 = approximate coulex (read only)
 C      Polm   - (read only)
 C      Joj    - index of substate (write only)
- 
+
       SUBROUTINE LOAD(Iexp,Ient,Icg,Polm,Joj)
       IMPLICIT NONE
-      REAL*8 a1 , a2 , aaz2 , aaz3 , aazz , ah , cpsi , dep , eta , 
+      REAL*8 a1 , a2 , aaz2 , aaz3 , aazz , ah , cpsi , dep , eta ,
      &       etan , Polm , pp1 , pp2
-      REAL*8 ppp , rlam , ssqrt , szet , wrt , wrtm , z1 , z2 , zet , 
+      REAL*8 ppp , rlam , ssqrt , szet , wrt , wrtm , z1 , z2 , zet ,
      &       zsqa
-      INTEGER*4 i , i1 , i2 , i3 , Icg , Ient , Iexp , ir , is , ispi , 
+      INTEGER*4 i , i1 , i2 , i3 , Icg , Ient , Iexp , ir , is , ispi ,
      &          ispo
       INTEGER*4 jj , jjj , Joj , la , lam , lam1 , ld , m , m1
       INTEGER*4 m2 , mstop , n , n2 , n3 , nn , nz
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       INTEGER*4 ISHA
       COMMON /PSPIN / ISHA
@@ -3774,7 +3774,7 @@ C      Joj    - index of substate (write only)
       COMMON /COEX2 / NMAX , NDIM , NMAX1
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       INTEGER*4 NSTART , NSTOP
       COMMON /CEXC0 / NSTART(101) , NSTOP(100)
@@ -3789,7 +3789,7 @@ C      Joj    - index of substate (write only)
       INTEGER*4 IPATH , MAGA
       COMMON /PTH   / IPATH(100) , MAGA(100)
       DIMENSION etan(100) , cpsi(8)
-      
+
       LMAX = INT(SPIN(1)+1.1) ! ground-state spin + 1
       IF ( Ient.EQ.1 ) THEN
          ISHA = 0
@@ -3825,7 +3825,7 @@ C        i.e. hbar c / e^2 * sqrt(2 / amu).
             XI(n) = etan(i1) - etan(i2)
          ENDDO
 
-C        Calculate C_\lambda \over (s Z_1 Z_2)^\lambda 
+C        Calculate C_\lambda \over (s Z_1 Z_2)^\lambda
          aazz = 1./(1.+a1/a2)/z1/z2
          cpsi(1) = 5.169286*aazz
 
@@ -3959,7 +3959,7 @@ C        Initialise pointers to ZETA array
             ENDIF
          ENDDO ! Loop over multipolarity
 
-C        Make sure we haven't reached the limit of zeta coefficients          
+C        Make sure we haven't reached the limit of zeta coefficients
          IF ( nz.GT.LP7 ) THEN ! LP7 is 45100
             WRITE (22,99001) LP7
 99001       FORMAT (1x,
@@ -3975,7 +3975,7 @@ C        Make sure we haven't reached the limit of zeta coefficients
 
       ERR = .TRUE. ! Set error flag
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE LSLOOP
 C
@@ -4021,17 +4021,17 @@ C For the evaluation of the 3-j symbol, ins = 2 I_n, lam2 = 2 \lambda,
 C inr = 2 I_k, jg1 = -2 M_n, jg2 = 2 * \mu, jrmir = 2 * M_k. Note that the
 C parameters to WTHREJ are all doubled, so that this routine can cope with
 C half-integers.
- 
+
       SUBROUTINE LSLOOP(Ir,N,Nz,Ld,Lam,La,Ssqrt,Icg,Iexp)
       IMPLICIT NONE
       REAL*8 phz , rmir , rmis , Ssqrt , WTHREJ
-      INTEGER*4 i2 , i3 , Icg , Iexp , iiex , indx , inqa , inr , 
+      INTEGER*4 i2 , i3 , Icg , Iexp , iiex , indx , inqa , inr ,
      &          ins , Ir , is , is1 , is2 , ismin
-      INTEGER*4 isplus , jg1 , jg2 , jrmir , La , Lam , lam2 , Ld , 
+      INTEGER*4 isplus , jg1 , jg2 , jrmir , La , Lam , lam2 , Ld ,
      &          LEADF , m , MEM , mrange , mt , N , Nz
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       REAL*8 PSI
       COMMON /PCOM  / PSI(1500)
@@ -4048,15 +4048,15 @@ C half-integers.
       COMMON /APRCAT/ QAPR(1500,2,7) , IAPR(1500,2) , ISEX(100)
       INTEGER*4 IPATH , MAGA
       COMMON /PTH   / IPATH(100) , MAGA(100)
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       REAL*8 ELM , ELMU , ELML , SA
       COMMON /COMME / ELM(1500) , ELMU(1500) , ELML(1500) , SA(1500)
       INTEGER*4 IFAC
       COMMON /CLCOM0/ IFAC(100)
-      
+
       lam2 = 2*Lam
       inr = INT(CAT(Ir,2)*2.) ! 2 * Spin of substate Ir
       rmir = CAT(Ir,3)   ! m quantum number of substate Ir
@@ -4116,7 +4116,7 @@ C half-integers.
          ENDIF ! If there are substates
       ENDDO ! Loop on matrix elements
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION LEADF
 C
@@ -4134,12 +4134,12 @@ C      N3     - multipolarity
 C
 C Purpose: calculate the level number for the final level associated with the
 C      matrix element index N2, initial level index N1 and multipolarity N3.
- 
+
       INTEGER*4 FUNCTION LEADF(N1,N2,N3)
       IMPLICIT NONE
       INTEGER*4 k , lsum , N1 , n1m , N2 , N3 , n3m
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       lsum = 0
       n3m = N3 - 1
@@ -4150,7 +4150,7 @@ C      matrix element index N2, initial level index N1 and multipolarity N3.
       ENDIF
 
 C     lsum now points to start of the multipolarity N3
-       
+
       n1m = N1 - 1
       IF ( n1m.NE.0 ) THEN
          DO k = 1 , n1m ! Loop over levels below the selected one
@@ -4159,15 +4159,15 @@ C     lsum now points to start of the multipolarity N3
       ENDIF
 
 C     lsum now points to start of level N1 for multipolarity N3
-      
+
       n1m = lsum + N2
 
 C     n1m now points to the appropriate matrix element N2 for initial level N1
 C     and multipolarity N3
-      
+
       LEADF = LEAD(2,n1m) ! Get the final level for this matrix element
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION MEM
 C
@@ -4188,12 +4188,12 @@ C      N3     - multipolarity
 C
 C Return value:
 C      Index of matrix element
- 
+
       INTEGER*4 FUNCTION MEM(N1,N2,N3)
       IMPLICIT NONE
       INTEGER*4 k , msum , N1 , n1m , N2 , N3 , n3m
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       msum = 0
       IF ( N3.NE.1 ) THEN
@@ -4223,7 +4223,7 @@ C     msum is now an index to the start of the matrix elements for the appropria
 
  100  MEM = msum ! MEM is now the index to the matrix element we want
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE CMLAB
 C
@@ -4282,14 +4282,14 @@ C      Tetrn  - theta of recoiling nucleus in lab frame (in radians)
       COMMON /COEX2 / NMAX , NDIM , NMAX1
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       REAL*8 EPS, EROOT, FIEX
       INTEGER*4 IEXP, IAXS
       COMMON /KIN   / EPS(50) , EROOT(50) , FIEX(50,2) , IEXP , IAXS(50)
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       DATA r3/0./
 
@@ -4414,7 +4414,7 @@ C        EPS is "epsilon" the eccentricity parameter.
          EPS(lexp) = 1./SIN(tcmrad/2.)
          TETACM(lexp) = tcmrad
          IF ( IPRM(1).EQ.1 ) THEN
-            IF ( Ii.EQ.0 .AND. IPRM(10).EQ.1 ) WRITE (22,99010) tcmdg , 
+            IF ( Ii.EQ.0 .AND. IPRM(10).EQ.1 ) WRITE (22,99010) tcmdg ,
      &           EPS(lexp)
 99010       FORMAT (5X,'CM SCATTERING ANGLE',1X,1F10.3,1X,'DEG',5X,
      &              'EPSILON',1X,1F10.4)
@@ -4490,15 +4490,26 @@ C        Now calculate dsigma
          Tetrn = zlbrad
          IF ( IZ1(lexp).LT.0. ) Tetrn = tlbrad
          TREP(lexp) = Tetrn
+      
+         WRITE (22,99014) lexp,a1,a2,EN(NCM),EP(lexp),tau,tcmrad,tlbrad,
+     &         z1,z2,dista,Dsig,EPS(lexp),r3
+
+99014    FORMAT(5X,'EXP ',1I3,2X,'AP ',1F7.3,2X,'AT ',1F7.3,2X,'EN ',
+     &         1F10.3,2X,'EP ',1F7.3,2X,'Tau ',1F10.3,2X,'TCM ',1F10.3,
+     &         2X,'TLAB ',1F7.3,2X,'ZP ',1F7.3,2X,'ZT ',1F7.3,2X,
+     &         'DISTA ',1F10.3,2X,'DSIG',1F10.3,2X,'EPS ',1F10.3,2X
+     &         'R3 ',1F10.3)
       ENDDO ! Loop over experiments lexp
+
 
       IPRM(10) = 0 ! Turn off printing so we don't write things twice
       RETURN
 
 C     An error has occured, so set error flag and return
  200  ERR = .TRUE. ! Set error flag
+
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE QE
 C
@@ -4535,7 +4546,7 @@ C quadrupole, but the operator has the same form as the E2 operator, so it
 C is easiest to consider the effect as a correction to this operator.
 C
 C Lmda = lambda (1 = E1, 2 = E2... 6 = E6)
- 
+
       SUBROUTINE QE(C,D,B2,C2,D2,B4,B6,D3,B8,C4,D4,B10,D5,B12,D6,Lmda,
      &              Pol,Cq)
       IMPLICIT NONE
@@ -4583,7 +4594,7 @@ C Lmda = lambda (1 = E1, 2 = E2... 6 = E6)
       Cq(1) = 0.5*C/B2
       Cq(2) = -0.35355339*D/B2
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE QM
 C
@@ -4604,8 +4615,8 @@ C We used different formulae depending on lambda (see the table of magnetic
 C collision functions in the gosia manual).
 C
 C Lmda = lambda + 6. i.e. Lmda = 7 is M1, Lmda = 8 is M2.
- 
- 
+
+
       SUBROUTINE QM(C,D,B2,B4,Ert,Lmda,Cq)
       IMPLICIT NONE
       REAL*8 B2 , B4 , C , Cq , D , Ert
@@ -4619,7 +4630,7 @@ C Lmda = lambda + 6. i.e. Lmda = 7 is M1, Lmda = 8 is M2.
       ENDIF
       Cq(1) = -.3535533905*Ert/B2
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE SNAKE
 C
@@ -4653,13 +4664,13 @@ C EROOT is set in CMLAB to \sqrt(\epsilon^2 - 1).
 C
 C Note that when we call QE and QM that lmda = 1...6 for E1...6 and 7,8 for
 C M1, M2.
- 
+
       SUBROUTINE SNAKE(Nexp,Zpol)
       IMPLICIT NONE
-      REAL*8 b10 , b12 , b2 , b4 , b6 , b8 , c , c2 , c4 , c6 , 
+      REAL*8 b10 , b12 , b2 , b4 , b6 , b8 , c , c2 , c4 , c6 ,
      &       chi , cq , d , d2 , d3 , d4 , d5 , d6
       REAL*8 ert , pol , shi , Zpol
-      INTEGER*4 ibm , icm , icnt , idm , irl , j , k , lloc , lmd , 
+      INTEGER*4 ibm , icm , icnt , idm , irl , j , k , lloc , lmd ,
      &          lmda , mimx , Nexp , nind , nlm
       DIMENSION lloc(8) , cq(7) , irl(8)
       REAL*8 EPS, EROOT, FIEX
@@ -4668,15 +4679,15 @@ C M1, M2.
       REAL*8 ZETA
       INTEGER*4 LZETA
       COMMON /CCOUP / ZETA(155600) , LZETA(8)
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       INTEGER*4 LOCQ
       COMMON /ALLC  / LOCQ(8,7)
       REAL*8 CH , SH
       COMMON /HIPER / SH(365) , CH(365)
-      
+
       icnt = 0
  100  icnt = icnt + 1
 
@@ -4756,7 +4767,7 @@ C     Calculate some parameters, which we will pass to QE or QM
       ENDIF
       GOTO 100
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE FHIP
 C
@@ -4773,18 +4784,18 @@ C      SH     - table of sinh values
 C
 C LP12 (from common MGN) is the number of values to calculate. This is set to
 C 365  in GOSIA, which is the dimension of the arrays.
- 
+
       SUBROUTINE FHIP
       IMPLICIT NONE
       REAL*8 er , ex , w
       INTEGER*4 j
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       REAL*8 CH , SH
       COMMON /HIPER / SH(365) , CH(365)
-      
+
       w = -.03d0
       DO j = 1 , LP12
          w = w + .03d0
@@ -4794,7 +4805,7 @@ C 365  in GOSIA, which is the dimension of the arrays.
          CH(j) = (ex+er)/2.
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE ALLOC
 C
@@ -4825,7 +4836,7 @@ C 2 * IRA(1) values for E1, 3 * IRA(2) values for E2, 4 * IRA(3) values for
 C E3... 3 * IRA(8) values for M2 in that order.
 C
 C We are limited to a maximum of LP14 (=4900) values in total.
- 
+
       SUBROUTINE ALLOC(Accur)
       IMPLICIT NONE
       REAL*8 Accur
@@ -4834,9 +4845,9 @@ C We are limited to a maximum of LP14 (=4900) values in total.
       COMMON /ALLC  / LOCQ(8,7)
       INTEGER*4 IRA , MAXLA
       COMMON /RNG   / IRA(8) , MAXLA
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
 C     Call RANGEL to determine the range of the integration over omega, which
 C     depends on the accuracy Accur.
@@ -4850,7 +4861,7 @@ C     First zero all the elements
             LOCQ(j,k) = 0
          ENDDO
       ENDDO
-      
+
 C     Now store values for E1...E6
       DO k = 1 , 6
          k1 = k + 1
@@ -4859,7 +4870,7 @@ C     Now store values for E1...E6
             load = load + IRA(k)
          ENDDO
       ENDDO
-      
+
 C     And for M1, M2
       DO k = 7 , 8
          k1 = k - 6
@@ -4876,7 +4887,7 @@ C     And for M1, M2
      &        'SORRY,JOB WILL BE BRUTALLY TERMINATED!')
       STOP 'JOB TERMINATED BY ALLOC' ! Added N. Warr Jul2007
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE RANGEL
 C
@@ -4902,7 +4913,7 @@ C
 C Note that first we work out omega, but then we work out the appropriate
 C index, knowing that we are always using steps of 0.03.
 
- 
+
       SUBROUTINE RANGEL(Acc1)
       IMPLICIT NONE
       REAL*8 Acc1 , acl , w
@@ -4912,7 +4923,7 @@ C index, knowing that we are always using steps of 0.03.
       INTEGER*4 IRA , MAXLA
       COMMON /RNG   / IRA(8) , MAXLA
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       acl = -LOG(Acc1)
       ACC50 = Acc1/50.
@@ -4940,7 +4951,7 @@ C index, knowing that we are always using steps of 0.03.
       IF ( IRA(7).NE.0 ) IRA(7) = IRA(7) + 1
       IF ( IRA(8).NE.0 ) IRA(8) = IRA(8) + 1
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE QRANGE
 C
@@ -4961,17 +4972,17 @@ C      Ibm    -
 C      Icm    -
 C      Idm    -
 C      Irl    - range to integrate over omega for each multipolarity
- 
+
       SUBROUTINE QRANGE(Icnt,Nlm,Lloc,Ibm,Icm,Idm,Irl)
       IMPLICIT NONE
-      INTEGER*4 Ibm , Icm , Icnt , Idm , Irl , is , k , ke , km , 
+      INTEGER*4 Ibm , Icm , Icnt , Idm , Irl , is , k , ke , km ,
      &          l , ld , Lloc , ls
       INTEGER*4 nlend , Nlm
       DIMENSION Lloc(8) , Irl(8)
       INTEGER*4 IRA , MAXLA
       COMMON /RNG   / IRA(8) , MAXLA
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       IF ( Icnt.EQ.1 ) THEN
          Nlm = 0
@@ -5036,7 +5047,7 @@ C      Irl    - range to integrate over omega for each multipolarity
          Idm = l
       ENDIF
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE AMPDER
 C
@@ -5072,20 +5083,20 @@ C      I57    - switch which is either 5 or 7. This tells LAISUM to access eithe
       SUBROUTINE AMPDER(I57)
       IMPLICIT NONE
       REAL*8 rsg
-      INTEGER*4 i1 , I57 , ibg , iend , iflg , indx , ir , is2 , k , 
+      INTEGER*4 i1 , I57 , ibg , iend , iflg , indx , ir , is2 , k ,
      &          lam , lax , ld , m , mm , n , nhold , nz
       COMPLEX*16 ARM
       COMMON /AZ    / ARM(1200,7)
       REAL*8 ELM , ELMU , ELML , SA
       COMMON /COMME / ELM(1500) , ELMU(1500) , ELML(1500) , SA(1500)
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       INTEGER*4 NMAX , NDIM , NMAX1
       COMMON /COEX2 / NMAX , NDIM , NMAX1
       REAL*8 D2W
       INTEGER*4 NPT , NDIV , KDIV , LAMR , ISG , NSW , ISG1
-      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW , 
+      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW ,
      &                ISG1
       INTEGER*4 ISSTAR , ISSTO , MSTORE
       COMMON /PINT  / ISSTAR(101) , ISSTO(100) , MSTORE(2,100)
@@ -5158,7 +5169,7 @@ C     Zero ARM(k,4) and ARM(k,6) for each substate used
  100     CONTINUE
       ENDDO ! Loop over lambda
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE LAISUM
 C
@@ -5208,11 +5219,11 @@ C ARM are the excitation amplitudes of the substates.
 C q is the Qe or Qm calculated by the functions QE and QM, respectively and
 C stored in ZETA array in the function SNAKE.
 C z is the coupling parameter zeta, calculated in the function LSLOOP.
-      
+
       SUBROUTINE LAISUM(Ir,N,Rsg,Lam,Ld,Nz,I57)
       IMPLICIT NONE
       REAL*8 q , rmir , rmis , rmu , Rsg , z
-      INTEGER*4 i2 , i3 , I57 , iii , indq , indx , Ir , irs , is , 
+      INTEGER*4 i2 , i3 , I57 , iii , indq , indx , Ir , irs , is ,
      &          is1 , is2 , ismin , isplus
       INTEGER*4 la , Lam , Ld , m , mrange , mua , N , Nz
       COMPLEX*16 FAZA , pamp , pamp1
@@ -5222,11 +5233,11 @@ C z is the coupling parameter zeta, calculated in the function LSLOOP.
       COMMON /AZ    / ARM(1200,7)
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       REAL*8 D2W
       INTEGER*4 NPT , NDIV , KDIV , LAMR , ISG , NSW , ISG1
-      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW , 
+      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW ,
      &                ISG1
       INTEGER*4 ISSTAR , ISSTO , MSTORE
       COMMON /PINT  / ISSTAR(101) , ISSTO(100) , MSTORE(2,100)
@@ -5235,9 +5246,9 @@ C z is the coupling parameter zeta, calculated in the function LSLOOP.
       REAL*8 ZETA
       INTEGER*4 LZETA
       COMMON /CCOUP / ZETA(155600) , LZETA(8)
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       REAL*8 CAT
       INTEGER*4 ISMAX
@@ -5248,7 +5259,7 @@ C z is the coupling parameter zeta, calculated in the function LSLOOP.
       COMMON /ALLC  / LOCQ(8,7)
       INTEGER*4 NSTART , NSTOP
       COMMON /CEXC0 / NSTART(101) , NSTOP(100)
-      
+
       rmir = CAT(Ir,3) ! m quantum number of substate Ir
       iii = 0
       IF ( Lam.GT.6 ) iii = 1
@@ -5352,7 +5363,7 @@ C in the function SETIN.
       REAL*8 XI
       COMMON /CXI   / XI(1500)
       DATA ci/(0.,1.)/
-      
+
       expox = TCEXP(ci*XI(Inx)*ADB(Npt)*Isg)
       EXPON = expox
       IF ( Ndiv.NE.0 ) THEN
@@ -5360,7 +5371,7 @@ C in the function SETIN.
          EXPON = expox + DBLE(Kdiv)*(expo1-expox)/DBLE(Ndiv)
       ENDIF
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION FAZA
 C
@@ -5404,7 +5415,7 @@ C      Phase
       ENDIF
       FAZA = DCMPLX(Rsg,0.D0) ! mu is odd, so sign changes with sign of omega
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE SETIN
 C
@@ -5427,13 +5438,13 @@ C adiabatic parameters are stored in ADB in common block ADX.
 C
 C LP12 (from common MGN) is the number of values to calculate. This is set to
 C 365  in GOSIA, which is the dimension of the array.
- 
+
       SUBROUTINE SETIN
       IMPLICIT NONE
       INTEGER*4 k
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       REAL*8 CH , SH
       COMMON /HIPER / SH(365) , CH(365)
@@ -5442,12 +5453,12 @@ C 365  in GOSIA, which is the dimension of the array.
       REAL*8 EPS, EROOT, FIEX
       INTEGER*4 IEXP, IAXS
       COMMON /KIN   / EPS(50) , EROOT(50) , FIEX(50,2) , IEXP , IAXS(50)
-      
+
       DO k = 1 , LP12
          ADB(k) = EPS(IEXP)*SH(k) + .03d0*(k-1)
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE STING
 C
@@ -5479,14 +5490,14 @@ C      NPT    - index in ADB array (this is omega / 0.03)
 C
 C Formal parameters:
 C      Irld   - index into ARM array
- 
+
       SUBROUTINE STING(Irld)
       IMPLICIT NONE
       REAL*8 rsg , w0
-      INTEGER*4 i , i57 , ibg , iend , indx , Irld , is2 , j , j1 , 
+      INTEGER*4 i , i57 , ibg , iend , indx , Irld , is2 , j , j1 ,
      &          jj , lam , ld , maxh , mm , n , nz
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       COMPLEX*16 ARM
       COMMON /AZ    / ARM(1200,7)
@@ -5503,7 +5514,7 @@ C      Irld   - index into ARM array
       COMMON /CCOUP / ZETA(155600) , LZETA(8)
       REAL*8 D2W
       INTEGER*4 NPT , NDIV , KDIV , LAMR , ISG , NSW , ISG1
-      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW , 
+      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW ,
      &                ISG1
       REAL*8 CAT
       INTEGER*4 ISMAX
@@ -5516,7 +5527,7 @@ C      Irld   - index into ARM array
       rsg = -1.
       IFLG = 1
       w0 = IRA(MAXLA)*.03 + .03 ! Maximum omega to calculate for (steps of 0.03)
-      
+
       DO j = 1 , ISMAX ! For substate used, zero ARM array
          DO jj = 1 , 6
             ARM(j,jj) = (0.,0.)
@@ -5528,9 +5539,9 @@ C      Irld   - index into ARM array
          LAMR(j) = 0 ! Initially mark that we shouldn't calculate any multipolarity
       ENDDO
       LAMR(MAXLA) = 1 ! Mark that we should calculate this multipolarity
-      
+
       NPT = IRA(MAXLA) + 1 ! Number of omega values to calculate for this multipolarity
-      
+
       IF ( MAXLA.EQ.7 .AND. IRA(2).NE.0 ) THEN ! Special case of M1
          LAMR(2) = 1
          NPT = NPT - 1
@@ -5578,7 +5589,7 @@ C                 Calculate sum over matrix elements
             ENDIF ! If we should calculate this multipolarity
          ENDDO ! Loop over multipolarities
          IF ( j.EQ.4 ) GOTO 200 ! We've set everything up, so finish
-         
+
          DO i = 1 , ISMAX ! Shift terms up one
             ARM(i,j) = ARM(i,4)
             ARM(i,4) = (0.,0.)
@@ -5588,14 +5599,14 @@ C                 Calculate sum over matrix elements
 
 C     Calculate amplitude
  200  CALL LAIAMP(Irld,w0)
-      
+
       MAXLA = maxh ! Restore MAXLA
 
       DO jj = 1 , 8
          IRA(jj) = ABS(IRA(jj)) ! Make sure all the IRA are positive again
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE LAIAMP
 C
@@ -5625,23 +5636,23 @@ C
 C Formal parameters:
 C      Ir     - index of substate
 C      W0     - omega limit
-      
+
       SUBROUTINE LAIAMP(Ir,W0)
       IMPLICIT NONE
-      REAL*8 epsi , errt , pm , ppp , rmir , rmis , rmu , TCABS , W0 , 
+      REAL*8 epsi , errt , pm , ppp , rmir , rmis , rmu , TCABS , W0 ,
      &       xiv , z
-      INTEGER*4 i1 , i2 , i3 , indx , Ir , is , is1 , is2 , ismin , 
+      INTEGER*4 i1 , i2 , i3 , indx , Ir , is , is1 , is2 , ismin ,
      &          isplus , la , lam
       INTEGER*4 ld , LEADF , m , MEM , mrange , mua , nz
       COMPLEX*16 STAMP , dis , uhuj
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       COMPLEX*16 ARM
       COMMON /AZ    / ARM(1200,7)
       REAL*8 D2W
       INTEGER*4 NPT , NDIV , KDIV , LAMR , ISG , NSW , ISG1
-      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW , 
+      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW ,
      &                ISG1
       REAL*8 ZETA
       INTEGER*4 LZETA
@@ -5662,7 +5673,7 @@ C      W0     - omega limit
       epsi = EPS(IEXP) ! epsilon
       errt = EROOT(IEXP) ! sqrt(epsilon^2 - 1)
       rmir = CAT(Ir,3) ! m quantum number of substate Ir
-      
+
       DO i1 = 1 , LAMMAX ! Loop on multipolarity
          lam = LAMDA(i1) ! Get multipolarity
          nz = LZETA(lam) ! nz is an index into ZETA array for this multipolarity
@@ -5719,7 +5730,7 @@ C                             estimate amplitude
       ENDDO ! Loop on lambda
       ARM(Ir,5) = DCMPLX(SQRT(1.-ppp),0.D0)
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE FAZA1
 C
@@ -5757,7 +5768,7 @@ C      Rmu    - mu
       ENDIF
       Dis = DCMPLX(-DBLE(irs),0.D0)
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE TRINT
 C
@@ -5797,7 +5808,7 @@ C Handbook of Mathematical Functions with Formulas, Graphs and Mathematical
 C Tables, National Bureau of Standards, 8th Ed. P233 Eqs. 5.2.38 and 5.2.39 to
 C calculate the auxillary functions f and g and then use 5.2.8 and 5.2.9 to
 C obtain the values of pi/2 - Si and -Ci from f and g.
-      
+
       SUBROUTINE TRINT(Arg,Si,Ci)
       IMPLICIT NONE
       REAL*8 a , Arg , c , Ci , f , g , POL4 , s , Si
@@ -5821,11 +5832,11 @@ C     Otherwise use the expansion in terms of sine and cosine
       s = SIN(Arg)
       c = COS(Arg)
 
-C     Here we use an approximation. If Arg is quite large, a is very large 
-C     and the four polynomials are all huge. Moreover, the four polynomials 
-C     are almost identical, so the ratios are unity. So in this case, 
+C     Here we use an approximation. If Arg is quite large, a is very large
+C     and the four polynomials are all huge. Moreover, the four polynomials
+C     are almost identical, so the ratios are unity. So in this case,
 C     f = 1./Arg and g=1./a is a good approximation.
-      
+
       f = 1.
       g = 1.
 
@@ -5842,15 +5853,15 @@ C     from that reference:
          g = g/POL4(1.D0,48.196927D0,482.485984D0,1114.978885D0,
      &       449.690326D0,a)
       ENDIF
-      
+
       f = f/Arg
       g = g/a
 
-C     From Abramowitz and Stegun 5.2.8 and 5.2.9:      
+C     From Abramowitz and Stegun 5.2.8 and 5.2.9:
       Si = f*c + g*s ! This is actually pi/2 - Si compared to Abramowitz and Stegun
       Ci = g*c - f*s ! This is actually -Ci compared to Abramowitz and Stegun
 99999 END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION POL4
 C
@@ -5866,14 +5877,14 @@ C      C3     - coefficient of polynomial
 C      C4     - coefficient of polynomial
 C
 C Evaluate C0 * A^4 + C1 * A^3 + C2 * A^2 + C3 * A + C4
- 
+
       REAL*8 FUNCTION POL4(C0,C1,C2,C3,C4,A)
       IMPLICIT NONE
       REAL*8 A , C0 , C1 , C2 , C3 , C4
 
       POL4 = C4 + A*(C3+A*(C2+A*(C1+A*C0)))
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION STAMP
 C
@@ -5896,10 +5907,10 @@ C collision functions.
 C
 C Return value:
 C      Estimated amplitude
- 
+
       COMPLEX*16 FUNCTION STAMP(Epsi,Errt,Xiv,Dw,W0,Lmda,Mua)
       IMPLICIT NONE
-      REAL*8 a , axi , b , bic , bic2 , bis , bis2 , ca , cb , cia , 
+      REAL*8 a , axi , b , bic , bic2 , bis , bis2 , ca , cb , cia ,
      &       cib , cic , cis , Dw , dwi , Epsi , Errt , ex , exa , fct
       INTEGER*4 la , Lmda , mi , Mua
       REAL*8 sa , sb , sia , sib , W0 , Xiv
@@ -5969,7 +5980,7 @@ C      Estimated amplitude
       STAMP = STAMP*fct
       STAMP = CONJG(STAMP)
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE RESET
 C
@@ -5988,7 +5999,7 @@ C      NSTART - index in CAT of first substate associated with a level
 C
 C Formal parameters:
 C      Iso    - isotropic flag
- 
+
       SUBROUTINE RESET(Iso)
       IMPLICIT NONE
       INTEGER*4 ir , Iso , j
@@ -6001,7 +6012,7 @@ C      Iso    - isotropic flag
       COMMON /CLCOM8/ CAT(1200,3) , ISMAX
       INTEGER*4 NMAX , NDIM , NMAX1
       COMMON /COEX2 / NMAX , NDIM , NMAX1
-      
+
       IF ( Iso.EQ.0 ) THEN
          DO j = 1 , NMAX ! Loop over levels
             ir = NSTART(j) - 1 ! Index of first substate of level - 1
@@ -6013,14 +6024,14 @@ C      Iso    - isotropic flag
          ENDDO
          GOTO 99999
       ENDIF
-       
+
       DO j = 1 , ISMAX ! Loop over substates
          ARM(j,1) = ARM(j,2)
          ARM(j,2) = ARM(j,3)
          ARM(j,3) = ARM(j,4)
       ENDDO
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE HALF
 C
@@ -6037,7 +6048,7 @@ C      NSTART - index in CAT of first substate associated with a level
 C
 C Formal parameters:
 C      Iso    - isotropic flag
- 
+
       SUBROUTINE HALF(Iso)
       IMPLICIT NONE
       INTEGER*4 ir , Iso , j
@@ -6064,7 +6075,7 @@ C      Iso    - isotropic flag
          ENDDO
          GOTO 99999
       ENDIF
-       
+
       DO j = 1 , ISMAX ! Loop over substates
          fpom = ARM(j,3)
          ARM(j,1) = -.0625*(ARM(j,4)+ARM(j,1))
@@ -6073,7 +6084,7 @@ C      Iso    - isotropic flag
          ARM(j,2) = fpom
       ENDDO
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE DOUBLE
 C
@@ -6090,7 +6101,7 @@ C      NSTART - index in CAT of first substate associated with a level
 C
 C Formal parameters:
 C      Iso    - isotropic flag
- 
+
       SUBROUTINE DOUBLE(Iso)
       IMPLICIT NONE
       INTEGER*4 ir , Iso , j
@@ -6104,21 +6115,21 @@ C      Iso    - isotropic flag
       COMMON /CLCOM8/ CAT(1200,3) , ISMAX
       INTEGER*4 NMAX , NDIM , NMAX1
       COMMON /COEX2 / NMAX , NDIM , NMAX1
-      
+
       IF ( Iso.EQ.0 ) THEN
          DO j = 1 , NMAX ! Loop over levels
             ir = NSTART(j) - 1 ! Index of first substate of level - 1
  20         ir = ir + 1
             fpom = ARM(ir,2)
             ARM(ir,2) = -8.*ARM(ir,3) + 6.*ARM(ir,2) + 3.*ARM(ir,4)
-            ARM(ir,1) = -16.*ARM(ir,1) + 9.*ARM(ir,2) + 9.*fpom - 
+            ARM(ir,1) = -16.*ARM(ir,1) + 9.*ARM(ir,2) + 9.*fpom -
      &                  ARM(ir,4)
             ARM(ir,3) = fpom
             IF ( CAT(ir,3).LT.-.1 ) GOTO 20
          ENDDO
          GOTO 99999
       ENDIF
-       
+
       DO j = 1 , ISMAX ! Loop over substates
          fpom = ARM(j,2)
          ARM(j,2) = -8.*ARM(j,3) + 6.*ARM(j,2) + 3.*ARM(j,4)
@@ -6126,7 +6137,7 @@ C      Iso    - isotropic flag
          ARM(j,3) = fpom
       ENDDO
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE PATH
 C
@@ -6143,7 +6154,7 @@ C      NSTOP  - index in CAT of last substate associated with a level
 C
 C Formal parameters:
 C      Irld   - index into ARM array
- 
+
       SUBROUTINE PATH(Irld)
       IMPLICIT NONE
       REAL*8 spm , vl
@@ -6174,7 +6185,7 @@ C      Irld   - index into ARM array
       ENDDO
       IPATH(1) = Irld ! Special case of ground state
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE INTG
 C
@@ -6242,16 +6253,16 @@ C The function RESET is called to advance n by one. i.e. f(n-3) is set to the
 C old value of f(n-2), f(n-2) to the old value of f(n-1) and f(n-1) to the old
 C value of f(n).
 
- 
+
       SUBROUTINE INTG(Ien)
       IMPLICIT NONE
       REAL*8 f , rim , rl , srt
-      INTEGER*4 i , i57 , Ien , ihold , intend , ir , ir1 , k , kast , 
+      INTEGER*4 i , i57 , Ien , ihold , intend , ir , ir1 , k , kast ,
      &          mir , n
       COMPLEX*16 hold
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       COMPLEX*16 ARM
       COMMON /AZ    / ARM(1200,7)
@@ -6268,7 +6279,7 @@ C value of f(n).
       COMMON /COEX2 / NMAX , NDIM , NMAX1
       REAL*8 D2W
       INTEGER*4 NPT , NDIV , KDIV , LAMR , ISG , NSW , ISG1
-      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW , 
+      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW ,
      &                ISG1
       INTEGER*4 IFLG
       COMMON /FLA   / IFLG
@@ -6278,7 +6289,7 @@ C value of f(n).
       COMMON /PTH   / IPATH(100) , MAGA(100)
       INTEGER*4 INTERV
       COMMON /CEXC9 / INTERV(50)
-      
+
       intend = INTERV(Ien) ! Default accuracy set by INT option of OP,CONT
       D2W = .03 ! We use steps of 0.03 in omega
       NSW = 1
@@ -6290,7 +6301,7 @@ C value of f(n).
          LAMR(i) = 0
          IF ( (NPT+NSW).LT.IRA(i) ) LAMR(i) = 1
       ENDDO
-C     Predictor 
+C     Predictor
       IF ( ISO.EQ.0 ) THEN
          DO n = 1 , NMAX ! For each level
             ir = NSTART(n) - 1 ! First substate - 1
@@ -6327,7 +6338,7 @@ C     Predictor
 
 C     Calculate derivatives of amplitudes
       CALL AMPDER(i57)
-      
+
 C     Corrector
       IF ( ISO.EQ.0 ) THEN
          DO n = 1 , NMAX ! For each level
@@ -6398,12 +6409,12 @@ C
                   ENDIF
                ENDIF
             ENDIF
-             
+
          ENDIF ! if kast>=intend
       ENDIF
       GOTO 100
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE NEWLV
 C
@@ -6436,17 +6447,17 @@ C      La     - multipolarity
 C
 C Note that the exponential is calculated by EXPON. This file does the
 C storage part.
-      
+
       SUBROUTINE NEWLV(N,Ld,La)
       IMPLICIT NONE
       INTEGER*4 i2 , indx , La , Ld , LEADF , m , MEM , N
       COMPLEX*16 EXPON
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       REAL*8 D2W
       INTEGER*4 NPT , NDIV , KDIV , LAMR , ISG , NSW , ISG1
-      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW , 
+      COMMON /CAUX  / NPT , NDIV , KDIV , LAMR(8) , ISG , D2W , NSW ,
      &                ISG1
       INTEGER*4 ISSTAR , ISSTO , MSTORE
       COMMON /PINT  / ISSTAR(101) , ISSTO(100) , MSTORE(2,100)
@@ -6472,7 +6483,7 @@ C storage part.
          ENDIF
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE CODE7
 C
@@ -6491,7 +6502,7 @@ C      N      - index of initial level
 C      Mt     - index of final level
 C      Inqa   - result of operation
 C      Indx   - Index of matrix element
- 
+
       SUBROUTINE CODE7(Ir,Is,N,Mt,Inqa,Indx)
       IMPLICIT NONE
       INTEGER*4 idm , idn , Indx , Inqa , Ir , Is , ism , Mt , N
@@ -6500,7 +6511,7 @@ C      Indx   - Index of matrix element
       REAL*8 QAPR
       INTEGER*4 IAPR , ISEX
       COMMON /APRCAT/ QAPR(1500,2,7) , IAPR(1500,2) , ISEX(100)
-      
+
       IAPR(Indx,1) = N  ! Index of initial level
       IAPR(Indx,2) = Mt ! Index of final level
       IF ( IPATH(N).EQ.0 .OR. IPATH(Mt).EQ.0 ) THEN
@@ -6528,7 +6539,7 @@ C      Indx   - Index of matrix element
       ENDIF
       Inqa = 7
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE APRAM
 C
@@ -6556,7 +6567,7 @@ C      Acca   - accuracy required
       SUBROUTINE APRAM(Iexp,Inc,Indx,Irld,Acca)
       IMPLICIT NONE
       REAL*8 Acca , accah , uwa
-      INTEGER*4 i1 , i56 , i7 , Iexp , img , Inc , Indx , Irld , itm , 
+      INTEGER*4 i1 , i56 , i7 , Iexp , img , Inc , Indx , Irld , itm ,
      &          j , jidim , jj , k , ktoto , l , l1 , l2 , l3 , m
       COMPLEX*16 ARM
       COMMON /AZ    / ARM(1200,7)
@@ -6677,7 +6688,7 @@ C     Initialise (Inc = 0)
       GOTO 200
 
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE NEWCAT
 C
@@ -6699,19 +6710,19 @@ C      XIR    - [for maps]
 C
 C Formal parameters:
 C     Iexp    - experiment number
-C     Jidim   - 
-      
+C     Jidim   -
+
       SUBROUTINE NEWCAT(Iexp,Jidim)
       IMPLICIT NONE
       REAL*8 a , b , FXIS1 , FXIS2 , q1 , q2 , wg , wl , xp , xx , zt
-      INTEGER*4 Iexp , ist , istop , Jidim , k , kk , n , 
+      INTEGER*4 Iexp , ist , istop , Jidim , k , kk , n ,
      &          ng , nl
       REAL*8 PARX, PARXM, XIR
       COMMON /MAP   / PARX(50,12,5) , PARXM(50,4,10,6) , XIR(6,50)
       REAL*8 XI
       COMMON /CXI   / XI(1500)
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       INTEGER*4 NMAX , NDIM , NMAX1
       COMMON /COEX2 / NMAX , NDIM , NMAX1
@@ -6778,7 +6789,7 @@ C     Jidim   -
          ENDIF
       ENDDO ! Loop over electric multipolarities kk
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE POMNOZ
 C
@@ -6807,11 +6818,11 @@ C      Iw
 C      Img
 C      Jidim
 C      Ktoto  - number of iterations needed
- 
+
       SUBROUTINE POMNOZ(Acca,L,Iw,Ktoto,Img,Jidim)
       IMPLICIT NONE
       REAL*8 Acca , sig , TCABS , test , u
-      INTEGER*4 Img , Iw , Jidim , k , kk , Ktoto , L , m , mc , mc1 , 
+      INTEGER*4 Img , Iw , Jidim , k , kk , Ktoto , L , m , mc , mc1 ,
      &          mw , mw1
       COMPLEX*16 ci
       INTEGER*4 INHB
@@ -6889,7 +6900,7 @@ C        Test to see if we have achieved required accuracy
 
       IF ( INHB.NE.1 ) LERF = 1 ! Accuracy not achieved, so set error flag
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE TENB
 C
@@ -6917,13 +6928,13 @@ C can cope with half-integers.
       SUBROUTINE TENB(Icl,Bten,Lmax)
       IMPLICIT NONE
       REAL*8 Bten , ce , fc , si , WTHREJ , x
-      INTEGER*4 i , Icl , iha , ila , ilg , ind , isi , ite , jm , 
+      INTEGER*4 i , Icl , iha , ila , ilg , ind , isi , ite , jm ,
      &          jmp , k , kk , kp , l , ll , Lmax , lp , m
       INTEGER*4 mm , mp , ms , msp
       DIMENSION Bten(*)
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       REAL*8 CAT
       INTEGER*4 ISMAX
@@ -6997,7 +7008,7 @@ C can cope with half-integers.
          ENDIF ! If ms.NE.0
       ENDDO ! Loop over level i
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE TENS
 C
@@ -7014,12 +7025,12 @@ C      TETACM - theta of particle detector in center of mass frame (readonly)
 C      ZETA   - various coefficients (read/write)
 C
 C Formal parameter:
-C      Bten   - 
- 
+C      Bten   -
+
       SUBROUTINE TENS(Bten)
       IMPLICIT NONE
       REAL*8 arg , Bten , DJMM
-      INTEGER*4 i , ind , inz , iph , ix , k , k1 , kp , l , lp , 
+      INTEGER*4 i , ind , inz , iph , ix , k , k1 , kp , l , lp ,
      &          lpp , lx , lxx
       DIMENSION Bten(*)
       REAL*8 EPS, EROOT, FIEX
@@ -7072,7 +7083,7 @@ C      Bten   -
          ENDDO ! Loop over kp
       ENDDO ! Loop over level i
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION DJMM
 C
@@ -7098,12 +7109,12 @@ C previously calculated. For this to work, the variable djm has to be
 C declared with a SAVE statement, otherwise the variable is an automatic one,
 C which is created freshly each time the function is called.
 
- 
+
       REAL*8 FUNCTION DJMM(Beta,K,Kpp,Kp)
       IMPLICIT NONE
-      REAL*8 b1 , b2 , be , Beta , cb , ctb , djm , f , g , 
+      REAL*8 b1 , b2 , be , Beta , cb , ctb , djm , f , g ,
      &       sb , sk , ul
-      INTEGER*4 iczy , ifla , ifza , ill , j , ja , jb , jc , jd , K , 
+      INTEGER*4 iczy , ifla , ifza , ill , j , ja , jb , jc , jd , K ,
      &          Kp , Kpp , lca , loc , mas , mis
       DIMENSION djm(525) , iczy(525)
       REAL*8 BEQ
@@ -7111,7 +7122,7 @@ C which is created freshly each time the function is called.
       REAL*8 B
       COMMON /CB    / B(20)
       SAVE djm , iczy ! Added N. Warr Jul2007
-      
+
       ifza = 1
       IF ( Beta.LT.0. ) ifza = (-1)**(Kp+Kpp)
       sk = DBLE(K)
@@ -7145,7 +7156,7 @@ C     We have to calculate it
             RETURN
          ENDIF
       ENDIF
-       
+
       ctb = cb*cb/sb/sb
       ja = K + Kp + 1 ! K + \xi^\prime (+1 for indexing array)
       jb = K - Kp + 1 ! K - \xi^\prime (+1 for indexing array)
@@ -7187,7 +7198,7 @@ C     We have to calculate it
       djm(loc) = DJMM/ifza
       iczy(loc) = 1
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE FTBM
 C
@@ -7256,22 +7267,22 @@ C      Bten   -
 
       SUBROUTINE FTBM(Icll,Chisq,Idr,Ncall,Chilo,Bten)
       IMPLICIT NONE
-      REAL*8 aval , Bten , Chilo , chis1 , chish , Chisq , chisx , 
+      REAL*8 aval , Bten , Chilo , chis1 , chish , Chisq , chisx ,
      &       chx , fc , fx , polm , pr , prop , val , wz
       INTEGER*4 i1 , i11 , iapx , Icll , idec , Idr , iflg , ii , ile1 ,
      &          ile2 , ile3 , ilin , indx , inko
-      INTEGER*4 inp , inpo , inpx , inzz , inzzz , issp , itemp , ixx , 
+      INTEGER*4 inp , inpo , inpx , inzz , inzzz , issp , itemp , ixx ,
      &          izzz
       INTEGER*4 j , jj , jjgg , jjj , jk , jkl , jm , jmf , jmt , jmte ,
      &          jpp , jpz , jy , k , karm , kk , kk6 , kkx , kmt
-      INTEGER*4 knm , kx , larm , lcc , lcou , licz , lix , llx , lm , 
+      INTEGER*4 knm , kx , larm , lcc , lcou , licz , lix , llx , lm ,
      &          lmh , loc , loch , loct
       INTEGER*4 lp , lpit , lput , lpx , lpxd , ls , lst
       INTEGER*4 luu , lx , Ncall , nlin , nowr , npoz , nrest , nwyr
       DIMENSION jmte(6) , prop(6) , Bten(*)
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       INTEGER*4 NSTART , NSTOP
       COMMON /CEXC0 / NSTART(101) , NSTOP(100)
@@ -7301,8 +7312,8 @@ C      Bten   -
       COMMON /KIN   / EPS(50) , EROOT(50) , FIEX(50,2) , IEXP , IAXS(50)
       REAL*8 YEXP, CORF , DYEX , UPL , YNRM
       INTEGER*4 IY , NYLDE , IDRN , ILE
-      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) , 
-     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) , 
+      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) ,
+     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) ,
      &                YNRM(32,50) , IDRN , ILE(32)
       REAL*8 ELM , ELMU , ELML , SA
       COMMON /COMME / ELM(1500) , ELMU(1500) , ELML(1500) , SA(1500)
@@ -7310,16 +7321,16 @@ C      Bten   -
       COMMON /CLM   / LMAX
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       REAL*8 CAT
       INTEGER*4 ISMAX
       COMMON /CLCOM8/ CAT(1200,3) , ISMAX
       COMPLEX*16 ARM
       COMMON /AZ    / ARM(1200,7)
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       INTEGER*4 NMAX , NDIM , NMAX1
       COMMON /COEX2 / NMAX , NDIM , NMAX1
@@ -7629,7 +7640,7 @@ C      Bten   -
          ENDIF
       ENDIF
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE MINI
 C
@@ -7689,17 +7700,17 @@ C don't go outside the limits specified by the user.
       SUBROUTINE MINI(Chisq,Chiok,Nptl,Conv,Imode,Idr,Xtest,Ips,Is,Jjh,
      &                Bten)
       IMPLICIT NONE
-      REAL*8 a , a0 , a1 , b , Bten , c , ccd , chd , chil , chilo , 
-     &       Chiok , chirf , chis12 , chis13 , chisf , chisp , Chisq , 
+      REAL*8 a , a0 , a1 , b , Bten , c , ccd , chd , chil , chilo ,
+     &       Chiok , chirf , chis12 , chis13 , chisf , chisp , Chisq ,
      &       chiss , chl
       REAL*8 chx , cmax , Conv , crit , dl , dm , f1 , f2 , flt
-      REAL*8 gradp , ht , p , q , rfk , sel , shl , sumg1 , 
+      REAL*8 gradp , ht , p , q , rfk , sel , shl , sumg1 ,
      &       sumg2 , sumht , uxa , xkat , Xtest
-      INTEGER*4 i , icl1 , icl2 , icount , Idr , iht , iin , Imode , 
+      INTEGER*4 i , icl1 , icl2 , icount , Idr , iht , iin , Imode ,
      &          indx1 , inmx , ino , ipas , ipm
-      INTEGER*4 Ips , Is , istec , itf , j , jcoup , jcp , jin , 
+      INTEGER*4 Ips , Is , istec , itf , j , jcoup , jcp , jin ,
      &          Jjh , jjj , jlin , jnm , jpr , jsa , jst
-      INTEGER*4 kh2 , kkk , l , lnm , metf , mvfl , ncall , nlinn , 
+      INTEGER*4 kh2 , kkk , l , lnm , metf , mvfl , ncall , nlinn ,
      &          noflg , Nptl
       DIMENSION ipm(10) , Bten(*) , gradp(1500)
       REAL*8 GRAD , HLMLM , ELMH
@@ -7708,16 +7719,16 @@ C don't go outside the limits specified by the user.
       COMMON /ILEWY / NWR
       REAL*8 CHIS11
       COMMON /CH1T  / CHIS11
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       INTEGER*4 ITAK2
       COMMON /UWAGA / ITAK2
       REAL*8 YEXP, CORF , DYEX , UPL , YNRM
       INTEGER*4 IY , NYLDE , IDRN , ILE
-      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) , 
-     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) , 
+      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) ,
+     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) ,
      &                YNRM(32,50) , IDRN , ILE(32)
       REAL*8 DEVD, DEVU
       COMMON /DFTB  / DEVD(1500) , DEVU(1500)
@@ -7815,9 +7826,9 @@ C     Write correction factors
       DO jnm = 1 , LP4
          WRITE (11) (CORF(jnm,kh2),kh2=1,LP6)
       ENDDO
-       
+
       IF ( IPS1.EQ.0 ) RETURN ! If IPS1 = 0, terminate after writing correction factors
-       
+
  200  noflg = 0
       ncall = 1
  300  sumht = 0.
@@ -7950,7 +7961,7 @@ C     Write correction factors
             IF ( metf.NE.0 ) THEN
                dm = 0.
                DO jnm = 1 , MEMAX
-                  IF ( IVAR(jnm).EQ.2 .OR. IVAR(jnm).EQ.1 ) dm = dm + 
+                  IF ( IVAR(jnm).EQ.2 .OR. IVAR(jnm).EQ.1 ) dm = dm +
      &                 ELM(jnm)*ELM(jnm)*GRAD(jnm)*GRAD(jnm)
                ENDDO
                dm = SQRT(dm)
@@ -8010,7 +8021,7 @@ C     Write correction factors
             HLMLM(l) = ELM(l)
          ENDDO
          DO l = 1 , MEMAX
-            IF ( ABS(GRAD(l)).LE.DLOCK .AND. LOCKS.EQ.1 .AND. 
+            IF ( ABS(GRAD(l)).LE.DLOCK .AND. LOCKS.EQ.1 .AND.
      &           icount.EQ.1 .AND. IVAR(l).LE.999 .AND. IVAR(l).NE.0 )
      &           THEN
                IF ( KFERR.NE.1 ) KVAR(l) = 0
@@ -8022,7 +8033,7 @@ C     Write correction factors
          ENDDO
          istec = 0
       ENDIF
-       
+
  400  DO j = 1 , MEMAX
          ELMH(j) = ELM(j)
       ENDDO
@@ -8038,7 +8049,7 @@ C     Find steepest gradient
             inmx = iht
          ENDIF
       ENDDO
-       
+
       ht = .01*ABS(ELM(inmx))/cmax
       mvfl = 0
       IF ( icount.NE.1 .AND. istec.EQ.1 ) THEN
@@ -8063,7 +8074,7 @@ C     Find steepest gradient
             gradp(iin) = 0.
          ENDIF
       ENDIF
-       
+
  500  DO j = 1 , MEMAX
          ELM(j) = ELMH(j) - ht*GRAD(j)
       ENDDO
@@ -8122,13 +8133,13 @@ C     Find steepest gradient
          ENDIF
       ENDIF
 
-C     Required chi square achieved       
+C     Required chi square achieved
  600  chil = Chisq
       IF ( Ips.EQ.0 ) WRITE (22,99006) icount
 99006 FORMAT (5X,'AT STEP',1X,1I5,1X,'CHISQ CRITERION FULFILLED')
       IF ( Ips.EQ.0 ) WRITE (22,99010) chil
       RETURN
-      
+
  700  IF ( LOCKF.EQ.0 ) THEN ! Terminate if convergence satisfied
          IF ( Chisq.GE.chil ) THEN
             DO jjj = 1 , MEMAX
@@ -8172,11 +8183,11 @@ C     Required chi square achieved
       ENDIF
       INTR = 0
       RETURN
-       
+
 99010 FORMAT (5X,'*** CHISQ=',1E14.6,1X,'***')
 99011 FORMAT (1X/5X,'MATRIX ELEMENT',1X,1I3,1X,'LOCKED!')
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE CEGRY
 C
@@ -8249,28 +8260,28 @@ C      Nwyr   - number of data points contributing to chi squared
 C      Icall  -
 C      Issp   -
 C      Iredv  -
- 
+
       SUBROUTINE CEGRY(Chisq,Itemp,Chilo,Idr,Nwyr,Icall,Issp,Iredv)
       IMPLICIT NONE
       REAL*8 ccc , ccd , Chilo , Chisq , cnr , cocos , d , decen
       REAL*8 dl , effi , fi0 , fi1 , fic , figl , fm , g
-      REAL*8 gth , part , partl , rik , rl , rx , ry , 
+      REAL*8 gth , part , partl , rik , rl , rx , ry ,
      &       rys , rz , sf , sgm , sum3 , sumpr , TACOS
       REAL*8 tetrc , tfac , thc , wf
-      INTEGER*4 iabc , Icall , id , idc , Idr , ifdu , ifxd , ii , 
+      INTEGER*4 iabc , Icall , id , idc , Idr , ifdu , ifxd , ii ,
      &          ile2 , inclus
-      INTEGER*4 ipd , Iredv , Issp , Itemp , iva , iw , ixl , 
+      INTEGER*4 ipd , Iredv , Issp , Itemp , iva , iw , ixl ,
      &          ixm , iyex , jj
-      INTEGER*4 jj1 , jk , jpc , k , k9 , kc , kj , kk , l , l1 , 
+      INTEGER*4 jj1 , jk , jpc , k , k9 , kc , kj , kk , l , l1 ,
      &          lic , licz , ll1
       INTEGER*4 lth , lu , luu , na , nf , nf1 , ni , ni1 , Nwyr
       CHARACTER*4 wupl , war
       CHARACTER*4 op2
-      DIMENSION part(32,50,2) , lic(32) , lth(1500) , cnr(32,50) , 
+      DIMENSION part(32,50,2) , lic(32) , lth(1500) , cnr(32,50) ,
      &          partl(32,50,2)
       INTEGER*4 ICLUST , LASTCL , IRAWEX
-      REAL*8 SUMCL      
-      COMMON /CLUST / ICLUST(50,200) , LASTCL(50,20) , SUMCL(20,1500) , 
+      REAL*8 SUMCL
+      COMMON /CLUST / ICLUST(50,200) , LASTCL(50,20) , SUMCL(20,1500) ,
      &                IRAWEX(50)
       REAL*8 DEV
       COMMON /ODCH  / DEV(1500)
@@ -8278,7 +8289,7 @@ C      Iredv  -
       COMMON /COEX2 / NMAX , NDIM , NMAX1
       REAL*8 DELTA, ENDEC, ENZ
       INTEGER*4 ITMA
-      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) , 
+      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) ,
      &                ENZ(200)
       REAL*8 BETAR
       COMMON /BREC  / BETAR(50)
@@ -8302,7 +8313,7 @@ C      Iredv  -
       COMMON /IGRAD / IGRD
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       INTEGER*4 IMIN , LNORM
       COMMON /MINNI / IMIN , LNORM(50)
@@ -8314,9 +8325,9 @@ C      Iredv  -
       COMMON /YTEOR / YGN(1500) , YGP(1500) , IFMO
       INTEGER*4 KVAR
       COMMON /SEL   / KVAR(1500)
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       REAL*8 EG, CC, AGELI, Q
       INTEGER*4 NICC, NANG, ISPL
@@ -8324,8 +8335,8 @@ C      Iredv  -
      &                NICC , NANG(200) , ISPL
       REAL*8 YEXP, CORF , DYEX , UPL , YNRM
       INTEGER*4 IY , NYLDE , IDRN , ILE
-      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) , 
-     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) , 
+      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) ,
+     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) ,
      &                YNRM(32,50) , IDRN , ILE(32)
       REAL*8 EPS, EROOT, FIEX
       INTEGER*4 IEXP, IAXS
@@ -8335,7 +8346,7 @@ C      Iredv  -
       COMMON /WARN  / SGW , SUBCH1 , SUBCH2 , IWF
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       INTEGER*4 JSKIP
       COMMON /SKP   / JSKIP(50)
@@ -8511,10 +8522,10 @@ C              Correct for finite recoil
                            IF ( ABS(sgm).GE.SGW ) war = '*?!*'
                            ni1 = KSEQ(l1,3) ! Initial level of l1'th decay
                            nf1 = KSEQ(l1,4) ! Final level of l1'th decay
-                           WRITE (22,99007) ni , ni1 , nf , nf1 , 
-     &                            SPIN(ni) , SPIN(ni1) , SPIN(nf) , 
-     &                            SPIN(nf1) , ENDEC(l) , ENDEC(l1) , 
-     &                            YGN(l)*CNOR(k9,IEXP) , YEXP(k9,lu) , 
+                           WRITE (22,99007) ni , ni1 , nf , nf1 ,
+     &                            SPIN(ni) , SPIN(ni1) , SPIN(nf) ,
+     &                            SPIN(nf1) , ENDEC(l) , ENDEC(l1) ,
+     &                            YGN(l)*CNOR(k9,IEXP) , YEXP(k9,lu) ,
      &                            100.*(YEXP(k9,lu)-YGN(l)*CNOR(k9,IEXP)
      &                            )/YEXP(k9,lu) , sgm , war
 99007                      FORMAT (4X,1I2,'+',1I2,'--',1I2,'+',1I2,3X,
@@ -8531,9 +8542,9 @@ C              Correct for finite recoil
                            sgm = (YEXP(k9,lu)-YGN(l)*CNOR(k9,IEXP))
      &                           /DYEX(k9,lu)
                            IF ( ABS(sgm).GE.SGW ) war = '*?!*'
-                           WRITE (22,99013) ni , nf , SPIN(ni) , 
+                           WRITE (22,99013) ni , nf , SPIN(ni) ,
      &                            SPIN(nf) , ENDEC(l) , YGN(l)
-     &                            *CNOR(k9,IEXP) , YEXP(k9,lu) , 
+     &                            *CNOR(k9,IEXP) , YEXP(k9,lu) ,
      &                            100.*(YEXP(k9,lu)-YGN(l)*CNOR(k9,IEXP)
      &                            )/YEXP(k9,lu) , sgm , war
                            SUBCH1 = SUBCH1 + sgm*sgm
@@ -8556,7 +8567,7 @@ C              Correct for finite recoil
      &                             *CNOR(k9,IEXP)/DYEX(k9,lu)
                               IF ( ITS.EQ.1 .AND. INM.EQ.1 )
      &                             WRITE (15,*) IEXP , rik/CNOR(1,IEXP)
-     &                             , CNOR(1,IEXP) , DYEX(k9,lu) , 
+     &                             , CNOR(1,IEXP) , DYEX(k9,lu) ,
      &                             YEXP(k9,lu)
                               CALL SIXEL(rik,ry,EMH,jk,kk,INM,licz)
                            ENDIF
@@ -8588,17 +8599,17 @@ C              Correct for finite recoil
                         IF ( ry.GT.UPL(k9,IEXP) .AND. lth(l).EQ.0 )
      &                       wupl = 'UPL!'
                         IF ( IPRM(16).NE.0 .OR. wupl.NE.'    ' ) THEN
-                           IF ( wupl.EQ.'    ' ) WRITE (22,99008) ni , 
-     &                          nf , SPIN(ni) , SPIN(nf) , ENDEC(l) , 
+                           IF ( wupl.EQ.'    ' ) WRITE (22,99008) ni ,
+     &                          nf , SPIN(ni) , SPIN(nf) , ENDEC(l) ,
      &                          YGN(l)*CNOR(k9,IEXP) , wupl
 99008                      FORMAT (6X,1I2,5X,1I2,7X,1F4.1,6X,1F4.1,9X,
      &                             1F6.4,6X,1E9.4,10X,1A4)
                            IF ( wupl.NE.'    ' ) THEN
                               sgm = (ry-UPL(k9,IEXP))/UPL(k9,IEXP)
-                              WRITE (22,99013) ni , nf , SPIN(ni) , 
+                              WRITE (22,99013) ni , nf , SPIN(ni) ,
      &                               SPIN(nf) , ENDEC(l) , YGN(l)
      &                               *CNOR(k9,IEXP) , UPL(k9,IEXP)
-     &                               *CNOR(k9,IEXP)*YGN(IDRN) , 
+     &                               *CNOR(k9,IEXP)*YGN(IDRN) ,
      &                               100.*(1.-YGN(l)/UPL(k9,IEXP)
      &                               /YGN(IDRN)) , sgm , wupl
                               SUBCH1 = SUBCH1 + sgm*sgm
@@ -8611,7 +8622,7 @@ C              Correct for finite recoil
      &                          /UPL(k9,IEXP)
                         Chilo = Chilo + LOG(ry/UPL(k9,IEXP))**2
                         IF ( IWF.NE.0 ) THEN ! If warning flag is set
-                           WRITE (22,99009) IEXP , ni , nf , 
+                           WRITE (22,99009) IEXP , ni , nf ,
      &                            ry/UPL(k9,IEXP)
 99009                      FORMAT (5X,'WARNING-EXP.',1I2,2X,'TRANS. ',
      &                             1I2,'--',1I2,5X,
@@ -8758,7 +8769,7 @@ C           If we want a common normalisation, sort it out here
                   ENDIF ! IF ( k.NE.1 )
                ENDIF ! IF ( LNORM(jj).EQ.jj )
             ENDIF ! IF ( INNR.NE.1 )
-             
+
          ENDIF ! IF ( JSKIP(jj).NE.0 )
       ENDDO ! Loop on experiment
 
@@ -8798,7 +8809,7 @@ C     Calculate chi squared
 99013 FORMAT (6X,1I2,5X,1I2,7X,1F4.1,6X,1F4.1,9X,1F6.4,6X,1E9.4,6X,
      &        1E9.4,3X,1F6.1,5X,1F4.1,10X,1A4)
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE FAKP
 C
@@ -8812,7 +8823,7 @@ C      IP     - table of primes
 C      IPI    - number of time a number is divisible by each prime in IP
 C      KF     - sum of factors of primes
 C      PILOG  - table of natural logs of primes
- 
+
       SUBROUTINE FAKP
       IMPLICIT NONE
       INTEGER*4 i , k , l
@@ -8826,7 +8837,7 @@ C     Calculate log of primes
          PILOG(i) = LOG(x)
       ENDDO
 
-C     Initialise KF       
+C     Initialise KF
       DO l = 1 , 26
          KF(1,l) = 0
          KF(2,l) = 0
@@ -8840,7 +8851,7 @@ C     Calculate factors of numbers
          ENDDO
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE PRIM
 C
@@ -8854,7 +8865,7 @@ C      IPI    - multipliers for each prime
 C
 C Formal parameters:
 C      N      - number N
- 
+
       SUBROUTINE PRIM(N)
       IMPLICIT NONE
       INTEGER*4 i , N , nni , nnk
@@ -8873,7 +8884,7 @@ C      N      - number N
          ENDIF
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE SEQ
 C
@@ -8909,30 +8920,30 @@ C We store the order in the KSEQ array of common block LEV.
 C
 C Note that in the code, a multipolarity 1 = E1, 2 = E2 ... 6 = E6, 7 = M1,
 C 8 = M2.
- 
+
       SUBROUTINE SEQ(Idr)
       IMPLICIT NONE
       REAL*8 CONV , ega , egs , emax , F , GF , spinf , spini , twoi
-      INTEGER*4 idecay , Idr , indx , inx , inx1 , ir , is , istr1 , 
-     &          istr2 , j , js , jsave , k , kpa , l , la , la1 , 
+      INTEGER*4 idecay , Idr , indx , inx , inx1 , ir , is , istr1 ,
+     &          istr2 , j , js , jsave , k , kpa , l , la , la1 ,
      &          ld , LEADF
       INTEGER*4 m , m1 , m6 , MEM , mk , mule , mulm , n , n1 , nob
       INTEGER*4 NMAX , NDIM , NMAX1
       COMMON /COEX2 / NMAX , NDIM , NMAX1
       REAL*8 DELTA, ENDEC, ENZ
       INTEGER*4 ITMA
-      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) , 
+      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) ,
      &                ENZ(200)
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       REAL*8 TAU
       INTEGER*4 KSEQ
@@ -8941,7 +8952,7 @@ C 8 = M2.
       INTEGER*4 KLEC
       COMMON /CATLF / FP(4,1500,3) , GKP(4,1500,2) , KLEC(100)
       DATA jsave/0/
-      
+
       m6 = 0
       DO l = 1 , 6
          m6 = m6 + MULTI(l)
@@ -9119,7 +9130,7 @@ C     multipolarity
          IF ( KLEC(n).NE.0 ) NMAX1 = NMAX1 + 1
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION GF
 C
@@ -9145,7 +9156,7 @@ C can handle half-integers.
       IMPLICIT NONE
       INTEGER*4 i , ix , jfz , jiz , K , kz , L , lz
       REAL*8 phase , Sjf , Sji , WSIXJ
-      
+
       GF = 0.
       IF ( L.EQ.0 ) RETURN
       ix = INT(Sji+Sjf+.0001)
@@ -9158,7 +9169,7 @@ C can handle half-integers.
       lz = L*2
       GF = phase*SQRT((jiz+1.)*(jfz+1.))*WSIXJ(jiz,jiz,kz,jfz,jfz,lz)
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION F
 C
@@ -9197,7 +9208,7 @@ C the values to calculate, so that they can handle half-integers correctly.
       IMPLICIT NONE
       INTEGER*4 ix , jfz , jiz , K , kz , l , L1 , l1z , L2 , l2z
       REAL*8 phase , Sjf , Sji , WSIXJ , WTHREJ
-      
+
       F = 0.
       IF ( (L1*L2).EQ.0 ) RETURN
       ix = INT(Sji+Sjf+.0001)
@@ -9212,7 +9223,7 @@ C the values to calculate, so that they can handle half-integers correctly.
       F = phase*SQRT((l1z+1.)*(l2z+1.)*(jiz+1.)*(kz+1.))
      &    *WTHREJ(l1z,l2z,kz,2,-2,0)*WSIXJ(jiz,jiz,kz,l2z,l1z,jfz)
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION CONV
 C
@@ -9270,14 +9281,14 @@ C     then use read the conversion coefficients from a file on unit 29.
             cpo(j) = CC(n1+j-1,N)
             cpo1(j) = EG(n1+j-1)
          ENDDO
-C        Interpolate 
+C        Interpolate
          IF ( ISPL.EQ. 0 ) CALL LAGRAN(cpo1,cpo,4,1,Ega,cv,2,1)
          IF ( ISPL.EQ. 1 ) CALL SPLNER(cpo1,cpo,4,Ega,cv,2)
          CONV = cv
          RETURN
       ENDIF
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION WTHREJ
 C
@@ -9305,14 +9316,14 @@ C Note that the values of the parameters are doubled, so that this function
 C can handle half-integers. In other words if you want to evaluate
 C \threej(J1 J2 J3 M1 M2 M3) you need to use call the function as:
 C WTHREJ(2 * J1, 2 * J2, 2 * J3, 2 * M1, 2 * M2, 2 * M3).
- 
+
       REAL*8 FUNCTION WTHREJ(J1,J2,J3,M1,M2,M3)
       IMPLICIT NONE
-      INTEGER*4 iz , iza , izb , izc , izd , ize , izexp , 
-     &          izf , izmax , izmin , J1 , J2 , J3 , jabc , jabm , 
+      INTEGER*4 iz , iza , izb , izc , izd , ize , izexp ,
+     &          izf , izmax , izmin , J1 , J2 , J3 , jabc , jabm ,
      &          jbma , jj1 , jj2
-      INTEGER*4 jj3 , jjha , jjhb , jjhc , jjhd , jlp , jma , jmax , 
-     &          jmb , jmc , jmd , jme , jmf , jta , jtb , jtc , jvo , 
+      INTEGER*4 jj3 , jjha , jjhb , jjhc , jjhd , jlp , jma , jmax ,
+     &          jmb , jmc , jmd , jme , jmf , jta , jtb , jtc , jvo ,
      &          jvora , M1
       INTEGER*4 M2 , M3 , mm1 , mm2 , mm3 , n , nmax
       REAL*8 qsumlo , sumlo , vorz , wthrep , zuthre
@@ -9320,13 +9331,13 @@ C WTHREJ(2 * J1, 2 * J2, 2 * J3, 2 * M1, 2 * M2, 2 * M3).
       REAL*8 PILOG
       INTEGER*4 IP , IPI , KF
       COMMON /FAKUL / IP(26) , IPI(26) , KF(101,26) , PILOG(26)
-      
+
       wthrep = 0.E+00
       jjha = (J1+J2-J3)/2 + 1
       jjhb = (J1-J2+J3)/2 + 1
       jjhc = (-J1+J2+J3)/2 + 1
 
-      IF ( (jjha.LT.1) .OR. (jjhb.LT.1) .OR. (jjhc.LT.1) .OR. 
+      IF ( (jjha.LT.1) .OR. (jjhb.LT.1) .OR. (jjhc.LT.1) .OR.
      &     ((M1+M2+M3).NE.0) ) THEN
          WTHREJ = wthrep
          GOTO 99999
@@ -9412,7 +9423,7 @@ C WTHREJ(2 * J1, 2 * J2, 2 * J3, 2 * M1, 2 * M2, 2 * M3).
       ENDIF
       WTHREJ = wthrep
 99999 END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION WSIXJ
 C
@@ -9440,14 +9451,14 @@ C Note that the values of the parameters are doubled, so that this function
 C can handle half-integers. In other words if you want to evaluate
 C \sixj(J1 J2 J3 L1 L2 L3) you need to use call the function as:
 C WSIXJ(2 * J1, 2 * J2, 2 * J3, 2 * L1, 2 * L2, 2 * L3).
- 
+
       REAL*8 FUNCTION WSIXJ(J1,J2,J3,L1,L2,L3)
       IMPLICIT NONE
-      INTEGER*4 irj , irl , isa , isb , isc , isumfa , iva , ivb , 
-     &          ivc , ivd , ivorfa , iz , iza , izb , izc , izd , 
+      INTEGER*4 irj , irl , isa , isb , isc , isumfa , iva , ivb ,
+     &          ivc , ivd , ivorfa , iz , iza , izb , izc , izd ,
      &          ize , izf
-      INTEGER*4 izg , izh , izmax , izmin , J1 , J2 , J3 , kqa , 
-     &          kqb , kqc , kqd , kra , krb , krc , krd , ksa , ksb , 
+      INTEGER*4 izg , izh , izmax , izmin , J1 , J2 , J3 , kqa ,
+     &          kqb , kqc , kqd , kra , krb , krc , krd , ksa , ksb ,
      &          ksc , ksd
       INTEGER*4 kta , ktb , ktc , ktd , kua , kub , kuc , L1 , L2 , L3 ,
      &          n , nmax
@@ -9456,15 +9467,15 @@ C WSIXJ(2 * J1, 2 * J2, 2 * J3, 2 * L1, 2 * L2, 2 * L3).
       REAL*8 PILOG
       INTEGER*4 IP , IPI , KF
       COMMON /FAKUL / IP(26) , IPI(26) , KF(101,26) , PILOG(26)
-      
+
       wsixp = 0.E+00
-      IF ( ((J1+J2-J3).GE.0) .AND. ((J1-J2+J3).GE.0) .AND. 
+      IF ( ((J1+J2-J3).GE.0) .AND. ((J1-J2+J3).GE.0) .AND.
      &     ((-J1+J2+J3).GE.0) ) THEN
-         IF ( ((J1+L2-L3).GE.0) .AND. ((J1-L2+L3).GE.0) .AND. 
+         IF ( ((J1+L2-L3).GE.0) .AND. ((J1-L2+L3).GE.0) .AND.
      &        ((-J1+L2+L3).GE.0) ) THEN
-            IF ( ((L1+J2-L3).GE.0) .AND. ((L1-J2+L3).GE.0) .AND. 
+            IF ( ((L1+J2-L3).GE.0) .AND. ((L1-J2+L3).GE.0) .AND.
      &           ((-L1+J2+L3).GE.0) ) THEN
-               IF ( ((L1+L2-J3).GE.0) .AND. ((L1-L2+J3).GE.0) .AND. 
+               IF ( ((L1+L2-J3).GE.0) .AND. ((L1-L2+J3).GE.0) .AND.
      &              ((-L1+L2+J3).GE.0) ) THEN
                   kqa = (J1+J2-J3)/2
                   kqb = (J1-J2+J3)/2
@@ -9539,7 +9550,7 @@ C WSIXJ(2 * J1, 2 * J2, 2 * J3, 2 * L1, 2 * L2, 2 * L3).
       ENDIF
  100  WSIXJ = wsixp
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE LAGRAN
 C
@@ -9569,7 +9580,7 @@ C Iscal = 3   FUNC(y) = sqrt(y)  FUNC1(y) = y^2
       INTEGER*4 i , Ipc , Irc , Iscal , j , Ndata
       DIMENSION X(*) , Y(*) , w(101) , arh(101,101)
       SAVE arh
-      
+
       IF ( Irc.EQ.2 ) THEN
       ELSEIF ( Irc.EQ.3 ) THEN
          DO i = 1 , Ndata
@@ -9606,7 +9617,7 @@ C Iscal = 3   FUNC(y) = sqrt(y)  FUNC1(y) = y^2
       ENDDO
       Yy = FUNC1(Yy,Iscal)
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION FUNC
 C
@@ -9623,12 +9634,12 @@ C Return value:
 C      returns either y, log(y) or sqrt(y) depending on mode
 C
 C Note that this is the inverse of FUNC1
-      
+
       REAL*8 FUNCTION FUNC(Y,I)
       IMPLICIT NONE
       INTEGER*4 I
       REAL*8 Y
-      
+
       IF ( I.EQ.2 ) THEN
          IF ( Y.LT.1.E-12 ) Y = 1.E-12
          FUNC = LOG(Y)
@@ -9639,7 +9650,7 @@ C Note that this is the inverse of FUNC1
       ENDIF
       FUNC = Y
 99999 END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION FUNC1
 C
@@ -9661,7 +9672,7 @@ C Note that this is the inverse of FUNC
       IMPLICIT NONE
       INTEGER*4 I
       REAL*8 Y
-      
+
       IF ( I.EQ.2 ) THEN
          FUNC1 = EXP(Y)
          RETURN
@@ -9671,7 +9682,7 @@ C Note that this is the inverse of FUNC
       ENDIF
       FUNC1 = Y
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE GKVAC
 C
@@ -9693,7 +9704,7 @@ C      XLAMB  - Lambda*       (this is G(3) in GOSIA)
 C
 C Formal parameters:
 C      Il     - level index
- 
+
       SUBROUTINE GKVAC(Il)
       IMPLICIT NONE
       REAL*8 beta , sp , time
@@ -9708,7 +9719,7 @@ C      Il     - level index
       EQUIVALENCE(AVJI,G)
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       REAL*8 GKI , SUM
       COMMON /GVAC  / GKI(3) , SUM(3)
@@ -9721,7 +9732,7 @@ C      Il     - level index
      &                IBYP
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       INTEGER*4 ITTE
       COMMON /THTAR / ITTE(50)
@@ -9741,7 +9752,7 @@ C      Il     - level index
          VACDP(i,Il) = 1.
       ENDDO
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE GKK
 C
@@ -9801,9 +9812,9 @@ C element.
       SUBROUTINE GKK(Iz,Beta,Spin,Time,Il)
       IMPLICIT NONE
       REAL*8 alp , ATS , Beta , ccf , down , dwc , f , hmean , rk , sm ,
-     &       Spin , Time , up , upc , valmi , w2 , wrt , WSIXJ , wsp , 
+     &       Spin , Time , up , upc , valmi , w2 , wrt , WSIXJ , wsp ,
      &       xji , xlam
-      INTEGER*4 i , if2 , ifq , Il , imean , inq , irk2 , ispin2 , 
+      INTEGER*4 i , if2 , ifq , Il , imean , inq , irk2 , ispin2 ,
      &          ixji2 , Iz , j , k , k1 , k2 , l , m , ncoup , nz
       REAL*8 GKI , SUM
       COMMON /GVAC  / GKI(3) , SUM(3)
@@ -9892,7 +9903,7 @@ C element.
          GKI(k) = GKI(k)*ccf
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE XSTATIC
 C
@@ -9930,11 +9941,11 @@ C paper.
       INTEGER*4 IBYP
       COMMON /VAC   / VACDP(3,100) , QCEN , DQ , XNOR , AKS(6,100) ,
      &                IBYP
-      
+
       h = 1./(1.+(Iz**.45*.012008/Beta)**1.666667)
       QCEN = Iz*h**.6
       DQ = SQRT(QCEN*(1.-h))/2.
-      
+
       Iup = INT(QCEN+3.*DQ+.5)
       Ido = INT(QCEN-3.*DQ-.5)
       IF ( Iup.GT.Iz ) Iup = Iz
@@ -9944,7 +9955,7 @@ C paper.
          XNOR = XNOR + EXP(-((QCEN-DBLE(lq))/DQ)**2/2.)
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION ATS
 C
@@ -9957,12 +9968,12 @@ C      N      - number of electrons (Z - charge state)
 C
 C Return value:
 C      truncation point
- 
+
       REAL*8 FUNCTION ATS(N)
       IMPLICIT NONE
       INTEGER*4 m , N
       REAL*8 x , xm
-      
+
       IF ( N.LE.0 .OR. N.GT.96 ) THEN
          ATS = 0.
          RETURN
@@ -9971,14 +9982,14 @@ C      truncation point
          m = N/2 + 1
          xm = DBLE(m)
          IF ( ABS(x-xm).GE.1.E-9 ) THEN
-            IF ( m.EQ.1 .OR. m.EQ.2 .OR. m.EQ.3 .OR. m.EQ.6 .OR. 
-     &           m.EQ.7 .OR. m.EQ.10 .OR. m.EQ.15 .OR. m.EQ.16 .OR. 
-     &           m.EQ.19 .OR. m.EQ.24 .OR. m.EQ.25 .OR. m.EQ.28 .OR. 
-     &           m.EQ.31 .OR. m.EQ.35 .OR. m.EQ.37 .OR. m.EQ.40 .OR. 
+            IF ( m.EQ.1 .OR. m.EQ.2 .OR. m.EQ.3 .OR. m.EQ.6 .OR.
+     &           m.EQ.7 .OR. m.EQ.10 .OR. m.EQ.15 .OR. m.EQ.16 .OR.
+     &           m.EQ.19 .OR. m.EQ.24 .OR. m.EQ.25 .OR. m.EQ.28 .OR.
+     &           m.EQ.31 .OR. m.EQ.35 .OR. m.EQ.37 .OR. m.EQ.40 .OR.
      &           m.EQ.41 .OR. m.EQ.44 ) THEN
                ATS = .5
                RETURN
-            ELSEIF ( m.EQ.4 .OR. m.EQ.5 .OR. m.EQ.8 .OR. m.EQ.9 .OR. 
+            ELSEIF ( m.EQ.4 .OR. m.EQ.5 .OR. m.EQ.8 .OR. m.EQ.9 .OR.
      &               m.EQ.11 .OR. m.EQ.17 .OR. m.EQ.18 .OR. m.EQ.20 .OR.
      &               m.EQ.26 .OR. m.EQ.27 .OR. m.EQ.36 .OR. m.EQ.42 .OR.
      &               m.EQ.43 .OR. m.EQ.45 ) THEN
@@ -10006,8 +10017,8 @@ C      truncation point
             ENDIF
          ENDIF
          m = m - 1
-         IF ( m.EQ.4 .OR. m.EQ.8 .OR. m.EQ.17 .OR. m.EQ.26 .OR. 
-     &        m.EQ.28 .OR. m.EQ.30 .OR. m.EQ.32 .OR. m.EQ.42 .OR. 
+         IF ( m.EQ.4 .OR. m.EQ.8 .OR. m.EQ.17 .OR. m.EQ.26 .OR.
+     &        m.EQ.28 .OR. m.EQ.30 .OR. m.EQ.32 .OR. m.EQ.42 .OR.
      &        m.EQ.45 .OR. m.EQ.48 ) THEN
             ATS = 2.
             RETURN
@@ -10015,7 +10026,7 @@ C      truncation point
          ELSEIF ( m.EQ.12 .OR. m.EQ.21 .OR. m.EQ.37 ) THEN
             ATS = 3.
             RETURN
-         ELSEIF ( m.EQ.13 .OR. m.EQ.22 .OR. m.EQ.29 .OR. m.EQ.31 .OR. 
+         ELSEIF ( m.EQ.13 .OR. m.EQ.22 .OR. m.EQ.29 .OR. m.EQ.31 .OR.
      &            m.EQ.34 .OR. m.EQ.38 .OR. m.EQ.47 ) THEN
             ATS = 4.
             RETURN
@@ -10032,7 +10043,7 @@ C      truncation point
       ENDIF
       ATS = 1.
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE YLM
 C
@@ -10063,7 +10074,7 @@ C -0.3530900028 = -3 * sqrt(140) / (32 pi)
 C 0.0943672726  = 3 * sqrt(10) / (32 pi)
 C -0.1334554768 = -3 * sqrt(20) / (32 pi)
 C etc.
-      
+
       SUBROUTINE YLM(Theta,Ylmr)
       IMPLICIT NONE
       REAL*8 ct , ctsq , st , Theta , Ylmr
@@ -10072,7 +10083,7 @@ C etc.
       INTEGER*4 IEXP, IAXS
       COMMON /KIN   / EPS(50) , EROOT(50) , FIEX(50,2) , IEXP , IAXS(50)
       DIMENSION Ylmr(9,9) , st(7)
-      
+
       ct = COS(Theta)
       ctsq = ct*ct
       IF ( IAXS(IEXP).EQ.0 ) THEN ! If axially symmetric
@@ -10108,7 +10119,7 @@ C etc.
          ENDDO
       ENDDO
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE DECAY
 C
@@ -10138,16 +10149,16 @@ C Formal parameters:
 C      Chisq  - chi squared
 C      Nlift  - number of lifetimes
 C      Chilo  - chi squared of logs
-      
+
       SUBROUTINE DECAY(Chisq,Nlift,Chilo)
       IMPLICIT NONE
       REAL*8 bsum , Chilo , Chisq , df , el1 , emt , emt1 , gk , vcd
-      INTEGER*4 i , ibra , idr , idrh , ifn , il , inx , inx1 , iu , 
+      INTEGER*4 i , ibra , idr , idrh , ifn , il , inx , inx1 , iu ,
      &          j , jlt , k , kl , kq , l , l1 , lc1 , lc2 , n1 , n2
       INTEGER*4 Nlift
       REAL*8 DELTA, ENDEC, ENZ
       INTEGER*4 ITMA
-      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) , 
+      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) ,
      &                ENZ(200)
       REAL*8 TIMEL
       INTEGER*4 LIFCT
@@ -10268,7 +10279,7 @@ C      Chilo  - chi squared of logs
          ENDIF
       ENDDO ! Loop on levels
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE ANGULA
 C
@@ -10303,23 +10314,23 @@ C      Gth    - Theta of gamma
 C      Figl   - Phi of gamma
 C      Ngl    - detector number
 C      Op2    - The part after the OP, for the option we are processing
-      
+
       SUBROUTINE ANGULA(Ygn,Idr,Iful,Fi0,Fi1,Trec,Gth,Figl,Ngl,Op2)
       IMPLICIT NONE
       REAL*8 alab , arg , at , attl , bt , f , Fi0 , fi01 , Fi1 ,
      &       fi11 , Figl , Gth , qv , sm , Trec , trec2 , Ygn , ylmr
-      INTEGER*4 Idr , ifn , Iful , ig , il , inat , inx1 , 
+      INTEGER*4 Idr , ifn , Iful , ig , il , inat , inx1 ,
      &          ipd , is , iu , ixs , j , ji , jj , jm , k
       INTEGER*4 kq , l , lf , lf1 , mind , Ngl , nlv
       CHARACTER*4 Op2
-      DIMENSION f(4) , ylmr(9,9) , at(28) , alab(9,9) , attl(9,9) , 
+      DIMENSION f(4) , ylmr(9,9) , at(28) , alab(9,9) , attl(9,9) ,
      &          Ygn(*)
       REAL*8 ZETA
       INTEGER*4 LZETA
       COMMON /CCOUP / ZETA(155600) , LZETA(8)
       REAL*8 DELTA, ENDEC, ENZ
       INTEGER*4 ITMA
-      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) , 
+      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) ,
      &                ENZ(200)
       REAL*8 TAU
       INTEGER*4 KSEQ
@@ -10342,9 +10353,9 @@ C      Op2    - The part after the OP, for the option we are processing
       COMMON /THTAR / ITTE(50)
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
-      
+
       DO l = 1 , Idr ! For each decay
 
          nlv = KSEQ(l,3) ! Level number of l'th decay
@@ -10442,7 +10453,7 @@ C      Op2    - The part after the OP, for the option we are processing
 
 C     In gosia2, we multiply by dsig*SIN(ttx) here, but not in gosia
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE READY
 C
@@ -10468,34 +10479,34 @@ C      Ipri   - printing flag (Ipri=1 gives additional output)
 C
 C NTAP is the unit number of the file from which we should read the
 C experimental yields
- 
+
       SUBROUTINE READY(Idr,Ntap,Ipri)
       IMPLICIT NONE
       REAL*8 ap , u , w , waga , xep , zp
-      INTEGER*4 idc , idc1 , idcx , Idr , ii , Ipri , 
+      INTEGER*4 idc , idc1 , idcx , Idr , ii , Ipri ,
      &          iytot , iytt , j , k , kk , kkl , lbg
       INTEGER*4 lxp , nanx , nde , nde1 , ne , ns1
       INTEGER*4 ns2 , ns3 , ns4 , nsxh , nsyh , Ntap , nval
       DIMENSION iytot(32)
       REAL*8 YEXP, CORF , DYEX , UPL , YNRM
       INTEGER*4 IY , NYLDE , IDRN , ILE
-      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) , 
-     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) , 
+      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) ,
+     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) ,
      &                YNRM(32,50) , IDRN , ILE(32)
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       REAL*8 TAU
       INTEGER*4 KSEQ
       COMMON /LEV   / TAU(100) , KSEQ(1500,4)
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       INTEGER*4 NDST
       COMMON /CCCDS / NDST(50)
-      
+
 C     Rewind yield file
       REWIND Ntap
 
@@ -10511,7 +10522,7 @@ C     Rewind yield file
          ii = NDST(lxp) ! Number of datasets
          DO kk = 1 , ii ! iexp, ng, zp, ag, ep, nd, wt
             READ (Ntap,*) ne , nanx , zp , ap , xep , nval , waga
-            IF ( Ipri.EQ.1 ) WRITE (22,99002) ne , zp , ap , xep , 
+            IF ( Ipri.EQ.1 ) WRITE (22,99002) ne , zp , ap , xep ,
      &                              NDST(ne) , waga
 99002       FORMAT (1X,///5X,'EXPERIMENT',1X,1I2/2X,'PROJECTILE',1X,'(',
      &              1F4.0,',',1F4.0,')',1X,1F7.3,1X,'MEV',1X,'---',1I1,
@@ -10552,7 +10563,7 @@ C     Rewind yield file
                idc = idcx
  30            idc1 = idc
                IF ( idc1.GT.1000 ) idc1 = idc/1000
-               IF ( Ipri.EQ.1 ) WRITE (22,99004) idc , KSEQ(idc1,3) , 
+               IF ( Ipri.EQ.1 ) WRITE (22,99004) idc , KSEQ(idc1,3) ,
      &                                 KSEQ(idc1,4) , u , w
 99004          FORMAT (2X,1I6,1X,1I3,1X,1I3,1(1E14.6,3X,1E14.6))
                iytt = iytot(kk)
@@ -10570,7 +10581,7 @@ C     Rewind yield file
 99005 FORMAT (1X///5X,'ERROR-NO MATRIX ELEMENT BETWEEN STATES',1X,1I3,
      &        ' AND ',1I3,/10X,'THIS TRANSITION IGNORED',//)
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE BRANR
 C
@@ -10599,22 +10610,22 @@ C      Chilo  - chi squared of logs
       SUBROUTINE BRANR(Chisq,Nwyr,Chilo)
       IMPLICIT NONE
       REAL*8 ch1 , ch2 , Chilo , Chisq , CONV , eng1 , eng2 , u
-      INTEGER*4 i1 , i2 , iflg , iout , itt , j1 , j2 , 
+      INTEGER*4 i1 , i2 , iflg , iout , itt , j1 , j2 ,
      &          k , lab1 , lab2 , mul2
       INTEGER*4 n1 , n2 , Nwyr
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       REAL*8 BRAT
       INTEGER*4 IBRC , NBRA
       COMMON /BRNCH / BRAT(50,3) , IBRC(2,50) , NBRA
       REAL*8 DELTA, ENDEC, ENZ
       INTEGER*4 ITMA
-      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) , 
+      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) ,
      &                ENZ(200)
       INTEGER*4 IPRM
       COMMON /PRT   / IPRM(20)
@@ -10626,7 +10637,7 @@ C      Chilo  - chi squared of logs
 C     If no branching ratios were defined, return doing nothing
       IF ( NBRA.EQ.0 ) RETURN
 
-C     If printing option is on, print something      
+C     If printing option is on, print something
       IF ( IPRM(3).EQ.-1 ) WRITE (22,99001)
 99001 FORMAT (1X,///10X,'EXP. AND CALCULATED BRANCHING RATIOS',//5X,
      &        'NS1',5X,'NF1',5X,'NS2',5X,'NF2',5X,'RATIO(1:2)',9X,
@@ -10689,10 +10700,10 @@ C     If printing option is on, print something
      &                               ch1/ch2 , -u
 99002    FORMAT (5X,3(1I2,6X),1I2,5X,4(1F10.5,5X),5X,1F4.1)
       ENDDO ! Loop on branching ratios
-       
+
       IF ( IPRM(3).EQ.-1 ) IPRM(3) = 0 ! Turn off printing option, so we don't print twice
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE LIMITS
 C
@@ -10707,7 +10718,7 @@ C      ELML   - lower limit on matrix elements
 C      ELMU   - upper limit on matrix elements
 C      IVAR   - indicates a limit or correlation is set
 C      MEMAX  - number of matrix elements
- 
+
       SUBROUTINE LIMITS
       IMPLICIT NONE
       INTEGER*4 j
@@ -10730,7 +10741,7 @@ C      MEMAX  - number of matrix elements
       ENDDO
 99001 FORMAT (2X,'Warning - matrix element ',1I3,' reset to ',1F10.6)
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE SZEREG
 C
@@ -10749,15 +10760,15 @@ C Formal parameters:
 C      Lst    - first yield in set
 C      Ls     - last yield in set
 C      L      - number of dataset
- 
+
       SUBROUTINE SZEREG(Lst,Ls,L)
       IMPLICIT NONE
       REAL*8 dyh , yh
       INTEGER*4 ia , ib , ih , inx , k , L , Ls , lsp , Lst , lst1
       REAL*8 YEXP, CORF , DYEX , UPL , YNRM
       INTEGER*4 IY , NYLDE , IDRN , ILE
-      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) , 
-     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) , 
+      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) ,
+     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) ,
      &                YNRM(32,50) , IDRN , ILE(32)
       IF ( Lst.EQ.Ls ) RETURN
       lst1 = Lst
@@ -10791,7 +10802,7 @@ C     Swap them
       IF ( lst1.GT.lsp ) RETURN
       GOTO 100
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE SIXEL
 C
@@ -10814,7 +10825,7 @@ C      Jk     -
 C      Kk     -
 C      Indx   - index of matrix element
 C      Lu     -
- 
+
       SUBROUTINE SIXEL(Rik,Rv,Em,Jk,Kk,Indx,Lu)
       IMPLICIT NONE
       REAL*8 a1 , al , al1 , c1 , c2 , Em , Rik , rn , Rv , rx
@@ -10830,11 +10841,11 @@ C      Lu     -
       COMMON /TRB   / ITS
       INTEGER*4 KVAR
       COMMON /SEL   / KVAR(1500)
-      
+
       kk6 = Kk + 5
       rn = DEV(Lu)
       al = (Rv-rn)*20./Rik
-      IF ( ITS.EQ.1 .AND. KVAR(Indx).NE.0 ) WRITE (18,*) Lu , Indx , 
+      IF ( ITS.EQ.1 .AND. KVAR(Indx).NE.0 ) WRITE (18,*) Lu , Indx ,
      &     IEXP , al/Em
       al1 = ABS(al)
       IF ( ITS.EQ.2 ) WRITE (18,*) Lu , Indx , IEXP , al1
@@ -10857,7 +10868,7 @@ C      Lu     -
       ENDDO
 
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE PRELM
 C
@@ -10879,7 +10890,7 @@ C      SPIN   - spin of level
 C
 C Formal parameters:
 C      Iop    - print flag (controls what is written to output).
- 
+
       SUBROUTINE PRELM(Iop)
       IMPLICIT NONE
       REAL*8 b , pv , ste
@@ -10893,10 +10904,10 @@ C      Iop    - print flag (controls what is written to output).
       COMMON /CEXC  / MAGEXC , MEMAX , LMAXE , MEMX6 , IVAR(1500)
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       INTEGER*4 NMAX , NDIM , NMAX1
       COMMON /COEX2 / NMAX , NDIM , NMAX1
@@ -10925,15 +10936,15 @@ C      Iop    - print flag (controls what is written to output).
 
                      IF ( Iop.EQ.2 ) THEN ! Iop is 2
                         IF ( IVAR(inx).EQ.0 ) THEN ! Fixed
-                           WRITE (22,99006) inx , LEAD(1,inx) , 
+                           WRITE (22,99006) inx , LEAD(1,inx) ,
      &                            LEAD(2,inx) , ELM(inx)
                         ELSEIF ( IVAR(inx).GT.1000 ) THEN ! Correlation
-                           WRITE (22,99007) inx , LEAD(1,inx) , 
-     &                            LEAD(2,inx) , ELM(inx) , 
+                           WRITE (22,99007) inx , LEAD(1,inx) ,
+     &                            LEAD(2,inx) , ELM(inx) ,
      &                            (IVAR(inx)-1000)
                         ELSE ! Limit
-                           WRITE (22,99009) inx , LEAD(1,inx) , 
-     &                            LEAD(2,inx) , ELM(inx) , ELML(inx) , 
+                           WRITE (22,99009) inx , LEAD(1,inx) ,
+     &                            LEAD(2,inx) , ELM(inx) , ELML(inx) ,
      &                            ELMU(inx)
                         ENDIF
 
@@ -10947,7 +10958,7 @@ C      Iop    - print flag (controls what is written to output).
                         b = ELM(inx)*ELM(inx)/(2.*SPIN(isp)+1.)
                         IF ( LEAD(1,inx).EQ.LEAD(2,inx) ) b = 9999999.
                         WRITE (22,99009) inx , LEAD(1,inx) , LEAD(2,inx)
-     &                         , ELM(inx) , 100.*(ELM(inx)-ste)/ste , 
+     &                         , ELM(inx) , 100.*(ELM(inx)-ste)/ste ,
      &                         b , wrn
                      ELSE ! Iop is 1
                         WRITE (22,99008) inx , LEAD(1,inx) , LEAD(2,inx)
@@ -10965,7 +10976,7 @@ C      Iop    - print flag (controls what is written to output).
 99008 FORMAT (5X,1I3,4X,1I3,4X,1I3,5X,1F10.5)
 99009 FORMAT (5X,1I3,4X,1I3,4X,1I3,3(5X,1F10.5),1A3)
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE RECOIL
 C
@@ -10982,14 +10993,14 @@ C      Theta  - angle to rotate
 C
 C We transform into the frame of the recoiling nucleus, correct according to
 C the method of Lesser and then rotate back to the laboratory frame.
- 
+
       SUBROUTINE RECOIL(Alab,Attl,Beta,Theta)
       IMPLICIT NONE
-      REAL*8 Alab , atemp , Attl , Beta , betasq , dum , hold , test , 
+      REAL*8 Alab , atemp , Attl , Beta , betasq , dum , hold , test ,
      &       Theta
       INTEGER*4 i , i1 , j , l , m
       DIMENSION Alab(9,9) , Attl(9,9) , atemp(16)
-      
+
       hold = Alab(1,1)
       IF ( ABS(hold).LT.1.E-9 ) RETURN
 
@@ -11083,7 +11094,7 @@ C     Rotate back into laboratory frame
 99001    FORMAT (' ERROR IN ROTATION',1X,1E10.3/)
       ENDIF
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE ROTATE
 C
@@ -11109,7 +11120,7 @@ C     ({\pi + \theta \over 2}) \rho_{k \xi^\prime}}
       REAL*8 Alab , Attl , djarg , DJMM , dkkk , sum , Theta
       INTEGER*4 idj , idm , idmp , j , k , K2 , ka , kappa , kapri , Kd
       DIMENSION Alab(9,9) , Attl(9,9)
-      
+
       IF ( ABS(Theta).GT..01 ) THEN
          djarg = Theta
          DO ka = 1 , K2 , Kd
@@ -11140,7 +11151,7 @@ C     ({\pi + \theta \over 2}) \rho_{k \xi^\prime}}
          ENDDO
       ENDDO
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE YLM1
 C
@@ -11159,13 +11170,13 @@ C harmonics.
 C
 C Note also that YLM1 and YLM have some values in common.
 C e.g. YLM1(5,3) = YLM(2,3)
- 
+
       SUBROUTINE YLM1(Theta,Ylmr)
       IMPLICIT NONE
       REAL*8 ct , ctsq , st , Theta , Ylmr
       INTEGER*4 i , j , l , m
       DIMENSION Ylmr(9,9) , st(9)
-      
+
       ct = COS(Theta)
       ctsq = ct*ct
       st(1) = SIN(Theta)
@@ -11235,7 +11246,7 @@ C e.g. YLM1(5,3) = YLM(2,3)
          ENDDO
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE FIINT
 C
@@ -11254,7 +11265,7 @@ C      Ixs    - axial symmetry flag
       REAL*8 At , Fi0 , Fi1 , wsp
       INTEGER*4 Ixs , j , jf , js , m , mm
       DIMENSION At(28)
-      
+
       IF ( Ixs.NE.0 ) THEN
          DO m = 2 , 7
             js = m/2
@@ -11274,7 +11285,7 @@ C      Ixs    - axial symmetry flag
          At(js) = At(js)*wsp
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE FIINT1
 C
@@ -11293,7 +11304,7 @@ C      Ixs    - axial symmetry flag
       REAL*8 Alab , Fi0 , Fi1 , wsp
       INTEGER*4 Ixs , j , m , mm
       DIMENSION Alab(9,9)
-      
+
       IF ( Ixs.NE.0 ) THEN
          DO m = 2 , 9
             mm = m - 1
@@ -11309,7 +11320,7 @@ C      Ixs    - axial symmetry flag
          Alab(j,1) = Alab(j,1)*wsp
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE TAPMA
 C
@@ -11336,11 +11347,11 @@ C      Enb    - energy of meshpoint read from file
 C
 C Note that unit 14 is used internally for the purpose of sensitivity
 C maps.
- 
+
       SUBROUTINE TAPMA(Lx,Iske,Isko,Iskf,Nflr,Idr,Nco,Nft,Enb)
       IMPLICIT NONE
       REAL*8 emn , emx , en0 , Enb , tmn , tmx , tta
-      INTEGER*4 Idr , Iske , Iskf , Isko , j , jf , jj , js , k , 
+      INTEGER*4 Idr , Iske , Iskf , Isko , j , jf , jj , js , k ,
      &          Lx , lx1 , na , Nco , ne , nfil , nfilt , Nflr , Nft
       INTEGER*4 ng , ng1 , ntt
       REAL*8 XV, YV, ZV, DSG, DSE, DS
@@ -11371,7 +11382,7 @@ C     Skip over unwanted records
       IF ( Nco.EQ.0 ) RETURN
 
 C     Read record
-      READ (14,*) ne , ntt , emn , emx , tmn , tmx , na , tmx , tmx , 
+      READ (14,*) ne , ntt , emn , emx , tmn , tmx , na , tmx , tmx ,
      &            tmx
       IF ( Isko.NE.0 ) THEN
          DO j = 1 , Isko
@@ -11397,7 +11408,7 @@ C     Read record
  100  WRITE (22,99001)
 99001 FORMAT (10X///10X,'TAPE READ ERROR'/10X,'JOB ABORTED')
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION SIMIN
 C
@@ -11413,7 +11424,7 @@ C
 C Return value:
 C      Integral under the array
 C
- 
+
       REAL*8 FUNCTION SIMIN(Np,H,Y)
       IMPLICIT NONE
       REAL*8 ee , H , sm , Y
@@ -11435,7 +11446,7 @@ C
       ENDIF
       SIMIN = (Y(1)+Y(2))*H/2.
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE MIXUP
 C
@@ -11459,7 +11470,7 @@ C Note that if IVAR = 0, then the matrix element is fixed, so we don't do
 C anything here. If it is >= 10000, this means it is correlated to another
 C matrix element, so use the correlation to determine the new value, which
 C may have been changed when we randomized.
- 
+
       SUBROUTINE MIXUP
       IMPLICIT NONE
       REAL*8 RNDM
@@ -11489,7 +11500,7 @@ C     element to which it is correlated.
          ENDIF
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION FXIS1
 C
@@ -11502,11 +11513,11 @@ C      XI     - xi coupling coefficients
 C
 C Formal parameters:
 C      I      - index into XI array
-C      N      - 
+C      N      -
 C
 C Return value:
 C      sign of xi
-      
+
       REAL*8 FUNCTION FXIS1(I,N)
       IMPLICIT NONE
       INTEGER*4 I , N
@@ -11518,7 +11529,7 @@ C      sign of xi
       ENDIF
       FXIS1 = -SIGN(1.D0,XI(I))
 99999 END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION FXIS2
 C
@@ -11531,7 +11542,7 @@ C      XI     - xi coupling coefficients
 C
 C Formal parameters:
 C      I      - index into XI array
-C      N      - 
+C      N      -
 C
 C Return value:
 C      sign of xi
@@ -11547,7 +11558,7 @@ C      sign of xi
       ENDIF
       FXIS2 = 1.
 99999 END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE PODZIEL
 C
@@ -11567,13 +11578,13 @@ C
 C Formal parameters:
 C      I      - flag (I=1,2,3) I=3 means initialise
 C      J      - experiment number
- 
+
       SUBROUTINE PODZIEL(I,J)
       IMPLICIT NONE
       INTEGER*4 I , J , k , l , l1 , l2
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       REAL*8 QAPR
       INTEGER*4 IAPR , ISEX
@@ -11603,7 +11614,7 @@ C      J      - experiment number
 
       IF ( I.EQ.2 ) WRITE (22,99001) J , IDIVE(J,1) , l2
       IF ( I.NE.3 ) RETURN
-      
+
  100  l2 = IDIVE(J,1)
       IF ( I.EQ.3 ) l1 = 1
       DO k = 1 , LP2 ! For each matrix element
@@ -11611,15 +11622,15 @@ C      J      - experiment number
             QAPR(k,1,l) = QAPR(k,1,l)*l1/l2
          ENDDO
       ENDDO
-       
+
       IF ( I.EQ.1 ) WRITE (22,99001) J , l2 , IDIVE(J,2)
       RETURN
-      
+
 99001 FORMAT (5X,'*****',1X,'EXP(A) EXPANSION FAILURE!',1X,'*****'/5X,
      &        'EXPERIMENT',1X,1I2,3X,'NEW SUBDIVISION',1X,'(',1I1,',',
      &        1I1,')')
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE KLOPOT
 C
@@ -11651,30 +11662,30 @@ C      Rlr    - print out if matrix element exceeds Rlr.
 
       SUBROUTINE KLOPOT(K,Rlr)
       IMPLICIT NONE
-      REAL*8 a , al , al1 , b , c , ch , d , dy , e , g , g1 , g2 , 
+      REAL*8 a , al , al1 , b , c , ch , d , dy , e , g , g1 , g2 ,
      &       rl , Rlr , sgm , u , umm , ump , ux
-      INTEGER*4 i , iex , iexh , iexp , indx , inh , ipf , j , jm , 
-     &          jp , K , l , lc , ll , lngt , loc , lu , nf , ni , nm , 
+      INTEGER*4 i , iex , iexh , iexp , indx , inh , ipf , j , jm ,
+     &          jp , K , l , lc , ll , lngt , loc , lu , nf , ni , nm ,
      &          np
       REAL*8 ELM , ELMU , ELML , SA
       COMMON /COMME / ELM(1500) , ELMU(1500) , ELML(1500) , SA(1500)
       REAL*8 YEXP, CORF , DYEX , UPL , YNRM
       INTEGER*4 IY , NYLDE , IDRN , ILE
-      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) , 
-     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) , 
+      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) ,
+     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) ,
      &                YNRM(32,50) , IDRN , ILE(32)
       INTEGER*4 MAGEXC , MEMAX , LMAXE , MEMX6 , IVAR
       COMMON /CEXC  / MAGEXC , MEMAX , LMAXE , MEMX6 , IVAR(1500)
-      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      INTEGER*4 LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &          LP10 , LP11 , LP12 , LP13 , LP14
-      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 , 
+      COMMON /MGN   / LP1 , LP2 , LP3 , LP4 , LP6 , LP7 , LP8 , LP9 ,
      &                LP10 , LP11 , LP12 , LP13 , LP14
       REAL*8 ZETA
       INTEGER*4 LZETA
       COMMON /CCOUP / ZETA(155600) , LZETA(8)
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       INTEGER*4 KVAR
       COMMON /SEL   / KVAR(1500)
@@ -11817,8 +11828,8 @@ C      Rlr    - print out if matrix element exceeds Rlr.
                                  jp = j
                               ENDIF
                            ENDDO
-                           WRITE (22,99008) IY(jp,1) , IY(jp,2) , 
-     &                            IY(jp,3) , CORF(jp,1) , CORF(jp,2) , 
+                           WRITE (22,99008) IY(jp,1) , IY(jp,2) ,
+     &                            IY(jp,3) , CORF(jp,1) , CORF(jp,2) ,
      &                            ump , IY(jm,1) , IY(jm,2) , IY(jm,3) ,
      &                            CORF(jm,1) , CORF(jm,2) , umm
 99008                      FORMAT (5X,1I3,2X,1I3,'--',1I3,4X,1F4.1,4X,
@@ -11858,7 +11869,7 @@ C      Rlr    - print out if matrix element exceeds Rlr.
          GOTO 500
       ENDIF
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE MIXR
 C
@@ -11879,7 +11890,7 @@ C      Nw     - number of data points used to calculate chi squared
 C      Ipsw   - printing flag (0 means no print, 1 means print)
 C      Chi    - chi squared
 C      Chilo  - chi squared using logs
- 
+
       SUBROUTINE MIXR(Nw,Ipsw,Chi,Chilo)
       IMPLICIT NONE
       REAL*8 Chi , Chilo , dl
@@ -11895,7 +11906,7 @@ C      Chilo  - chi squared using logs
       INTEGER*4 LNY , INTR , IPS1
       COMMON /LOGY  / LNY , INTR , IPS1
       dl = 0.
-      
+
       IF ( NDL.EQ.0 ) RETURN
       Nw = Nw + NDL
 
@@ -11920,7 +11931,7 @@ C      Chilo  - chi squared using logs
       ENDDO ! Loop on mixing ratios i
 
       IF ( Ipsw.EQ.0 ) RETURN
-      
+
       WRITE (22,99001)
 99001 FORMAT (1X//10X,'E2/M1 MIXING RATIOS'/10X,'TRANSITION',10X,
      &        'EXP.DELTA',10X,'CALC.DELTA',10X,'SIGMA'/)
@@ -11939,7 +11950,7 @@ C      Chilo  - chi squared using logs
       ENDDO ! Loop on mixing ratios i
 
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE COORD
 C
@@ -11968,12 +11979,12 @@ C      Wtlb   - angle of particle detector in theta (degrees) in lab frame - rea
 C      Lz     - experiment number - readonly
 C      Tyy    - lower limit of theta (degrees) - read/write
 C      Tzz    - upper limit of theta (degrees) - read/write
- 
+
       SUBROUTINE COORD(Wth,Wph,Wthh,Naa,Ifw,Pfi,Wpi,Wtlb,Lz,Tyy,Tzz)
       IMPLICIT NONE
-      REAL*8 ga , gi , Pfi , rade , rmass , TACOS , TASIN , thetb , 
+      REAL*8 ga , gi , Pfi , rade , rmass , TACOS , TASIN , thetb ,
      &       ttcm , Tyy , Tzz
-      REAL*8 wpa , Wph , Wpi , ws , Wth , Wthh , Wtlb , xaa , xph , 
+      REAL*8 wpa , Wph , Wpi , ws , Wth , Wthh , Wtlb , xaa , xph ,
      &       xth , xthh , za , za1 , zb , zl
       INTEGER*4 i , Ifw , Lz , Naa
       DIMENSION Pfi(101) , Wpi(100,2)
@@ -11985,7 +11996,7 @@ C      Tzz    - upper limit of theta (degrees) - read/write
       COMMON /KIN   / EPS(50) , EROOT(50) , FIEX(50,2) , IEXP , IAXS(50)
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       INTEGER*4 ISKIN
       COMMON /SECK  / ISKIN(50)
@@ -12073,7 +12084,7 @@ C     we use the target angle
          ENDDO
       ENDIF
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE CHMEM
 C
@@ -12088,7 +12099,7 @@ C      EAMX   - known matrix elements and their error
 C      NAMX   - number of known matrix elements
 C      IAMX   - index of matrix element for known matrix element
 C      IAMY   - level indices of pair of levels for which matrix element is known
- 
+
       SUBROUTINE CHMEM(Nw,Chi,Chilo)
       IMPLICIT NONE
       REAL*8 Chi , Chilo , di
@@ -12133,7 +12144,7 @@ C      IAMY   - level indices of pair of levels for which matrix element is know
          ENDIF
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE PTICC
 C
@@ -12156,11 +12167,11 @@ C      Idr    - number of decays
       REAL*8 cone1 , cone2 , conm1 , CONV , enet
       INTEGER*4 Idr , iinx , l , nf , ni
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       REAL*8 TAU
       INTEGER*4 KSEQ
@@ -12187,7 +12198,7 @@ C      Idr    - number of decays
      &           E9.4)
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION RNDM
 C
@@ -12202,7 +12213,7 @@ C It is used to generate random matrix elements as a starting position,
 C when OP,RAND is called. The parameter to OP,RAND is the seed here.
 C
 C This function uses the Lehmer method
- 
+
       REAL*8 FUNCTION RNDM(Se)
       IMPLICIT NONE
       REAL*8 a, b, Se
@@ -12213,7 +12224,7 @@ C This function uses the Lehmer method
       Se = MOD(a * Se, b)
       RNDM = MOD(a * Se, b) / b
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE KONTUR
 C
@@ -12247,7 +12258,7 @@ C      Jj     - matrix element
 C      Sh     -
 C      Bten   -
 C      Rem    - natural log of the largest value the computer can represent
- 
+
       SUBROUTINE KONTUR(Idr,Chis0,Chil,Ifbf,Inpo,Jj,Sh,Bten,Rem)
       IMPLICIT NONE
       REAL*8 ac , Bten , c , Chil , chilo , Chis0 , chis1 , chis2 , d1 ,
@@ -12400,7 +12411,7 @@ C      Rem    - natural log of the largest value the computer can represent
 99004 FORMAT (10X,'BETTER POINT FOUND...MATRIX ELEMENTS WRITTEN ON 17',
      &        3X,'CHISQ=',1E12.4)
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION RK4
 C
@@ -12409,12 +12420,12 @@ C
 C Purpose:
 C
 C Formal parameters:
-C      Y      - 
+C      Y      -
 C      H      -
 C      F      - array of three coefficients
 C
 C Return value:
- 
+
       REAL*8 FUNCTION RK4(Y,H,F)
       IMPLICIT NONE
       REAL*8 F , H , Y
@@ -12422,7 +12433,7 @@ C Return value:
 
       RK4 = Y + H*(F(1)+4.*F(2)+F(3))/6.
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE QFIT
 C
@@ -12442,17 +12453,17 @@ C      Nl     - number of types of absorber (7)
 C      Ind    - type of absorber
 C
 C Note the absorbers are: Al, C, Fe, Cu, Ag/Cd/Sn, Ta and Pb, respectively.
-      
+
       SUBROUTINE QFIT(Qui,Tau1,Tau2,Eng,Xl1,Cf,Nl,Ind)
       IMPLICIT NONE
-      REAL*8 ca , cb , Cf , cm , cn , co , d , d1 , d2 , Eng , Qui , 
+      REAL*8 ca , cb , Cf , cm , cn , co , d , d1 , d2 , Eng , Qui ,
      &       Tau1 , Tau2 , Xl1
       INTEGER*4 Ind , ind1 , k , Nl
-      DIMENSION Tau1(10) , Eng(10) , Tau2(10,7) , Xl1(7) , Qui(8,10) , 
+      DIMENSION Tau1(10) , Eng(10) , Tau2(10,7) , Xl1(7) , Qui(8,10) ,
      &          Cf(8,2)
 
       CALL GAMATT(Qui,Tau1,Tau2,Xl1,Nl)
-      
+
       ind1 = 5
       IF ( Ind.EQ.4 ) ind1 = 6
       IF ( Ind.EQ.5 ) ind1 = 7
@@ -12469,7 +12480,7 @@ C Note the absorbers are: Al, C, Fe, Cu, Ag/Cd/Sn, Ta and Pb, respectively.
          Cf(k,2) = d2/d
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE GAMATT
 C
@@ -12486,12 +12497,12 @@ C      Xl1    - thickness of each kind of absorber
 C      Nl     - number of kinds of absorber, we can treat (7)
 C
 C Note the absorbers are: Al, C, Fe, Cu, Ag/Cd/Sn, Ta and Pb, respectively.
- 
+
       SUBROUTINE GAMATT(Qui,Tau1,Tau2,Xl1,Nl)
       IMPLICIT NONE
       INTEGER*4 i , i1 , k , Nl
       REAL*8 q , Qui , tau , Tau1 , Tau2 , thing , thing1 , thing3 , Xl1
-      DIMENSION Tau1(10) , Tau2(10,7) , Xl1(7) , thing3(10) , q(9) , 
+      DIMENSION Tau1(10) , Tau2(10,7) , Xl1(7) , thing3(10) , q(9) ,
      &          Qui(8,10)
 
 C     Treat absorbers
@@ -12514,7 +12525,7 @@ C     Treat germanium
          ENDDO
       ENDDO
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE GCF
 C
@@ -12527,10 +12538,10 @@ C Formal parameters:
 C      Tau    - Absorption coefficient for Ge at this energy (input)
 C      Thing  - Absorption coefficient for absorbers at this energy (input)
 C      Q      - Attenuation coefficient (output)
- 
+
       SUBROUTINE GCF(Tau,Thing,Q)
       IMPLICIT NONE
-      REAL*8 A , b , D , dl , ev , ex , f , fint , od , Q , R , 
+      REAL*8 A , b , D , dl , ev , ex , f , fint , od , Q , R ,
      &       Tau , Thing , XL , xm , yl , yu
       INTEGER*4 i , j , k , m
       REAL*8 DIX, ODL
@@ -12541,7 +12552,7 @@ C      Q      - Attenuation coefficient (output)
       R = DIX(2)
       XL = DIX(3)
       D = DIX(4)
-      
+
       b(1) = ATAN2(A,D+XL) ! Region 0 from 0 to b(1) - all gammas in core
       b(2) = ATAN2(A,D)    ! Region 1 from b(1) to b(2) - gammas partially in core
       b(3) = ATAN2(R,D+XL) ! Region 2 from b(2) to b(3) - gammas going to back face
@@ -12608,7 +12619,7 @@ C evaluate Q_k = J_k0/J_00
       ENDDO
       Q(1) = Q(1)/2.
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION TCEXP
 C
@@ -12621,12 +12632,12 @@ C      Z      - argument of exponential (complex)
 C
 C Return value:
 C      complex exponential of Z.
- 
+
       COMPLEX*16 FUNCTION TCEXP(Z)
       IMPLICIT NONE
       REAL*8 a , b , c , d
       COMPLEX*16 Z
-      
+
       a = DBLE(Z)
       b = DIMAG(Z)
       a = EXP(a)
@@ -12634,7 +12645,7 @@ C      complex exponential of Z.
       d = a*SIN(b)
       TCEXP = DCMPLX(c,d)
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION TCABS
 C
@@ -12647,19 +12658,19 @@ C      Z      - argument for abs
 C
 C Return value:
 C      absolute value of complex number Z.
- 
+
       REAL*8 FUNCTION TCABS(Z)
       IMPLICIT NONE
       REAL*8 a , b
       COMPLEX*16 Z
-      
+
       a = DBLE(Z)
       b = DIMAG(Z)
       IF ( ABS(a).LT.1.E-16 ) a = 0.
       IF ( ABS(b).LT.1.E-16 ) b = 0.
       TCABS = SQRT(a*a+b*b)
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION TASIN
 C
@@ -12679,7 +12690,7 @@ C arctan(x / sqrt(1 - x^2).
       REAL*8 FUNCTION TASIN(X)
       IMPLICIT NONE
       REAL*8 dol , test , war , X
-      
+
       test = ABS(X) - 1.
       IF ( ABS(test).LT.1.E-9 ) THEN
          TASIN = 1.570796327 ! 1.570796327 is pi / 2
@@ -12690,7 +12701,7 @@ C arctan(x / sqrt(1 - x^2).
       war = X/dol
       TASIN = ATAN(war)
 99999 END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION TACOS
 C
@@ -12706,14 +12717,14 @@ C Return value:
 C      arccosine of X
 C
 C We use: arccos(x) = pi/2 - arcsin(x)
- 
+
       REAL*8 FUNCTION TACOS(X)
       IMPLICIT NONE
       REAL*8 TASIN , X
-      
+
       TACOS = 1.570796327 - TASIN(X) ! 1.570796327 = pi / 2
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE OPENF
 C
@@ -12730,7 +12741,7 @@ C 2 if it is required not to exist and 3 if it does not matter. The third is 1
 C if the file is formatted and 2 if it is unformatted. A second line is read,
 C which gives the name of the file to associate with that unit. If the unit is
 C zero, the function returns. It keeps looping until a unit zero is reached.
- 
+
       SUBROUTINE OPENF
       IMPLICIT NONE
       INTEGER*4 i , j , k
@@ -12760,7 +12771,7 @@ C     Now open the file
       WRITE (6,99004) 'PROBLEMS OPENING ' , name , k
 99004 FORMAT (A,A,I6)
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE EFFIX
 C
@@ -12800,7 +12811,7 @@ C     1  - Jaeri
 C     2  - Fiteff
 C     3  - Leuven
 C     4  - Radware
-      
+
       SUBROUTINE EFFIX(Iexp,Ipd,En,Effi)
       IMPLICIT NONE
       REAL*8 d , Effi , En , enl , pw , s , t , w , xx , yy
@@ -12943,7 +12954,7 @@ C     PJN@2008
       RETURN
 
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE ADHOC
 C
@@ -13000,13 +13011,13 @@ C      Ntap   - unit of yield file
 C      Iyr    - flag set here
 C
 C Here we parse the input of the OP,YIEL command and store the values.
- 
+
       SUBROUTINE ADHOC(Oph,Idr,Nfd,Ntap,Iyr)
       IMPLICIT NONE
       REAL*8 wamx , wbra , wdl , wlf
       INTEGER*4 iax , Idr , iexp1 , ilft , iosr , ipri , isrt1 , iuf
-      INTEGER*4 Iyr , jic , jicc , juf , lb , li , licc , llia , lxt , 
-     &          MEM , n1 , n2 , ndas , ndtp , Nfd , nistr , ns1 , ns2 , 
+      INTEGER*4 Iyr , jic , jicc , juf , lb , li , licc , llia , lxt ,
+     &          MEM , n1 , n2 , ndas , ndtp , Nfd , nistr , ns1 , ns2 ,
      &          ns3 , ns4 , Ntap , nvare
       CHARACTER*4 Oph
       CHARACTER*80 line
@@ -13016,7 +13027,7 @@ C Here we parse the input of the OP,YIEL command and store the values.
       COMMON /DIMX  / DIX(4) , ODL(200)
       REAL*8 DELTA, ENDEC, ENZ
       INTEGER*4 ITMA
-      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) , 
+      COMMON /TRA   / DELTA(1500,3) , ENDEC(1500) , ITMA(50,200) ,
      &                ENZ(200)
       INTEGER*4 NLIFT
       COMMON /LIFE  / NLIFT
@@ -13034,8 +13045,8 @@ C Here we parse the input of the OP,YIEL command and store the values.
       COMMON /BRNCH / BRAT(50,3) , IBRC(2,50) , NBRA
       REAL*8 YEXP, CORF , DYEX , UPL , YNRM
       INTEGER*4 IY , NYLDE , IDRN , ILE
-      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) , 
-     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) , 
+      COMMON /YEXPT / YEXP(32,1500) , IY(1500,32) , CORF(1500,32) ,
+     &                DYEX(32,1500) , NYLDE(50,32) , UPL(32,50) ,
      &                YNRM(32,50) , IDRN , ILE(32)
       REAL*8 YGN , YGP
       INTEGER*4 IFMO
@@ -13049,11 +13060,11 @@ C Here we parse the input of the OP,YIEL command and store the values.
      &                NICC , NANG(200) , ISPL
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       INTEGER*4 MAGEXC , MEMAX , LMAXE , MEMX6 , IVAR
       COMMON /CEXC  / MAGEXC , MEMAX , LMAXE , MEMX6 , IVAR(1500)
@@ -13063,7 +13074,7 @@ C Here we parse the input of the OP,YIEL command and store the values.
       COMMON /TRB   / ITS
       INTEGER*4 IUNIT3 , JZB
       COMMON /SWITCH/ JZB , IUNIT3
-      
+
 C     Read OP,YIEL parameters
       iosr = 0
       READ (JZB,*) IFMO ! IFLAG
@@ -13194,7 +13205,7 @@ C     Read branching ratios
             BRAT(lb,3) = BRAT(lb,2)
   303       BRAT(lb,2) = BRAT(lb,2)/(SQRT(wbra)+1.E-10) ! Relative error
             BRAT(lb,3) = BRAT(lb,3)/(SQRT(wbra)+1.E-10) ! Relative error
-            WRITE (22,99003) ns1 , ns2 , ns3 , ns4 , BRAT(lb,1) , 
+            WRITE (22,99003) ns1 , ns2 , ns3 , ns4 , BRAT(lb,1) ,
      &                       -BRAT(lb,2) , BRAT(lb,3)
 99003       FORMAT (4X,1I3,5X,1I3,5X,1I3,5X,1I3,5X,1F10.5,5X,1F10.5,3X,
      &        1F10.5)
@@ -13302,7 +13313,7 @@ C     Read known matrix elements
 
 99012 FORMAT (9X,1I3,'---',1I3,13X,1F9.4,8X,1F9.4,3X,1F9.4)
       END
- 
+
 C----------------------------------------------------------------------
 C FUNCTION ELMT
 C
@@ -13328,12 +13339,12 @@ C      Collective model matrix element
 C
 C Note that the parameters to WTHREJ are doubled to allow it to handle half
 C integers.
- 
+
       REAL*8 FUNCTION ELMT(Xi1,Xi2,Lam,Nb1,Nb2,Xk1,Xk2,Xm1,Xm2,Xm3)
       IMPLICIT NONE
-      REAL*8 addt , fac , fct , pha1 , pha2 , s1 , s2 , WTHREJ , Xi1 , 
+      REAL*8 addt , fac , fct , pha1 , pha2 , s1 , s2 , WTHREJ , Xi1 ,
      &       Xi2 , Xk1 , Xk2 , xlam , Xm1 , Xm2 , Xm3 , xn
-      INTEGER*4 i1 , i2 , ipha , k1 , k2 , l , la , Lam , llam , n , 
+      INTEGER*4 i1 , i2 , ipha , k1 , k2 , l , la , Lam , llam , n ,
      &          Nb1 , Nb2
 
       la = Lam
@@ -13402,7 +13413,7 @@ C-----In band, K.ne.0
          RETURN
       ENDIF
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE SELECT
 C
@@ -13416,7 +13427,7 @@ C
       SUBROUTINE SELECT
       IMPLICIT NONE
       REAL*8 a , al , am , y
-      INTEGER*4 i , ie , iexp , indx , ixf , j , l , lm , lu , lum , 
+      INTEGER*4 i , ie , iexp , indx , ixf , j , l , lm , lu , lum ,
      &        lx , memax
       DIMENSION lm(1500) , y(175,1500) , a(1500,1500)
 
@@ -13519,16 +13530,16 @@ C
       DIMENSION egamma(1500)
       REAL*8 EN , SPIN , ACCUR , DIPOL , ZPOL , ACCA
       INTEGER*4 ISO
-      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL , 
+      COMMON /COEX  / EN(100) , SPIN(100) , ACCUR , DIPOL , ZPOL ,
      &                ACCA , ISO
       REAL*8 XA , XA1 , EP , TLBDG , VINF
       INTEGER*4 NEXPT , IZ , IZ1
-      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) , 
+      COMMON /CX    / NEXPT , IZ , XA , IZ1(50) , XA1(50) , EP(50) ,
      &                TLBDG(50) , VINF(50)
       INTEGER*4 MAGEXC , MEMAX , LMAXE , MEMX6 , IVAR
       COMMON /CEXC  / MAGEXC , MEMAX , LMAXE , MEMX6 , IVAR(1500)
       INTEGER*4 LAMDA , LEAD , LDNUM , LAMMAX , MULTI
-      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX , 
+      COMMON /CLCOM / LAMDA(8) , LEAD(2,1500) , LDNUM(8,100) , LAMMAX ,
      &                MULTI(8)
       INTEGER*4 IUNIT3 , JZB
       COMMON /SWITCH/ JZB , IUNIT3
@@ -13551,7 +13562,7 @@ C     Write to output
 
 C     Make sure we are at start of file that we want to write
       rewind(29)
-      
+
 C     Open the BrIcc database files
       OPEN (UNIT=30,FILE=idx_name,ACCESS='direct',RECL=2048,ERR=999,
      &      STATUS='OLD')
@@ -13682,7 +13693,7 @@ C     Lagrangian method instead
       IF ( N.LE. 3 ) THEN
         CALL LAGRAN(X,Yr,N,1,Xx,Yy,Iscal,1)
         RETURN
-      ENDIF 
+      ENDIF
 
 C     Apply the scaling function
       DO i = 1 , N
@@ -13703,7 +13714,7 @@ C     Apply the inverse scaling function
       Yy = FUNC1(ys,Iscal)
       RETURN
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE SPLINE
 C
@@ -13725,7 +13736,7 @@ C
       REAL*8 Yp1 , Ypn , X(*) , Y(*) , Y2(*)
       INTEGER*4 i , k
       REAL*8 p , qn , sig , un , u(1500)
- 
+
       IF ( Yp1.GT..99E30 ) THEN
          Y2(1) = 0.
          u(1) = 0.
@@ -13781,7 +13792,7 @@ c
       INTEGER*4 k , khi , klo
       REAL*8 a , b , h
       DATA k/0/
- 
+
       klo = 1
       khi = N
  100  IF ( khi-klo.GT.1 ) THEN
@@ -13825,31 +13836,31 @@ C      Myz     - Z of nucleus to look up
 C      Egamma  - Gamma ray energy for which we want to interpolate
 C      Myimult - Multipolarity (1=E1,2=E2,3=E3,6=M1,7=M2)
       REAL*8 FUNCTION CCLKUP(Myz,Egamma,Myimult)
- 
+
       IMPLICIT NONE
- 
+
       INTEGER*4 iz , ia , flag(37) , nrec(37) , rec1(37) , Myz
       INTEGER*4 ishell , irec , ienergy , imult , Myimult
       REAL*8 x(500) , y(500) , result , Egamma
       REAL*4 binding_energy(500) , energy(37,500) , cc(37,500,10)
       CHARACTER*8 file(37) , name(37)
       CHARACTER*4 element
- 
+
 C     Initialise
       CCLKUP = 0.0D0
 
 C     We can't calculate above 6000 keV
       IF ( Egamma.GE.6000 ) RETURN
-  
+
 C     Read the index record for that Z
-      READ (30,REC=Myz,ERR=100) iz , element , ia , 
+      READ (30,REC=Myz,ERR=100) iz , element , ia ,
      &                          (flag(ishell),binding_energy(ishell),
      &                          file(ishell),name(ishell),nrec(ishell),
      &                          rec1(ishell),ishell=1,37)
 
 C     Ignore internal pair conversion below 1100 keV
       IF ( Egamma.LE.1100 ) flag(37) = 0
-      
+
 C     Now read the internal conversion coefficient data records for each shell
       DO ishell = 1 , 37 ! Only first 37 subshells
 
@@ -13861,20 +13872,20 @@ C        Flag that shell doesn't contribute if we are below binding energy
 C           Read all the records for this subshell
             ienergy = 1
             DO irec = rec1(ishell) , rec1(ishell) + nrec(ishell) - 1
-               READ (31,REC=irec,ERR=100) energy(ishell,ienergy) , 
+               READ (31,REC=irec,ERR=100) energy(ishell,ienergy) ,
      &               (cc(ishell,ienergy,imult),imult=1,10)
                ienergy = ienergy + 1
             ENDDO ! Loop on records
-             
+
             IF ( cc(ishell,1,Myimult).EQ.0.0D0 ) flag(ishell) = 0
           ENDIF ! If subshell is present in record
       ENDDO ! Loop on subshells
- 
+
 C     Interpolate for each subshell
-      DO ishell = 1 , 37 ! Only first 37 subshells                       
+      DO ishell = 1 , 37 ! Only first 37 subshells
 
         IF ( flag(ishell).EQ.-1 ) THEN ! If subshell is present in record
- 
+
 C           If the energy is less than the first data point use its ICC, or
 C           if it is more than the last data point, otherwise we interpolate
           IF ( Egamma.LE.energy(ishell,1) ) THEN
@@ -13893,24 +13904,24 @@ C             Set up for interpolation
                  x(ienergy) = LOG(DBLE(energy(ishell,ienergy)))
                  y(ienergy) = DBLE(cc(ishell,ienergy,Myimult)) ! Log for this is done in FUNC
               ENDDO
- 
+
 C             Perform spline over data
               CALL SPLNER(x,y,nrec(ishell),LOG(Egamma),result,2)
             ENDIF
 
 C           Add the conversion coefficients of each subshell
             CCLKUP = CCLKUP + result
-            
+
          ENDIF ! If subshell is present in record
       ENDDO ! Loop on subshells
- 
+
       RETURN
- 
+
  100  WRITE (*,*) 'ERROR - No data found for this Z ', Myz
       CCLKUP = -1.0D0
       RETURN
       END
- 
+
 C----------------------------------------------------------------------
 C SUBROUTINE INVKIN
 C
@@ -13936,7 +13947,7 @@ C      Theta_t - theta of recoiling target nucleus in lab frame (readonly)
 C      Theta_p - theta of scattered projectile in lab frame (writeonly)
 C      Iflag   - flag to select one of two possible solutions (readonly)
 C      Ikin    - kinematic flag (writeonly)
-      
+
       SUBROUTINE INVKIN(E_p, E_x , I_z , M_inv , M_non , Theta_t ,
      &                  Theta_p , Iflag , Ikin)
 
@@ -13946,7 +13957,7 @@ C      Ikin    - kinematic flag (writeonly)
       INTEGER*4 Iflag , Ikin , I_z
 
 C     Sort out which is the projectile and which is the target
-      
+
       IF ( I_z.LT.0 ) THEN
          M_p = M_inv ! Projectile is investigated
          M_t = M_non ! Target is non investigated
@@ -13956,21 +13967,21 @@ C     Sort out which is the projectile and which is the target
       ENDIF
 
 C     Reduced mass
-      
+
       ared = 1 + M_p / M_t
-      
+
 C     Excitation energy of inelastically scattered particle when state at
 C     energy E_x is excited
-      
+
       epmin = E_p - E_x * ared
-      
+
 C     Tau
-      
+
       taup = sqrt(E_p / epmin)
       tau = taup * M_p / M_t
-      
+
 C     Calculate the two solutions
-      
+
       y = tan(theta_t/57.2957795)
       t = taup * taup * y * y * y * y -
      &      (1 + y * y) * (taup * taup * y * y - 1)
@@ -13979,11 +13990,11 @@ C     Calculate the two solutions
       x(1) = atan2(sqrt(1 - x(1) * x(1)), tau + x(1))
       x(2) = (taup * y * y - t) / (1 + y * y)
       x(2) = atan2(sqrt(1 - x(2) * x(2)), tau + x(2))
-      
+
 C     Select the solution we want according to the flag. Note that the
 C     solution with the lower angle corresponds to target recoils which
 C     are probably undetectable.
-      
+
       IF ( Iflag.EQ.1 ) THEN
          theta_p = MAX(x(1),x(2))*57.2957795
       ELSE
@@ -13992,31 +14003,31 @@ C     are probably undetectable.
 
 C     Trap spurious values where tau * sin(theta_p/57.2957795) is greater
 C     than unity due to floating point rounding errors
-      if (tau * SIN(theta_p/57.2957795) .gt. 1.0d0) 
+      if (tau * SIN(theta_p/57.2957795) .gt. 1.0d0)
      &  theta_p = 57.2957795 * TASIN(1.d0/tau)
 
 C     In normal kinematics, Ikin is not meaningful, but set to 1 anyway
       Ikin = 1
       IF ( tau.LT.1 ) RETURN
-      
+
 C     Calculate angle of scattered projectile in centre of mass frame, for
 C     which the maximum laboratory scattering angle is reached.
-      
+
       t = acos(-1./tau)
-      
+
 C     Now calculate the arctangent of the corresponding angle for the
 C     recoiling target nuclei in the laboratory frame
-      
+
       thres = sin(t)/(taup-cos(t))
-      
+
 C     So now, if y = tan(theta_t_lab) > thres, we are above the maximum and
 C     need the larger value of theta_p_cm, so we set Ikin to 1. Otherwise we
 C     are below the maximum and need the smaller value so we choose Ikin = 0.
-      
+
       IF ( ABS(y).GT.ABS(thres) ) THEN
          Ikin = 1
       ELSE
          Ikin = 0
       ENDIF
-      
+
       END

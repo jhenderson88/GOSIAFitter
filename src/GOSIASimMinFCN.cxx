@@ -562,11 +562,58 @@ double GOSIASimMinFCN::operator()(const double* par){
 	std::vector<double>	scaling;
 	scaling.resize(exptData_Beam.size());
 	for(size_t s=0;s<scalingParameters.size();s++){
-		std::vector<double>	sc_expt;
+		double	sum1	= 0;
+		double	sum2	= 0;
+		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
+			size_t i = scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			float	ynrm 	= scalingParameters.at(s).GetExperimentNRMs().at(ss);	// Relative scaling parameter
+			
+			if(i < exptData_Beam.size()){
+				for(size_t t=0;t<exptData_Beam.at(i).GetData().size();++t){
+					int	index_init 	= exptData_Beam.at(i).GetData().at(t).GetInitialIndex();
+					int	index_final 	= exptData_Beam.at(i).GetData().at(t).GetFinalIndex();
+					double 	calcCounts 	= EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+					calcCounts		*= ynrm;
+					double 	exptCounts 	= exptData_Beam.at(i).GetData().at(t).GetCounts();
+					double	sigma		= (exptData_Beam.at(i).GetData().at(t).GetUpUnc() + exptData_Beam.at(i).GetData().at(t).GetDnUnc())/2.;  // Average uncertainty
+					sigma 	/= expt_weights.at(i);
+					if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+						sum1	+=	calcCounts * exptCounts / pow(sigma,2);
+						sum2	+= 	pow(calcCounts,2) / pow(sigma,2); 
+					}				
+				}
+			}
+			if(i < exptData_Target.size()){
+				for(size_t t=0;t<exptData_Target.at(i).GetData().size();++t){
+					int	index_init 	= exptData_Target.at(i).GetData().at(t).GetInitialIndex();
+					int	index_final 	= exptData_Target.at(i).GetData().at(t).GetFinalIndex();
+					double 	calcCounts 	= EffectiveCrossSection_Target.at(i)[index_final][index_init];
+					calcCounts		*= ynrm;
+					double 	exptCounts 	= exptData_Target.at(i).GetData().at(t).GetCounts();
+					double	sigma		= (exptData_Target.at(i).GetData().at(t).GetUpUnc() + exptData_Target.at(i).GetData().at(t).GetDnUnc())/2.;  // Average uncertainty
+					sigma 	/= expt_weights.at(i);
+					if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+						sum1	+=	calcCounts * exptCounts / pow(sigma,2);
+						sum2	+= 	pow(calcCounts,2) / pow(sigma,2); 
+					}
+				}
+			}
+
+		}
+		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
+			size_t i 	= scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			float ynrm 	= scalingParameters.at(s).GetExperimentNRMs().at(ss);	// Relative scaling parameter
+			if(sum2 > 0)
+				scaling[i]	= sum1/sum2 * ynrm;
+			else
+				scaling[i]	= 0;
+		}
+		
+		/*std::vector<double>	sc_expt;
 		std::vector<double>	sc_expt_unc;
 		std::vector<double>	sc_calc;
 		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
-			size_t  i = scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			size_t i = scalingParameters.at(s).GetExperimentNumbers().at(ss);
 			float	ynrm = scalingParameters.at(s).GetExperimentNRMs().at(ss);	// Relative scaling parameter
 			if(expt_weights.at(i) == 0) 
 				continue;
@@ -635,7 +682,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				}
 			}
 		}
-
+		
 		if(sc_expt.size() > 0){
 			ScalingFitFCN theFCN;
 
@@ -646,8 +693,9 @@ double GOSIASimMinFCN::operator()(const double* par){
 			ROOT::Math::Functor f_init(theFCN,1);
 			min->SetFunction(f_init);
 			min->SetVariable(0,"Scaling",1,0.000001);
-			min->SetTolerance(0.001);
+			min->SetTolerance(0.00000001);
 			min->Minimize();
+
 		
 			for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
 				size_t i 	= scalingParameters.at(s).GetExperimentNumbers().at(ss);
@@ -661,7 +709,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 				scaling[i]	= 0;
 			}
 
-		}	
+		}*/			
 
 	}
 

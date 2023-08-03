@@ -176,7 +176,54 @@ void Output::CalculateScaling(){
 	std::vector<double>	scaling;
 	scaling.resize(fitter->GetBeamData().size());
 	for(size_t s=0;s<fitter->GetScalingParameters().size();s++){
-		std::vector<double>	sc_expt;
+		double	sum1	= 0;
+		double	sum2	= 0;
+		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
+			size_t i = scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			float	ynrm 	= scalingParameters.at(s).GetExperimentNRMs().at(ss);	// Relative scaling parameter
+			
+			if(i < exptData_Beam.size()){
+				for(size_t t=0;t<exptData_Beam.at(i).GetData().size();++t){
+					int	index_init 	= exptData_Beam.at(i).GetData().at(t).GetInitialIndex();
+					int	index_final 	= exptData_Beam.at(i).GetData().at(t).GetFinalIndex();
+					double 	calcCounts 	= EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+					calcCounts		*= ynrm;
+					double 	exptCounts 	= exptData_Beam.at(i).GetData().at(t).GetCounts();
+					double	sigma		= (exptData_Beam.at(i).GetData().at(t).GetUpUnc() + exptData_Beam.at(i).GetData().at(t).GetDnUnc())/2.;  // Average uncertainty
+					sigma 	/= expt_weights.at(i);
+					if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+						sum1	+=	calcCounts * exptCounts / pow(sigma,2);
+						sum2	+= 	pow(calcCounts,2) / pow(sigma,2); 
+					}				
+				}
+			}
+			if(i < exptData_Target.size()){
+				for(size_t t=0;t<exptData_Target.at(i).GetData().size();++t){
+					int	index_init 	= exptData_Target.at(i).GetData().at(t).GetInitialIndex();
+					int	index_final 	= exptData_Target.at(i).GetData().at(t).GetFinalIndex();
+					double 	calcCounts 	= EffectiveCrossSection_Target.at(i)[index_final][index_init];
+					calcCounts		*= ynrm;
+					double 	exptCounts 	= exptData_Target.at(i).GetData().at(t).GetCounts();
+					double	sigma		= (exptData_Target.at(i).GetData().at(t).GetUpUnc() + exptData_Target.at(i).GetData().at(t).GetDnUnc())/2.;  // Average uncertainty
+					sigma 	/= expt_weights.at(i);
+					if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+						sum1	+=	calcCounts * exptCounts / pow(sigma,2);
+						sum2	+= 	pow(calcCounts,2) / pow(sigma,2); 
+					}
+				}
+			}
+
+		}
+		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
+			size_t i 	= scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			float ynrm 	= scalingParameters.at(s).GetExperimentNRMs().at(ss);	// Relative scaling parameter
+			if(sum2 > 0)
+				scaling[i]	= sum1/sum2 * ynrm;
+			else
+				scaling[i]	= 0;
+		}
+		
+		/*std::vector<double>	sc_expt;
 		std::vector<double>	sc_expt_unc;
 		std::vector<double>	sc_calc;
 		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
@@ -260,7 +307,7 @@ void Output::CalculateScaling(){
 			ROOT::Math::Functor f_init(theFCN,1);
 			min->SetFunction(f_init);
 			min->SetVariable(0,"Scaling",1,0.000001);
-			min->SetTolerance(0.000001);
+			min->SetTolerance(0.00000001);
 			min->Minimize();
 
 		
@@ -276,7 +323,7 @@ void Output::CalculateScaling(){
 				scaling[i]	= 0;
 			}
 
-		}	
+		}*/		
 	}
 
 	std::cout	<< std::setw( 8) << std::left << "Expt:"	
@@ -668,10 +715,17 @@ void Output::Write(const char* outfilename){
 		TMatrixD	tmpMat;
 		tmpMat.ResizeTo(rates_b.GetBranchingRatios().GetNrows(),rates_b.GetBranchingRatios().GetNcols());
 		size_t	nRows = beamCalc.at(i).GetData().size();
+		std::cout	<< i+1 << std::endl;
 		for(size_t j=0; j<nRows; j++){
 			int	init		= beamCalc.at(i).GetData().at(j).GetInitialIndex();
 			int	fina		= beamCalc.at(i).GetData().at(j).GetFinalIndex();
 			double 	counts 		= beamCalc.at(i).GetData().at(j).GetCounts();
+			std::cout		<< std::setw(8) << std::left << init 
+						<< std::setw(8) << std::left << fina 
+						<< std::setw(12) << std::left << counts 
+						<< std::setw(12) << correctionFactors_Beam.at(i)[init][fina]
+						<< std::setw(12) << correctionFactors_Beam.at(i)[init][fina] * counts
+						<< std::endl;
 			tmpMat[fina][init]	= counts * correctionFactors_Beam.at(i)[init][fina];
 			tmpMat[init][fina]	= counts * correctionFactors_Beam.at(i)[init][fina];
 		}
@@ -721,7 +775,54 @@ void Output::Write(const char* outfilename){
 	std::vector<double>	scaling;
 	scaling.resize(exptData_Beam.size());
 	for(size_t s=0;s<scalingParameters.size();s++){
-		std::vector<double>	sc_expt;
+		double	sum1	= 0;
+		double	sum2	= 0;
+		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
+			size_t i = scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			float	ynrm 	= scalingParameters.at(s).GetExperimentNRMs().at(ss);	// Relative scaling parameter
+			
+			if(i < exptData_Beam.size()){
+				for(size_t t=0;t<exptData_Beam.at(i).GetData().size();++t){
+					int	index_init 	= exptData_Beam.at(i).GetData().at(t).GetInitialIndex();
+					int	index_final 	= exptData_Beam.at(i).GetData().at(t).GetFinalIndex();
+					double 	calcCounts 	= EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+					calcCounts		*= ynrm;
+					double 	exptCounts 	= exptData_Beam.at(i).GetData().at(t).GetCounts();
+					double	sigma		= (exptData_Beam.at(i).GetData().at(t).GetUpUnc() + exptData_Beam.at(i).GetData().at(t).GetDnUnc())/2.;  // Average uncertainty
+					sigma 	/= expt_weights.at(i);
+					if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+						sum1	+=	calcCounts * exptCounts / pow(sigma,2);
+						sum2	+= 	pow(calcCounts,2) / pow(sigma,2); 
+					}				
+				}
+			}
+			if(i < exptData_Target.size()){
+				for(size_t t=0;t<exptData_Target.at(i).GetData().size();++t){
+					int	index_init 	= exptData_Target.at(i).GetData().at(t).GetInitialIndex();
+					int	index_final 	= exptData_Target.at(i).GetData().at(t).GetFinalIndex();
+					double 	calcCounts 	= EffectiveCrossSection_Target.at(i)[index_final][index_init];
+					calcCounts		*= ynrm;
+					double 	exptCounts 	= exptData_Target.at(i).GetData().at(t).GetCounts();
+					double	sigma		= (exptData_Target.at(i).GetData().at(t).GetUpUnc() + exptData_Target.at(i).GetData().at(t).GetDnUnc())/2.;  // Average uncertainty
+					sigma 	/= expt_weights.at(i);
+					if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+						sum1	+=	calcCounts * exptCounts / pow(sigma,2);
+						sum2	+= 	pow(calcCounts,2) / pow(sigma,2); 
+					}
+				}
+			}
+
+		}
+		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
+			size_t i 	= scalingParameters.at(s).GetExperimentNumbers().at(ss);
+			float ynrm 	= scalingParameters.at(s).GetExperimentNRMs().at(ss);	// Relative scaling parameter
+			if(sum2 > 0)
+				scaling[i]	= sum1/sum2 * ynrm;
+			else
+				scaling[i]	= 0;
+		}
+		
+		/*std::vector<double>	sc_expt;
 		std::vector<double>	sc_expt_unc;
 		std::vector<double>	sc_calc;
 		for(size_t ss=0;ss<scalingParameters.at(s).GetExperimentNumbers().size();ss++){
@@ -805,7 +906,7 @@ void Output::Write(const char* outfilename){
 			ROOT::Math::Functor f_init(theFCN,1);
 			min->SetFunction(f_init);
 			min->SetVariable(0,"Scaling",1,0.000001);
-			min->SetTolerance(0.001);
+			min->SetTolerance(0.00000001);
 			min->Minimize();
 
 		
@@ -821,7 +922,7 @@ void Output::Write(const char* outfilename){
 				scaling[i]	= 0;
 			}
 
-		}	
+		}*/	
 
 	}
 
