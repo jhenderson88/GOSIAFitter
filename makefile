@@ -18,7 +18,7 @@ export __APPLE__:= 1
 CFLAGS     += -Qunused-arguments -Wno-dangling-gsl
 CPP        = g++
 #### FORTRAN LIBS MIGHT NEED SETTING MANUALLY ON MACOS
-FORTRAN_LIBS = -L/usr/local/Cellar/gcc/12.2.0/lib/gcc/current/  -lgfortran
+FORTRAN_LIBS = -L/usr/local/Cellar/gcc/13.1.0/lib/gcc/current/  -lgfortran
 else
 export __LINUX__:= 1
 CPP        = g++

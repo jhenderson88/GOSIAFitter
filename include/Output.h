@@ -10,12 +10,15 @@ class Output {
 
 	public:
 		Output(GOSIASimFitter*);
-		~Output()	{;}
-		void			Write(const char*);
+		~Output()				{;}
+		void	Write(const char*);
+
+		void	SetScalingFit(bool b = true)	{ fScalingFit	= b;			}	/*!< Set numerical calculation (false) vs minimization (true) for scaling parameters */
+		bool	UseScalingFit()		const	{ return fScalingFit;			}	/*!< Use mumerical calculation (false) vs minimization (true) for scaling parameters */
 
 	private:
-		void			CalculateScaling();
-		GOSIASimFitter		*fitter;
+		void					CalculateScaling();
+		GOSIASimFitter				*fitter;
 
 		std::string workingDir;
 		std::vector<double>			parameters;			/*!< Matrix elements for both beam and target, and common scaling factors */
@@ -47,6 +50,8 @@ class Output {
 
 		std::string				beamBSTFile;
 		std::string				targetBSTFile;
+
+		bool 					fScalingFit;
 
 };
 

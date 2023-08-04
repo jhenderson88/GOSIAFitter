@@ -64,6 +64,8 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 
 												expt_weights.resize(Nexpts);
 												std::fill(expt_weights.begin(),expt_weights.end(),1);
+			
+												SetScalingFit(false);
 
 											}	/*!< Construct object with vector of experimental data to be fit */
 		virtual ~GOSIASimMinFCN()						{;					}
@@ -117,6 +119,9 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 		void	SetScalingParameters(std::vector<ScalingParameter> s)		{ scalingParameters = s;		}	/*!< Define the vector of ScalingParameter objects for fitting */
 		void	AddScalingParameter(ScalingParameter s)				{ scalingParameters.push_back(s);	}	/*!< Append a new ScalingParameter to the vector */
 		void	ClearScalingParameters()					{ scalingParameters.clear();		}	/*!< Clear the vector of ScalingParameter objects */
+
+		void	SetScalingFit(bool b = true)					{ fScalingFit	= b;			}	/*!< Set numerical calculation (false) vs minimization (true) for scaling parameters */
+		bool	UseScalingFit()						const	{ return fScalingFit;			}	/*!< Use mumerical calculation (false) vs minimization (true) for scaling parameters */
 
 		double 	up() const	 						{ return theErrorDef;			}	/*!< Required by ROOT::Minimizer */
 		double 	operator()(const double*);											/*!< Required by ROOT::Minimizer */
@@ -271,6 +276,8 @@ class GOSIASimMinFCN { // : public ROOT::Minuit2::FCNBase{
 		std::vector<int>		targetMapping_l;
 
 		std::vector<float>		expt_weights;
+
+		bool 				fScalingFit;
 
 };
 
