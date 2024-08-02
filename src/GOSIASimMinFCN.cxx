@@ -637,7 +637,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 							sc_calc.push_back(calcCounts);
 						}				
 					}
-					for(size_t t=0;i<exptData_Beam.at(i).GetDoublet().size();++t){
+					/*for(size_t t=0;t<exptData_Beam.at(i).GetDoublet().size();++t){
 						int	index_init1 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex1();
 						int	index_final1 	= exptData_Beam.at(i).GetDoublet().at(t).GetFinalIndex1();
 						int	index_init2 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex2();
@@ -647,6 +647,23 @@ double GOSIASimMinFCN::operator()(const double* par){
 						double 	exptCounts 	= exptData_Beam.at(i).GetDoublet().at(t).GetCounts();
 						double	sigma		= (exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc() + exptData_Beam.at(i).GetDoublet().at(t).GetDnUnc())/2.;  // Average uncertainty
 						sigma 	/= expt_weights.at(i);
+						if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+							sc_expt.push_back(exptCounts);
+							sc_expt_unc.push_back(sigma);
+							sc_calc.push_back(calcCounts);
+						}				
+					}*/
+					for(size_t t=0;t<exptData_Beam.at(i).GetMultiplet().size();++t){
+						double	tmpCalc = 0;
+						double	exptCounts	= exptData_Beam.at(i).GetMultiplet().at(t).GetCounts();
+						double	sigma		= exptData_Beam.at(i).GetMultiplet().at(t).GetUnc();
+						for(size_t tt=0;tt<exptData_Beam.at(i).GetMultiplet().at(t).GetInitialIndex().size();++tt){
+							int	index_init 	= exptData_Beam.at(i).GetMultiplet().at(t).GetInitialIndex().at(tt);
+							int	index_final	= exptData_Beam.at(i).GetMultiplet().at(t).GetFinalIndex().at(tt);
+							tmpCalc 		+= EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+						}
+						sigma 	/= expt_weights.at(i);
+						double	calcCounts	= tmpCalc;
 						if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
 							sc_expt.push_back(exptCounts);
 							sc_expt_unc.push_back(sigma);
@@ -669,7 +686,7 @@ double GOSIASimMinFCN::operator()(const double* par){
 							sc_calc.push_back(calcCounts);
 						}
 					}
-					for(size_t t=0;i<exptData_Target.at(i).GetDoublet().size();++t){
+					/*for(size_t t=0;i<exptData_Target.at(i).GetDoublet().size();++t){
 						int	index_init1 	= exptData_Target.at(i).GetDoublet().at(t).GetInitialIndex1();
 						int	index_final1 	= exptData_Target.at(i).GetDoublet().at(t).GetFinalIndex1();
 						int	index_init2 	= exptData_Target.at(i).GetDoublet().at(t).GetInitialIndex2();
@@ -684,6 +701,23 @@ double GOSIASimMinFCN::operator()(const double* par){
 							sc_expt_unc.push_back(sigma);
 							sc_calc.push_back(calcCounts);
 						}								
+					}*/
+					for(size_t t=0;t<exptData_Target.at(i).GetMultiplet().size();++t){
+						double	tmpCalc = 0;
+						double	exptCounts	= exptData_Target.at(i).GetMultiplet().at(t).GetCounts();
+						double	sigma		= exptData_Target.at(i).GetMultiplet().at(t).GetUnc();
+						for(size_t tt=0;tt<exptData_Target.at(i).GetMultiplet().at(t).GetInitialIndex().size();++tt){
+							int	index_init 	= exptData_Target.at(i).GetMultiplet().at(t).GetInitialIndex().at(tt);
+							int	index_final	= exptData_Target.at(i).GetMultiplet().at(t).GetFinalIndex().at(tt);
+							tmpCalc 		+= EffectiveCrossSection_Target.at(i)[index_final][index_init];
+						}
+						sigma 	/= expt_weights.at(i);
+						double	calcCounts	= tmpCalc;
+						if(sigma > 0 && calcCounts > 0 && exptCounts > 0){
+							sc_expt.push_back(exptCounts);
+							sc_expt_unc.push_back(sigma);
+							sc_calc.push_back(calcCounts);
+						}				
 					}
 				}
 			}
@@ -763,9 +797,15 @@ double GOSIASimMinFCN::operator()(const double* par){
 									<< std::setw(14) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
 									if (t%2 == 0) {
 										std::cout << std::setw(20) << std::left << " ";
-										if (t==exptData_Beam.at(i).GetData().size()-1) { std::cout << std::endl; }
+										if (t==exptData_Beam.at(i).GetData().size()-1) { 
+											std::cout << std::endl; 
+											std::cout	<< std::setw(14) << std::left << " "; 
+										}
 	  								}
-									else { std::cout << std::endl << std::setw(14) << std::left << " "; }
+									else { 	
+										std::cout 	<< std::endl;
+										std::cout	<< std::setw(14) << std::left << " "; 
+									}
 						}
 					}
         			}
@@ -786,49 +826,69 @@ double GOSIASimMinFCN::operator()(const double* par){
 				NDF_beam++;
 			}
 		}
-		for(size_t t=0;t<exptData_Beam.at(i).GetDoublet().size();++t){
+		if(exptData_Beam.at(i).GetMultiplet().size() > 0){
+			std::cout	<< std::setw(14) << std::left << "Multiplets:"
+					<< std::endl;
+			std::cout	<< std::setw(14) << std::left << " "
+					<< std::setw( 6) << std::left << "I1:"
+					<< std::setw( 6) << std::left << "F1:"
+					<< std::setw( 6) << std::left << "I2:"
+					<< std::setw( 6) << std::left << "F2:"
+					<< std::setw(14) << std::left << "Calc 1:"
+					<< std::setw(14) << std::left << "Calc 2:"
+					<< std::setw(14) << std::left << "Total:"
+					<< std::setw(14) << std::left << "Expt:"
+					<< std::setw(14) << std::left << "Err:"
+					<< std::setw(14) << std::left << "Calc/Expt:"
+					<< std::setw(14) << std::left << "Chisq:"
+					<< std::endl;
+		}
+		for(size_t t=0;t<exptData_Beam.at(i).GetMultiplet().size();++t){
 			double 	tmp 		= 0;
-			int	index_init1 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex1();
-			int	index_final1 	= exptData_Beam.at(i).GetDoublet().at(t).GetFinalIndex1();
-			int	index_init2 	= exptData_Beam.at(i).GetDoublet().at(t).GetInitialIndex2();
-			int	index_final2 	= exptData_Beam.at(i).GetDoublet().at(t).GetFinalIndex2();
-			double 	calcCounts 	= scaling.at(i) * (EffectiveCrossSection_Beam.at(i)[index_final1][index_init1] + EffectiveCrossSection_Beam.at(i)[index_final2][index_init2]);
-			double 	exptCounts 	= exptData_Beam.at(i).GetDoublet().at(t).GetCounts();
-			double	sigma		= exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc() * exptData_Beam.at(i).GetDoublet().at(t).GetDnUnc();
-			double	sigma_prime	= (exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc() - exptData_Beam.at(i).GetDoublet().at(t).GetDnUnc());
+			double	tmpCalc		= 0;
+			for(size_t tt=0;tt<exptData_Beam.at(i).GetMultiplet().at(t).GetInitialIndex().size();++tt){
+				int	index_init 	= exptData_Beam.at(i).GetMultiplet().at(t).GetInitialIndex().at(tt);
+				int	index_final 	= exptData_Beam.at(i).GetMultiplet().at(t).GetFinalIndex().at(tt);
+				tmpCalc		 	+= scaling.at(i) * EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+			}
+			double 	exptCounts 	= exptData_Beam.at(i).GetMultiplet().at(t).GetCounts();
+			double	sigma		= exptData_Beam.at(i).GetMultiplet().at(t).GetUnc();
+
+			double	calcCounts	= tmpCalc;
 			sigma			/= expt_weights.at(i);
-			sigma_prime		/= expt_weights.at(i);
 			if(calcCounts > 0 && sigma > 0){
-				if(true){// && ((index_init == 1 && index_final ==  0) || (index_init == 7 && index_final == 4))){
+				if(true){
 					if (verbose) {
-						if(fLikelihood){
-							std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2
-									<< std::setw( 6) << std::left << index_final1*100 + index_final2
-									<< std::setw(10) << std::left << calcCounts 
-									<< std::setw(10) << std::left << exptCounts 
-									<< std::setw(10) << std::left << calcCounts/exptCounts
-									<< std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
-						}
-						else{
-							std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2 
-									<< std::setw( 6) << std::left << index_final1*100 + index_final2
-									<< std::setw(10) << std::left << calcCounts 
-									<< std::setw(10) << std::left << exptCounts 
-									<< std::setw(10) << std::left << exptData_Beam.at(i).GetDoublet().at(t).GetUpUnc()
-									<< std::setw(10) << std::left << calcCounts/exptCounts
-									<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetData().at(t).GetUpUnc(),2);
+						std::cout	<< std::setw(14) << std::left << " ";
+						if(!fLikelihood){
+							for(size_t tt=0;tt<exptData_Beam.at(i).GetMultiplet().at(t).GetInitialIndex().size();++tt){
+								std::cout	<< std::setw( 6) << std::left << exptData_Beam.at(i).GetMultiplet().at(t).GetInitialIndex().at(tt)
+										<< std::setw( 6) << std::left << exptData_Beam.at(i).GetMultiplet().at(t).GetFinalIndex().at(tt);
+							}
+							for(size_t tt=0;tt<exptData_Beam.at(i).GetMultiplet().at(t).GetInitialIndex().size();++tt){
+								int	index_init 	= exptData_Beam.at(i).GetMultiplet().at(t).GetInitialIndex().at(tt);
+								int	index_final 	= exptData_Beam.at(i).GetMultiplet().at(t).GetFinalIndex().at(tt);
+								double	transitionCalc	= scaling.at(i) * EffectiveCrossSection_Beam.at(i)[index_final][index_init];
+								std::cout 	<< std::setw(14) << std::left << transitionCalc;
+							}
+							std::cout 	<< std::setw(14) << std::left << calcCounts 
+									<< std::setw(14) << std::left << exptCounts 
+									<< std::setw(14) << std::left << exptData_Beam.at(i).GetMultiplet().at(t).GetUnc()
+									<< std::setw(14) << std::left << calcCounts/exptCounts
+									<< std::setw(14) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Beam.at(i).GetMultiplet().at(t).GetUnc(),2)
+									<< std::endl;
 						}
 					}
 				}
 				if(fLikelihood){
-					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
-					beamchisq	+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
+					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma * sigma);
+					beamchisq	+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma * sigma);
 				}
 				else{
 					if(calcCounts > exptCounts)
-						tmp 		= (calcCounts - exptCounts) / exptData_Beam.at(i).GetData().at(t).GetUpUnc();
+						tmp 		= (calcCounts - exptCounts) / exptData_Beam.at(i).GetMultiplet().at(t).GetUnc();
 					else
-						tmp 		= (calcCounts - exptCounts) / exptData_Beam.at(i).GetData().at(t).GetDnUnc();
+						tmp 		= (calcCounts - exptCounts) / exptData_Beam.at(i).GetMultiplet().at(t).GetUnc();
 					chisq		+= tmp * tmp;
 					beamchisq	+= tmp * tmp;
 					exptchisq	+= tmp * tmp;
@@ -942,55 +1002,53 @@ double GOSIASimMinFCN::operator()(const double* par){
 				NDF_targ++;
 			}
 		}
-		for(size_t t=0;t<exptData_Target.at(i).GetDoublet().size();++t){
+		for(size_t t=0;t<exptData_Target.at(i).GetMultiplet().size();++t){
 			double 	tmp 		= 0;
-			int	index_init1 	= exptData_Target.at(i).GetDoublet().at(t).GetInitialIndex1();
-			int	index_final1 	= exptData_Target.at(i).GetDoublet().at(t).GetFinalIndex1();
-			int	index_init2 	= exptData_Target.at(i).GetDoublet().at(t).GetInitialIndex2();
-			int	index_final2 	= exptData_Target.at(i).GetDoublet().at(t).GetFinalIndex2();
-			double 	calcCounts 	= scaling.at(i) * (EffectiveCrossSection_Target.at(i)[index_final1][index_init1] + EffectiveCrossSection_Target.at(i)[index_final2][index_init2]);
-			double 	exptCounts 	= exptData_Target.at(i).GetDoublet().at(t).GetCounts();
-			double	sigma		= exptData_Target.at(i).GetDoublet().at(t).GetUpUnc() * exptData_Target.at(i).GetDoublet().at(t).GetDnUnc();
-			double	sigma_prime	= (exptData_Target.at(i).GetDoublet().at(t).GetUpUnc() - exptData_Target.at(i).GetDoublet().at(t).GetDnUnc());
+			double	tmpCalc		= 0;
+			for(size_t tt=0;tt<exptData_Target.at(i).GetMultiplet().at(t).GetInitialIndex().size();++tt){
+				int	index_init 	= exptData_Target.at(i).GetMultiplet().at(t).GetInitialIndex().at(tt);
+				int	index_final 	= exptData_Target.at(i).GetMultiplet().at(t).GetFinalIndex().at(tt);
+				tmpCalc		 	+= scaling.at(i) * EffectiveCrossSection_Target.at(i)[index_final][index_init];
+			}
+			double 	exptCounts 	= exptData_Target.at(i).GetMultiplet().at(t).GetCounts();
+			double	sigma		= exptData_Target.at(i).GetMultiplet().at(t).GetUnc();
+
 			sigma			/= expt_weights.at(i);
-			sigma_prime		/= expt_weights.at(i);
+			double	calcCounts	= tmpCalc;
 			if(calcCounts > 0 && sigma > 0){
-				if(true){// && ((index_init == 1 && index_final ==  0) || (index_init == 7 && index_final == 4))){
+				if(true){
 					if (verbose) {
-						if(fLikelihood){
-							std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2
-									<< std::setw( 6) << std::left << index_final1*100 + index_final2
-									<< std::setw(10) << std::left << calcCounts 
+						std::cout	<< std::endl;
+						std::cout	<< std::setw(4) << std::left << " ";
+						std::cout	<< std::setw(10) << std::left << "Mult:";
+						if(!fLikelihood){
+							for(size_t tt=0;tt<exptData_Target.at(i).GetMultiplet().at(t).GetInitialIndex().size();++tt){
+								std::cout	<< std::setw( 6) << std::left << exptData_Target.at(i).GetMultiplet().at(t).GetInitialIndex().at(tt)
+										<< std::setw( 6) << std::left << exptData_Target.at(i).GetMultiplet().at(t).GetFinalIndex().at(tt);
+							}
+							std::cout 	<< std::setw(10) << std::left << calcCounts 
 									<< std::setw(10) << std::left << exptCounts 
+									<< std::setw(10) << std::left << exptData_Target.at(i).GetMultiplet().at(t).GetUnc()
 									<< std::setw(10) << std::left << calcCounts/exptCounts
-									<< std::setw(12) << std::left << 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
-						}
-						else{
-							std::cout 	<< std::setw( 6) << std::left << index_init1*100 + index_init2 
-									<< std::setw( 6) << std::left << index_final1*100 + index_final2
-									<< std::setw(10) << std::left << calcCounts 
-									<< std::setw(10) << std::left << exptCounts 
-									<< std::setw(10) << std::left << exptData_Target.at(i).GetDoublet().at(t).GetUpUnc()
-									<< std::setw(10) << std::left << calcCounts/exptCounts
-									<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Target.at(i).GetData().at(t).GetUpUnc(),2);
+									<< std::setw(12) << std::left << TMath::Power((calcCounts - exptCounts)/exptData_Target.at(i).GetMultiplet().at(t).GetUnc(),2);
 						}
 					}
 				}
 				if(fLikelihood){
-					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
-					targchisq	+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma + sigma_prime * (exptCounts - calcCounts));
+					chisq		+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma * sigma);
+					beamchisq	+= 0.5 * TMath::Power((exptCounts - calcCounts),2)/(sigma * sigma);
 				}
 				else{
 					if(calcCounts > exptCounts)
-						tmp 		= (calcCounts - exptCounts) / exptData_Target.at(i).GetData().at(t).GetUpUnc();
+						tmp 		= (calcCounts - exptCounts) / exptData_Target.at(i).GetMultiplet().at(t).GetUnc();
 					else
-						tmp 		= (calcCounts - exptCounts) / exptData_Target.at(i).GetData().at(t).GetDnUnc();
+						tmp 		= (calcCounts - exptCounts) / exptData_Target.at(i).GetMultiplet().at(t).GetUnc();
 					chisq		+= tmp * tmp;
 					beamchisq	+= tmp * tmp;
-					targchisq	+= tmp * tmp;
+					exptchisq	+= tmp * tmp;
 				}
 				NDF++;
-				NDF_targ++;
+				NDF_beam++;
 			}
 		}
 		targdata.push_back(i);
@@ -1002,19 +1060,19 @@ double GOSIASimMinFCN::operator()(const double* par){
 	if(verbose){
 		std::cout	<< std::setw(16) << std::left << "Beam expt.:";
 		for(size_t i=0;i<beamdata.size();i++)
-			std::cout << std::setw(8) << std::left << beamdata.at(i) + 1;
+			std::cout << std::setw(12) << std::left << beamdata.at(i) + 1;
 		std::cout	<< std::endl;
 		std::cout	<< std::setw(16) << std::left << "Chi-squared:";
 		for(size_t i=0;i<beamexptchisq.size();i++)
-			std::cout << std::setw(8) << std::left << std::setprecision(3) << beamexptchisq.at(i);
+			std::cout << std::setw(12) << std::left << std::setprecision(3) << beamexptchisq.at(i);
 		std::cout	<< std::endl;
 		std::cout	<< std::setw(16) << std::left << "Target expt.:";
 		for(size_t i=0;i<targdata.size();i++)
-			std::cout << std::setw(8) << std::left << targdata.at(i) + 1;
+			std::cout << std::setw(12) << std::left << targdata.at(i) + 1;
 		std::cout	<< std::endl;
 		std::cout	<< std::setw(16) << std::left << "Chi-squared:";
 		for(size_t i=0;i<targexptchisq.size();i++)
-			std::cout << std::setw(8) << std::left << std::setprecision(3) << targexptchisq.at(i);
+			std::cout << std::setw(12) << std::left << std::setprecision(3) << targexptchisq.at(i);
 		std::cout	<< std::endl;
 
 	}

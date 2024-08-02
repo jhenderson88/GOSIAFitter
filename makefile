@@ -8,7 +8,7 @@ ROOT_LIBS = `root-config --glibs` -lSpectrum -lTreePlayer -lMathMore
 LIBRS = $(ROOT_LIBS) $(GSLLIBS) $(FORTRAN_LIBS)
 INCLUDE = $(INCDIR)
 
-CFLAGS = -std=c++11 -g -fPIC `root-config --cflags` `gsl-config --cflags` -Wno-unused-parameter
+CFLAGS = -std=c++11 -g -fPIC `root-config --cflags` -Wno-unused-parameter
 
 PLATFORM:=$(shell uname)
 $(info PLATFORM: $(PLATFORM))
@@ -18,7 +18,7 @@ export __APPLE__:= 1
 CFLAGS     += -Qunused-arguments -Wno-dangling-gsl
 CPP        = g++
 #### FORTRAN LIBS MIGHT NEED SETTING MANUALLY ON MACOS
-FORTRAN_LIBS = -L/usr/local/Cellar/gcc/13.1.0/lib/gcc/current/  -lgfortran
+FORTRAN_LIBS = -lgfortran
 else
 export __LINUX__:= 1
 CPP        = g++

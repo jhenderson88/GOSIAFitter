@@ -4491,14 +4491,14 @@ C        Now calculate dsigma
          IF ( IZ1(lexp).LT.0. ) Tetrn = tlbrad
          TREP(lexp) = Tetrn
       
-         WRITE (22,99014) lexp,a1,a2,EN(NCM),EP(lexp),tau,tcmrad,tlbrad,
-     &         z1,z2,dista,Dsig,EPS(lexp),r3
+c         WRITE (22,99014) lexp,a1,a2,EN(NCM),EP(lexp),tau,tcmrad,tlbrad,
+c     &         z1,z2,dista,Dsig,EPS(lexp),r3
 
-99014    FORMAT(5X,'EXP ',1I3,2X,'AP ',1F7.3,2X,'AT ',1F7.3,2X,'EN ',
-     &         1F10.3,2X,'EP ',1F7.3,2X,'Tau ',1F10.3,2X,'TCM ',1F10.3,
-     &         2X,'TLAB ',1F7.3,2X,'ZP ',1F7.3,2X,'ZT ',1F7.3,2X,
-     &         'DISTA ',1F10.3,2X,'DSIG',1F10.3,2X,'EPS ',1F10.3,2X
-     &         'R3 ',1F10.3)
+c99014    FORMAT(5X,'EXP ',1I3,2X,'AP ',1F7.3,2X,'AT ',1F7.3,2X,'EN ',
+c     &         1F10.3,2X,'EP ',1F7.3,2X,'Tau ',1F10.3,2X,'TCM ',1F10.3,
+c     &         2X,'TLAB ',1F7.3,2X,'ZP ',1F7.3,2X,'ZT ',1F7.3,2X,
+c     &         'DISTA ',1F10.3,2X,'DSIG',1F10.3,2X,'EPS ',1F10.3,2X
+c     &         'R3 ',1F10.3)
       ENDDO ! Loop over experiments lexp
 
 

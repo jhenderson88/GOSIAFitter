@@ -464,8 +464,20 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 
 	resultFile	<< "Beam matrix elements:"
 			<< std::endl;
+	resultFile	<< std::setw(10) << std::left << "Lambda:" 
+			<< std::setw(10) << std::left << "Init.:"
+			<< std::setw(10) << std::left << "Final:"
+			<< std::setw(15) << std::left << "ME:"
+			<< std::setw(15) << std::left << "Unc:"
+	                << std::endl;
 	std::cout	<< "Beam matrix elements:"
 			<< std::endl;
+	std::cout	<< std::setw(10) << std::left << "Lambda:" 
+			<< std::setw(10) << std::left << "Init.:"
+			<< std::setw(10) << std::left << "Final:"
+			<< std::setw(15) << std::left << "ME:"
+			<< std::setw(15) << std::left << "Unc:"
+	                << std::endl;
   	int parct = 0;
 	for(size_t i=0;i<matrixElements_Beam.size();i++){
     		if (!matrixElements_Beam.at(i).GetFixed()) {
@@ -474,13 +486,15 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 							matrixElements_Beam.at(i).GetInitialState(),
 							matrixElements_Beam.at(i).GetFinalState(),
 							res[parct]);
-			std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
+			std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetLambda() + 1
+					<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
 					<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
 		//			<< std::setw(15) << std::left << fNucleus_Beam.GetMatrixElements().at(matrixElements_Beam.at(i).GetLambda())[matrixElements_Beam.at(i).GetInitialState()][matrixElements_Beam.at(i).GetFinalState()]
 					<< std::setw(15) << std::left << res[parct] 
 					<< std::setw(15) << std::left << unc[parct]
 					<< std::endl;
-			resultFile	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
+			resultFile	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetLambda() + 1
+					<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
 					<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
 		//			<< std::setw(15) << std::left << fNucleus_Beam.GetMatrixElements().at(matrixElements_Beam.at(i).GetLambda())[matrixElements_Beam.at(i).GetInitialState()][matrixElements_Beam.at(i).GetFinalState()]
 					<< std::setw(15) << std::left << res[parct] 
@@ -493,7 +507,8 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
                                      matrixElements_Beam.at(i).GetInitialState(),
                                      matrixElements_Beam.at(i).GetFinalState(),
                                      matrixElements_Beam.at(i).GetMatrixElement());
-			std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
+			std::cout	<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetLambda() + 1
+					<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetInitialState()
 					<< std::setw(10) << std::left << matrixElements_Beam.at(i).GetFinalState()
 					<< std::setw(15) << std::left << fNucleus_Beam.GetMatrixElements().at(matrixElements_Beam.at(i).GetLambda())[matrixElements_Beam.at(i).GetInitialState()][matrixElements_Beam.at(i).GetFinalState()] << std::endl;
 		}
@@ -530,8 +545,20 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 	if(exptData_Target.size()>0){ 
 		resultFile	<< "Target matrix elements:"
 				<< std::endl;
+		resultFile	<< std::setw(10) << std::left << "Lambda:" 
+				<< std::setw(10) << std::left << "Init.:"
+				<< std::setw(10) << std::left << "Final:"
+				<< std::setw(15) << std::left << "ME:"
+				<< std::setw(15) << std::left << "Unc:"
+		                << std::endl;
 		std::cout	<< "Target matrix elements:"
 				<< std::endl;
+		std::cout	<< std::setw(10) << std::left << "Lambda:" 
+				<< std::setw(10) << std::left << "Init.:"
+				<< std::setw(10) << std::left << "Final:"
+				<< std::setw(15) << std::left << "ME:"
+				<< std::setw(15) << std::left << "Unc:"
+		                << std::endl;
 	}
 	for(size_t i=0;i<matrixElements_Target.size();i++){
     		if (!matrixElements_Target.at(i).GetFixed()) {
@@ -540,13 +567,15 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
                         	matrixElements_Target.at(i).GetInitialState(),
 				matrixElements_Target.at(i).GetFinalState(),
 				res[parct]);
-			std::cout	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
+			std::cout	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetLambda() + 1
+					<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
 					<< std::setw(10) << std::left << matrixElements_Target.at(i).GetFinalState()
 					//<< std::setw(15) << std::left << fNucleus_Target.GetMatrixElements().at(matrixElements_Target.at(i).GetLambda())[matrixElements_Target.at(i).GetInitialState()][matrixElements_Target.at(i).GetFinalState()]
 					<< std::setw(15) << std::left << res[parct] 
 					<< std::setw(15) << std::left << unc[parct]
 			                << std::endl;
-			resultFile	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
+			resultFile	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetLambda() + 1
+					<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
 					<< std::setw(10) << std::left << matrixElements_Target.at(i).GetFinalState()
 					//<< std::setw(15) << std::left << fNucleus_Target.GetMatrixElements().at(matrixElements_Target.at(i).GetLambda())[matrixElements_Target.at(i).GetInitialState()][matrixElements_Target.at(i).GetFinalState()]
 					<< std::setw(15) << std::left << res[parct] 
@@ -559,7 +588,8 @@ void GOSIASimFitter::DoFit(const char* method, const char *algorithm){
 							matrixElements_Target.at(i).GetInitialState(),
 							matrixElements_Target.at(i).GetFinalState(),
 							matrixElements_Target.at(i).GetMatrixElement());
-			std::cout	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
+			std::cout	<< std::setw(10) << std::left << matrixElements_Target.at(i).GetLambda() + 1
+					<< std::setw(10) << std::left << matrixElements_Target.at(i).GetInitialState()
 					<< std::setw(10) << std::left << matrixElements_Target.at(i).GetFinalState()
 					<< std::setw(15) << std::left << fNucleus_Target.GetMatrixElements().at(matrixElements_Target.at(i).GetLambda())[matrixElements_Target.at(i).GetInitialState()][matrixElements_Target.at(i).GetFinalState()] << std::endl;
 		}
@@ -731,6 +761,12 @@ void GOSIASimFitter::CreateScalingParameter(std::vector<int> expnum, std::vector
 
 	scalingParameters.push_back(tmpScaling);
 
+}
+
+void GOSIASimFitter::AddBeamFixedMatrixElement(int lambda, int init, int fin, double ME){
+	MatrixElement tmpME(matrixElements_Beam.size(),lambda,init,fin,ME,0,0);
+	matrixElements_Beam.push_back(tmpME);
+	matrixElements_Beam[matrixElements_Beam.size()-1].SetFixed(true);
 }
 
 void GOSIASimFitter::AddBeamFittingMatrixElement(int lambda, int init, int fin, double ME, double LL, double UL){
@@ -1357,12 +1393,12 @@ void GOSIASimFitter::WriteYieldGraphs(TFile *file, std::vector<double> angles, s
      sigma			/= expt_weights.at(i);
       sigma_prime	/= expt_weights.at(i);
 
-      calcGraph->AddPoint(i+1, calcCounts);
-      expGraph->AddPoint(i+1, exptCounts);
+//      calcGraph->AddPoint(i+1, calcCounts);
+//      expGraph->AddPoint(i+1, exptCounts);
       expGraph->SetPointError(expGraph->GetN()-1, 0, exptData_Beam.at(i).GetData().at(t).GetUpUnc());
 
-      normCalcGraph->AddPoint(angles[i], calcCounts/norms[i]);
-      normExpGraph->AddPoint(angles[i], exptCounts/norms[i]);
+ //     normCalcGraph->AddPoint(angles[i], calcCounts/norms[i]);
+ //     normExpGraph->AddPoint(angles[i], exptCounts/norms[i]);
       normExpGraph->SetPointError(expGraph->GetN()-1, 0, exptData_Beam.at(i).GetData().at(t).GetUpUnc()/norms[i]);
 		}
 		for(unsigned int t=0;t<exptData_Beam.at(i).GetDoublet().size();++t){
@@ -1482,4 +1518,15 @@ void GOSIASimFitter::UnFixBeamMatrixElements(std::vector<std::vector<int> > indi
       }
     }
   }
+}
+
+void GOSIASimFitter::PrintScaling() const {
+
+	for(size_t i=0;i<scalingParameters.size();i++){
+		for(size_t j=0;j<scalingParameters.at(i).GetExperimentNumbers().size();j++){
+			std::cout	<< std::setw(6) << i+1	
+					<< std::setw(6) << scalingParameters.at(i).GetExperimentNumbers().at(j)
+					<< std::endl;
+		}
+	}
 }

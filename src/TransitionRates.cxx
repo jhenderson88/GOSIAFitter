@@ -168,8 +168,7 @@ void TransitionRates::SetMatrixElements(){
 			for(unsigned int i=0;i<TransitionStrengths.size();i++){
         //TJG  - adding internal conversion
 				SummedGammaTransitionStrengths[y][x] += (TMath::Power(TMath::Abs(StateE.at(x)-StateE.at(y)),power[i]) * TransitionStrengths.at(i)[y][x]) / multfactor[i];
-//		std::cout << fNucleus->GetConversionCoeffients().at(i)[y][x] << std::endl;
-        SummedTransitionStrengths[y][x] += (TMath::Power(TMath::Abs(StateE.at(x)-StateE.at(y)),power[i]) * TransitionStrengths.at(i)[y][x]) * (1.0 + fNucleus->GetConversionCoeffients().at(i)[y][x]) / multfactor[i];        
+        			SummedTransitionStrengths[y][x] += (TMath::Power(TMath::Abs(StateE.at(x)-StateE.at(y)),power[i]) * TransitionStrengths.at(i)[y][x]) * (1.0 + fNucleus->GetConversionCoeffients().at(i)[y][x]) / multfactor[i];        
 			}
 			if(SummedTransitionStrengths[y][x]>0)        
 				Lifetimes[y][x] = (1 / SummedTransitionStrengths[y][x]);

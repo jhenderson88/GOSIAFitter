@@ -128,6 +128,7 @@ class GOSIASimFitter {
 		void	AddTargetMixingRatio(int,int,double,double);		/*!< Add literature mixing ratio data for the target particle*/
 		void	AddTargetMatrixElement(int,int,int,double,double);		/*!< Add literature matrix element data for the target particle*/
 
+		void	AddBeamFixedMatrixElement(int,int,int,double);		/*!< Add a fixed matrix element for the beam */
 		void	AddBeamFittingMatrixElement(int,int,int,double,double,double);		/*!< Add a fitting matrix element for the beam */
 		void  	AddBeamRelativeMatrixElement(int,int,int,int,int,int,double,double,double,bool=false,bool=false);		/*!< Add a fitting matrix element for the beam */
 		void 	SetBeamFittingMatrixElement(int lambda, int init, int fin, double ME, double LL, double UL);
@@ -135,6 +136,8 @@ class GOSIASimFitter {
 		void  	AddTargetRelativeMatrixElement(int,int,int,int,int,int,double,double,double,bool=false,bool=false);		/*!< Add a fitting matrix element for the beam */
 		void	CreateScalingParameter(std::vector<int>,std::vector<float>);				/*!< Add a scaling parameter, with common scaling experiments defined by their indices in a vector of int */
 		void	CreateScalingParameter(std::vector<int>);				/*!< Add a scaling parameter, with common scaling experiments defined by their indices in a vector of int */
+
+		void	PrintScaling()	const;
 
 		std::vector<RelativeMatrixElement>	GetBeamRelMEs()		const	{ return relativeElements_Beam;		} 
 		std::vector<RelativeMatrixElement>	GetTargetRelMEs()	const	{ return relativeElements_Beam;		} 

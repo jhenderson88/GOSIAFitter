@@ -5,6 +5,46 @@
 #include <iomanip>
 #include <vector>
 
+class ExptMultiplet {
+
+	public:
+		ExptMultiplet()					{;}
+		ExptMultiplet(std::vector<int> i, std::vector<int> f, double c, double e)			
+		{
+			StateIndex_I = i; 
+			StateIndex_F = f;
+ 			Counts = c; 	
+			Uncertainty =  e; 
+		}		
+		~ExptMultiplet()	{;}
+		ExptMultiplet(const ExptMultiplet& e);				/*!< Copy constructor */
+		ExptMultiplet& operator = (const ExptMultiplet& e);		/*!< Assignment operator */
+
+		void	Set(std::vector<int> i, std::vector<int> f, double c, double e)			
+		{ 
+			StateIndex_I = i; 
+			StateIndex_F = f;
+ 			Counts = c; 	
+			Uncertainty =  e; 
+		}
+		void	SetCounts(double c)					{ Counts = c;											}	/*!< Set experimental yield, c */
+
+		std::vector<int>	GetInitialIndex() 	const	{ return StateIndex_I;	}	/*!< Return initial state index */
+		std::vector<int>	GetFinalIndex() 	const	{ return StateIndex_F;	}	/*!< Return final state index */
+		double	GetCounts() 		const	{ return Counts;	}	/*!< Return yield */
+		double	GetUnc() 		const	{ return Uncertainty;	}	/*!< Return positive uncertainty */
+
+		void	Print()			const;					/*!< Print yield information */
+
+
+	private:
+		std::vector<int> 	StateIndex_I;		/*!< Initial state index */
+		std::vector<int> 	StateIndex_F;           /*!< Final state index */
+		double	Counts;                 /*!< Yield */
+		double	Uncertainty;          /*!< Positive uncertainty */
+
+};
+
 class ExptDoublet  {
 
 	public:
@@ -166,7 +206,7 @@ class ExptData {
 class ExperimentData{
 
 	public:	
-		ExperimentData()	{ Data.clear(); thetaCM = -1; }
+		ExperimentData()	{ Data.clear(); Multiplet.clear(); Doublet.clear(); thetaCM = -1; }
 		~ExperimentData()	{;}
 		ExperimentData(const ExperimentData& e);	       	/*!< Copy constructor */
 		ExperimentData& operator = (const ExperimentData& e);	/*!< Assignment operator */
@@ -180,29 +220,38 @@ class ExperimentData{
 		///
 		void				AddData(int i, int f, double c, double e)	{ ExptData tmp(i,f,c,e);	Data.push_back(tmp);	}
 		void				SetData(int i, ExptData exp)			{ Data.at(i) = exp;					}	/*!< Set experimental yield, index i to ExptData object exp */
-		void				ClearData()					{ Data.clear();	Doublet.clear();			}	/*!< Clear experimental data */
+		void				ClearData()					{ Data.clear();	Doublet.clear(); Multiplet.clear();			}	/*!< Clear experimental data */
 	
 		void				AddDoublet(int i1, int f1, int i2, int f2, double c, double e){
 			ExptDoublet	tmp(i1,f1,i2,f2,c,e);
 			Doublet.push_back(tmp);
 		}
 
+		void				AddMultiplet(std::vector<int> i, std::vector<int> f, double c, double e){
+			ExptMultiplet	tmp(i,f,c,e);
+			Multiplet.push_back(tmp);
+		}
+
 		void				SetDataEfficiency(int i, double eff)		{ Data.at(i).SetEfficiency(eff);			}	/*!<	*/
 	
-		ExptData			GetDataPoint(int i)	const			{ return Data.at(i);					}	/*!< Return ExptData object at index i */
-		std::vector<ExptData>		GetData()		const			{ return Data;						}	/*!< Return vector of ExptData */
+		ExptData			GetDataPoint(int i)		const		{ return Data.at(i);					}	/*!< Return ExptData object at index i */
+		std::vector<ExptData>		GetData()			const		{ return Data;						}	/*!< Return vector of ExptData */
 	
-		ExptDoublet			GetDoubletPoint(int i)	const			{ return Doublet.at(i);					}	/*!< Return ExptData object at index i */
-		std::vector<ExptDoublet>	GetDoublet()		const			{ return Doublet;					}	/*!< Return vector of ExptData */
+		ExptDoublet			GetDoubletPoint(int i)		const		{ return Doublet.at(i);					}	/*!< Return ExptData object at index i */
+		std::vector<ExptDoublet>	GetDoublet()			const		{ return Doublet;					}	/*!< Return vector of ExptData */
+	
+		ExptMultiplet			GetMultipletPoint(int i)	const		{ return Multiplet.at(i);					}	/*!< Return ExptData object at index i */
+		std::vector<ExptMultiplet>	GetMultiplet()			const		{ return Multiplet;					}	/*!< Return vector of ExptData */
 
-		void				SetThetaCM(double t)				{ thetaCM = t;						}	/*!< Define theta CM */
-		double				GetThetaCM()		const			{ return thetaCM;					}	/*!< Return theta CM */
+		void				SetThetaCM(double t)			{ thetaCM = t;						}	/*!< Define theta CM */
+		double				GetThetaCM()			const		{ return thetaCM;					}	/*!< Return theta CM */
 
-		void				Print()			const;	/*!< Print all experimental data */
+		void				Print()				const;	/*!< Print all experimental data */
 
 	private:
 		std::vector<ExptData>		Data;		/*!< Vector of experimental yields in ExptData objects */
 		std::vector<ExptDoublet>	Doublet;
+		std::vector<ExptMultiplet>	Multiplet;
 		double				thetaCM;	/*!< Theta CM (mean) for this experiment */
 
 };

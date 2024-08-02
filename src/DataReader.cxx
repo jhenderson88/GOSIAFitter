@@ -44,28 +44,38 @@ void	DataReader::ReadDataFile(const char* datafilename){
 				tmpExpt.ClearData();
 				break;
 			}
-			ss >> initial_state >> final_state >> counts >> uncertainty;
 
-			if(initial_state > 100 && final_state > 100){	// Doublet
-				int	i1	= initial_state / 100;
-				int	f1	= final_state / 100;
-				int 	i2	= initial_state - i1 * 100;			
-				int 	f2	= final_state - f1 * 100;
-				std::cout	<< "Doublet:"
-						<< std::endl;
-				std::cout	<< i1	<< "\t" << f1 << "\t" << i2 << "\t" << f2	
-						<< std::endl;
-				tmpExpt.AddDoublet(i1,f1,i2,f2,counts,uncertainty);
-			}
-			else if(initial_state < fNucleus.GetNstates() && final_state < fNucleus.GetNstates() && initial_state >= 0 && final_state >= 0){
-				tmpExpt.AddData(initial_state,final_state,counts,uncertainty);
+			found	= line.find("MULT");	// Multiplet
+			if(found != std::string::npos){
+				std::string		mult;
+				int			nMult;
+				std::vector<int>	initial_index;
+				std::vector<int>	final_index;
+				int	tmpInit;
+				int	tmpFinal;
+				ss	>> mult >> nMult;
+				for(int i=0;i<nMult;i++){
+					ss	>> tmpInit >> tmpFinal;
+					initial_index.push_back(tmpInit);
+					final_index.push_back(tmpFinal);	
+				}
+				ss	>> counts >> uncertainty;
+				if(uncertainty > 0)
+					tmpExpt.AddMultiplet(initial_index,final_index,counts,uncertainty);
 			}
 			else{
-				if(initial_state < fNucleus.GetNstates())
-					std::cout << "State " << initial_state << " out of range" << std::endl;
-				if(final_state < fNucleus.GetNstates())
-					std::cout << "State " << final_state << " out of range" << std::endl;
-				fNucleus.PrintNucleus();
+				ss >> initial_state >> final_state >> counts >> uncertainty;
+			       	if(initial_state < fNucleus.GetNstates() && final_state < fNucleus.GetNstates() && initial_state >= 0 && final_state >= 0){
+					if(uncertainty > 0)
+						tmpExpt.AddData(initial_state,final_state,counts,uncertainty);
+				}
+				else{
+					if(initial_state < fNucleus.GetNstates())
+						std::cout << "State " << initial_state << " out of range" << std::endl;
+					if(final_state < fNucleus.GetNstates())
+						std::cout << "State " << final_state << " out of range" << std::endl;
+					fNucleus.PrintNucleus();
+				}
 			}
 		}
 	}	
